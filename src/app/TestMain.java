@@ -10,15 +10,14 @@ public class TestMain {
     }
 }
 */
-
-package ui;
+package app;
 
 import model.User;
 import model.UserDAO;
+import ui.Login;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class TestMain {
     private static UserDAO userDAO = new UserDAO();
@@ -134,7 +133,7 @@ public class TestMain {
 
         // 打开你原来的登录界面
         btnOpenLogin.addActionListener(e -> {
-            ui.Login.loginFrame();
+            Login.loginFrame();
         });
 
         frame.setVisible(true);
