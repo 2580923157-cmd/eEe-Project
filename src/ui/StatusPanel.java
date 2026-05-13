@@ -14,6 +14,7 @@ public class StatusPanel extends JPanel {
     int offSetY;
     int width;
     int height;
+
     public StatusPanel(int offSetX, int offSetY,int width, int height) {
         this.setLayout(null);
         this.setBounds(offSetX, offSetY, width, height);
@@ -35,6 +36,7 @@ public class StatusPanel extends JPanel {
             }
             timeLabel.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
         });
+        //开始计时！
         timer.start();
         statusLabel.setFont(new Font("Arial", Font.BOLD, 50));
         timeLabel.setFont(new Font("Arial", Font.BOLD, 50));

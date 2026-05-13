@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Utils {
+    //这是为了2折准备的，就是说在各个方向寻找空格
     public static List<Cell> getReachablePointsInFourDirections(GameBoard gameBoard, Position posA) {
         List<Cell> res = new ArrayList<>();
         for (int i = posA.getRow() + 1; i < gameBoard.getRowCnt(); i++) {
@@ -41,7 +42,37 @@ public class Utils {
         return res;
     }
     public static boolean findZeroTurn(GameBoard gameBoard, Position posA, Position posB) {
+        // 同行判断
+        if (posA.getRow() == posB.getRow()) {
+            int minCol = Math.min(posA.getCol(), posB.getCol());
+            int maxCol = Math.max(posA.getCol(), posB.getCol());
+            for (int col = minCol + 1; col < maxCol; col++) {
+                if (!gameBoard.getCell(posA.getRow(), col).isEmpty()) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // 同列判断
+        if (posA.getCol() == posB.getCol()) {
+            int minRow = Math.min(posA.getRow(), posB.getRow());
+            int maxRow = Math.max(posA.getRow(), posB.getRow());
+            for (int row = minRow + 1; row < maxRow; row++) {
+                if (!gameBoard.getCell(row, posA.getCol()).isEmpty()) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // 既不同行也不同列，无法0折连接
+        return false;
+    }
+    //上一段是AI写的！！！等待修改
+    /*public static boolean findZeroTurn(GameBoard gameBoard, Position posA, Position posB) {
         boolean tmpRes0 = true;
+        //同一个column
         if (posA.getCol() == posB.getCol()) {
             int smallLine = Math.min(posA.getRow(), posB.getRow());
             int largeLine = Math.max(posA.getRow(), posB.getRow());
@@ -55,6 +86,7 @@ public class Utils {
                 return true;
             }
         }
+        //同一个row
         if (posA.getRow() == posB.getRow()) {
             int smallCol = Math.min(posA.getCol(), posB.getCol());
             int largeCol = Math.max(posA.getCol(), posB.getCol());
@@ -69,7 +101,7 @@ public class Utils {
             }
         }
         return false;
-    }
+    }*/
     public static boolean findOneTurn(GameBoard gameBoard, Position posA, Position posB) {
         if (posA.getCol() != posB.getCol() && posA.getRow() != posB.getCol()) {
             Position cornerPoint1 = new Position(posA.getRow(), posB.getCol());
