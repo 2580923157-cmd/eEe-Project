@@ -2,7 +2,9 @@ package ui;
 
 import javax.swing.*;
 import java.awt.*;
-
+import ui.GameFrame.*;
+//这是start那个按钮的控制区域
+//打算在这里加入设置、音乐之类的
 public class ControlPanel extends JPanel {
     StatusPanel statusPanel;
     JButton startButton;
@@ -28,7 +30,9 @@ public class ControlPanel extends JPanel {
         startButton.setFocusPainted(false);
         this.add(startButton);
         this.startButton.addActionListener(e -> {
-            statusPanel.setStatus("RUN");
+            //statusPanel.setStatus("RUN");
+            StatusPanel.resetTimer();
+            StatusPanel.startTimer();
         });
     }
 

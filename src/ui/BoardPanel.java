@@ -71,7 +71,7 @@ public class BoardPanel extends JPanel {
         this.cellWidth = this.width / totalCol;
         this.cellHeight = this.height / totalRow;
 
-        //接下来读文件
+        //接下来读文件（棋子的照片）
         File dir = new File("resource\\images");
         File[] files = dir.listFiles();
         for (File file : files) {

@@ -5,11 +5,11 @@ import java.awt.*;
 
 public class StatusPanel extends JPanel {
     JLabel statusLabel;
-    JLabel timeLabel;
-    Timer timer;
-    int seconds;
-    int minutes;
-    int hours;
+    static JLabel timeLabel;
+    static Timer timer;
+    static int seconds;
+    static int minutes;
+    static int hours;
     int offSetX;
     int offSetY;
     int width;
@@ -37,7 +37,7 @@ public class StatusPanel extends JPanel {
             timeLabel.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
         });
         //开始计时！
-        timer.start();
+        //timer.start();
         statusLabel.setFont(new Font("Arial", Font.BOLD, 50));
         timeLabel.setFont(new Font("Arial", Font.BOLD, 50));
         Dimension size = statusLabel.getPreferredSize();
@@ -50,6 +50,28 @@ public class StatusPanel extends JPanel {
         timeLabel.setBounds(time_x, time_y, timeLabelSize.width, timeLabelSize.height);
         this.add(statusLabel);
         this.add(timeLabel);
+    }
+    //启动计时器，外部调用用
+    public static void startTimer() {
+        if (timer != null && !timer.isRunning()) {
+            timer.start();
+        }
+    }
+
+    // 停止计时器，外部调用用
+    public static void stopTimer() {
+        if (timer != null && timer.isRunning()) {
+            timer.stop();
+        }
+    }
+
+    // 重置时间
+    public static void resetTimer() {
+        stopTimer();
+        seconds = 0;
+        minutes = 0;
+        hours = 0;
+        timeLabel.setText("00:00:00");
     }
     public void setStatus(String text) {
         statusLabel.setText(text);

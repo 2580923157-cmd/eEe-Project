@@ -16,7 +16,7 @@ public class GameFrame extends JFrame{
     public GameFrame(String title, int width, int height) {
         super(title);
         this.setResizable(false);
-        int size = 3;//棋盘大小
+        int size = 3;//有效棋盘大小（中间格子数量）
         Cell[][] board = new Cell[size + 2][size + 2];
         for (int i = 0; i < size + 2; i++) {
             for (int j = 0; j < size + 2; j++) {
