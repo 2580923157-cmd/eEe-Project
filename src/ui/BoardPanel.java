@@ -3,6 +3,9 @@ package ui;
 import model.*;
 import model.Rectangle;
 
+import utils.AudioProcess;
+import utils.AudioProcess.*;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -11,6 +14,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class BoardPanel extends JPanel {
     int offSetX;
@@ -88,6 +92,7 @@ public class BoardPanel extends JPanel {
                 imageList.add(icon.getImage());
             }
         }
+        System.out.println(imageList.size());
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -138,6 +143,7 @@ public class BoardPanel extends JPanel {
                     gameBoard.getCell(firstSelected.getRow(), firstSelected.getCol()),
                     gameBoard.getCell(secondSelected.getRow(), secondSelected.getCol())
             );
+            AudioProcess.playClear();
             Timer timer = new Timer(300, e -> {
                 Cell c1 = gameBoard.getCell(firstSelected.getRow(), firstSelected.getCol());
                 Cell c2 = gameBoard.getCell(secondSelected.getRow(), secondSelected.getCol());

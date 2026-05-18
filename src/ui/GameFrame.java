@@ -8,6 +8,9 @@ import model.Position;
 import javax.swing.*;
 import java.awt.*;
 
+import java.time.LocalTime;
+import java.util.Random;
+
 public class GameFrame extends JFrame{
     int width;
     int height;
@@ -21,6 +24,7 @@ public class GameFrame extends JFrame{
         this.setResizable(false);
         int size = 8;//有效棋盘大小（中间格子数量）
         Cell[][] board = new Cell[size + 2][size + 2];
+
         for (int i = 0; i < size + 2; i++) {
             for (int j = 0; j < size + 2; j++) {
                 if (i == 0 || i == size + 1 || j == 0 || j == size + 1) {
@@ -28,11 +32,14 @@ public class GameFrame extends JFrame{
                 }
             }
         }
+
+        Random rand=new Random(LocalTime.now().getSecond()+LocalTime.now().getMinute()+LocalTime.now().getHour());
         for (int i = 1; i <= size; i++) {
             for (int j = 1; j <= size; j++) {
-                board[i][j] = new Cell(new Position(i, j), false, 1);
+                board[i][j] = new Cell(new Position(i, j), false, rand.nextInt(1,7));   //格子
             }
         }
+        //目前是完全随机
         BoardPanel boardPanel = new BoardPanel(new GameBoard(size+2, size+2, board), 0, 100, 800, 800);
         //设置棋盘大小
         this.title = title;
