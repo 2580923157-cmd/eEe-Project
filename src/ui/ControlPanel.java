@@ -2,9 +2,15 @@ package ui;
 
 import javax.swing.*;
 import java.awt.*;
-import ui.GameFrame.*;
+//import javax.swing.border.LineBorder;
+// 或使用 BorderFactory
+//import javax.swing.BorderFactory;
+
 import utils.AudioProcess;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 //这是start那个按钮的控制区域
 //打算在这里加入设置、音乐之类的
 public class ControlPanel extends JPanel {
@@ -20,8 +26,8 @@ public class ControlPanel extends JPanel {
     int height;
 
     // 按钮状态
-    private boolean isPaused = false;
-    private boolean bgmPlaying = false;
+    private boolean isPaused=false;
+    private boolean bgmPlaying=true;
     private ImageIcon settingsIcon;
     private ImageIcon audioOnIcon;
     private ImageIcon audioOffIcon;
@@ -29,6 +35,7 @@ public class ControlPanel extends JPanel {
     private ImageIcon continueIcon;
 
     public ControlPanel(StatusPanel statusPanel, int offSetX, int offSetY,int width, int height) {
+        loadIcons();
         this.setLayout(null);
         this.setBounds(offSetX, offSetY, width, height);
         this.offSetX = offSetX;
@@ -49,6 +56,11 @@ public class ControlPanel extends JPanel {
             //statusPanel.setStatus("RUN");
             StatusPanel.resetTimer();
             StatusPanel.startTimer();
+            startButton.setVisible(false);
+            // 显示控制按钮
+            settingsButton.setVisible(true);
+            audioButton.setVisible(true);
+            pauseButton.setVisible(true);
         });
 
         //设置按钮
@@ -56,15 +68,17 @@ public class ControlPanel extends JPanel {
         int iconSize = 40;
         int gap = 10;
         int leftX = 20;
-        int bottomY = height - iconSize - 15;
+        int bottomY = height - iconSize-50;
         settingsButton.setBounds(leftX, bottomY, iconSize, iconSize);
         settingsButton.addActionListener(this::onSettingsClick);
+        settingsButton.setVisible(false);
         this.add(settingsButton);
 
         //音频控制按钮
-        audioButton = createIconButton(audioOffIcon, "音频控制"); // 初始未播放
+        audioButton = createIconButton(audioOnIcon, "音频控制"); // 初始未播放
         audioButton.setBounds(leftX + iconSize + gap, bottomY, iconSize, iconSize);
         audioButton.addActionListener(this::onAudioClick);
+        audioButton.setVisible(false);
         this.add(audioButton);
 
         //暂停按钮
@@ -72,18 +86,23 @@ public class ControlPanel extends JPanel {
         int rightX = width - iconSize - 20;
         pauseButton.setBounds(rightX, bottomY, iconSize, iconSize);
         pauseButton.addActionListener(this::onPauseClick);
+        pauseButton.setVisible(false);
         this.add(pauseButton);
     }
     // 加载图标资源
     private void loadIcons() {
-        settingsIcon = loadAndScaleIcon("settings.png", 36, 36);
-        audioOnIcon  = loadAndScaleIcon("audio_on.png", 36, 36);
-        audioOffIcon = loadAndScaleIcon("audio_off.png", 36, 36);
-        pauseIcon    = loadAndScaleIcon("pause.png", 36, 36);
-        continueIcon = loadAndScaleIcon("continue.png", 36, 36);
+        final int iconSize=45;
+        settingsIcon = loadAndScaleIcon("settings.png", iconSize, iconSize);
+        audioOnIcon  = loadAndScaleIcon("audio_on.png", iconSize, iconSize);
+        audioOffIcon = loadAndScaleIcon("audio_off.png", iconSize, iconSize);
+        pauseIcon    = loadAndScaleIcon("pause.png", iconSize, iconSize);
+        continueIcon = loadAndScaleIcon("continue.png", iconSize, iconSize);
     }
 
-    // 创建纯图标按钮（无边框、透明背景）
+    /**
+    * 创建纯图标按钮，鼠标靠近时候会”凸起“，这里利用swing的border实现；累死我啦
+     * 其中的tootip是鼠标靠近时候显示的文字
+    * */
     private JButton createIconButton(ImageIcon icon, String tooltip) {
         JButton btn = new JButton(icon);
         btn.setToolTipText(tooltip);
@@ -91,7 +110,33 @@ public class ControlPanel extends JPanel {
         btn.setContentAreaFilled(false);
         btn.setFocusPainted(false);
         btn.setCursor(Cursor.getDefaultCursor());
+
+
+
+        // 鼠标悬停效果
+        btn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                ImageIcon originalIcon=(ImageIcon) btn.getIcon();
+                if(originalIcon!=null) {
+                    ImageIcon biggerIcon = new ImageIcon(
+                            icon.getImage().getScaledInstance(icon.getIconWidth() + 6, icon.getIconHeight() + 6, Image.SCALE_SMOOTH)
+                    );
+                    btn.setIcon(biggerIcon);
+                }
+
+                btn.setBorderPainted(true);
+                btn.setBorder(BorderFactory.createLineBorder(new Color(100, 126, 247), 2));
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                //btn.setIcon(originalIcon);
+                btn.setBorderPainted(false);
+                btn.setBorder(null);
+            }
+        });
         return btn;
+
     }
 
     // 从文件加载图标并缩放
@@ -154,6 +199,10 @@ public class ControlPanel extends JPanel {
 
     public void setBgmPlaying(boolean bgmPlaying) {
         this.bgmPlaying = bgmPlaying;
+    }
+
+    public boolean isBoardActive() {
+        return !startButton.isVisible() && !isPaused;
     }
     /*
     * package ui;

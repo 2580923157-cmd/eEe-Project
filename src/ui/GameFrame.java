@@ -4,12 +4,19 @@ import model.Cell;
 import model.GameBoard;
 import model.GameState;
 import model.Position;
+import utils.AudioProcess;
+import utils.AudioProcess.*;
+import ui.BoardPanel;
 
 import javax.swing.*;
 import java.awt.*;
 
 import java.time.LocalTime;
 import java.util.Random;
+
+/**
+ * 主游戏框架及界面。重要的游戏主内容都在这里实现。
+ */
 
 public class GameFrame extends JFrame{
     int width;
@@ -18,6 +25,7 @@ public class GameFrame extends JFrame{
     StatusPanel statusPanel;
     ControlPanel controlPanel;
     BoardPanel boardPanel;
+    //boardPanel.setControlPanel(controlPanel);
 
     public GameFrame(String title, int width, int height) {
         super(title);
@@ -40,7 +48,8 @@ public class GameFrame extends JFrame{
             }
         }
         //目前是完全随机
-        BoardPanel boardPanel = new BoardPanel(new GameBoard(size+2, size+2, board), 0, 100, 800, 800);
+        //BoardPanel boardPanel = new BoardPanel(new GameBoard(size+2, size+2, board), 0, 100, 800, 800);
+        this.boardPanel=new BoardPanel(new GameBoard(size+2, size+2, board), 80, 100, 800, 800);
         //设置棋盘大小
         this.title = title;
         this.width = width;
@@ -49,11 +58,14 @@ public class GameFrame extends JFrame{
         this.setSize(width, height);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
-        this.statusPanel = new StatusPanel(0, 0, 800, 100);
-        this.controlPanel = new ControlPanel(statusPanel, 0, 900, 800, 100);
+        this.statusPanel = new StatusPanel(30, 0, 800, 100);
+        this.controlPanel = new ControlPanel(statusPanel, 50, 900, 800, 100);
+        //这个
+        this.boardPanel.setControlPanel(this.controlPanel);
         this.add(this.statusPanel);
         this.add(this.controlPanel);
-        this.add(boardPanel);
+        this.add(this.boardPanel);
+        AudioProcess.playBgm();
     }
 
 

@@ -3,11 +3,15 @@ package utils;
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
+/**
+ * 我发现这样写注释很有意思，
+ * 因此决定在这个类里试试看
+ */
 
-/*
- 音频处理类，负责背景音乐和音效的播放与停止。
- 音乐文件位于 resource/audio/ 目录下，格式定为 WAV！
- BGM循环，音效每次播放均创建新的 Clip
+/**
+ *音频处理类，负责背景音乐和音效的播放与停止。
+ *音乐文件位于 resource/audio/ 目录下，格式定为 WAV！（ffmpeg来转格式）
+ *BGM循环，音效每次播放均创建新的 Clip
  */
 public class AudioProcess {
 

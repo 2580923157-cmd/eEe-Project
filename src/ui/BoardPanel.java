@@ -2,6 +2,7 @@ package ui;
 
 import model.*;
 import model.Rectangle;
+import utils.AudioProcess;
 
 import javax.swing.*;
 import java.awt.*;
@@ -53,7 +54,11 @@ public class BoardPanel extends JPanel {
         return dr + dc == 1;
     }
     */
+    private ControlPanel controlPanel = null;
 
+    public void setControlPanel(ControlPanel controlPanel) {
+        this.controlPanel = controlPanel;
+    }
 
     // 获取连通路径
     public List<Position> getLinkPath(Position a, Position b) {
@@ -200,12 +205,22 @@ public class BoardPanel extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 handleClick(e.getX() , e.getY());
-                StatusPanel.startTimer();
+                //StatusPanel.startTimer();
+                //startButton.setVisible(false);
             }
         });
     }
-
+    /**
+     * 几个禁止点击：
+     * 1. 暂停了
+     * 2. 在画线
+     * 除此之外允许点击。画线由多段画成。
+     */
     public void handleClick(int x, int y) {
+
+        if(controlPanel!=null&&!controlPanel.isBoardActive()){
+            return;
+        }
         if (animating) {
             return;
         }
@@ -275,6 +290,7 @@ public class BoardPanel extends JPanel {
                 secondSelected = null;
                 animating = false;
                 repaint();
+                AudioProcess.playClear();
             });
             timer.setRepeats(false);
             timer.start();
