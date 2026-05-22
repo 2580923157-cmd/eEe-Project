@@ -59,20 +59,20 @@ public class ControlPanel extends JPanel {
         int bottomY = height - iconSize - 15;
         settingsButton.setBounds(leftX, bottomY, iconSize, iconSize);
         settingsButton.addActionListener(this::onSettingsClick);
-        add(settingsButton);
+        this.add(settingsButton);
 
         //音频控制按钮
         audioButton = createIconButton(audioOffIcon, "音频控制"); // 初始未播放
         audioButton.setBounds(leftX + iconSize + gap, bottomY, iconSize, iconSize);
         audioButton.addActionListener(this::onAudioClick);
-        add(audioButton);
+        this.add(audioButton);
 
         //暂停按钮
         pauseButton = createIconButton(pauseIcon, "暂停");
         int rightX = width - iconSize - 20;
         pauseButton.setBounds(rightX, bottomY, iconSize, iconSize);
         pauseButton.addActionListener(this::onPauseClick);
-        add(pauseButton);
+        this.add(pauseButton);
     }
     // 加载图标资源
     private void loadIcons() {
@@ -96,7 +96,7 @@ public class ControlPanel extends JPanel {
 
     // 从文件加载图标并缩放
     private ImageIcon loadAndScaleIcon(String filename, int w, int h) {
-        ImageIcon icon = new ImageIcon("resource/menus/" + filename);
+        ImageIcon icon = new ImageIcon("resource\\menus\\" + filename);
         Image img = icon.getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH);
         return new ImageIcon(img);
     }

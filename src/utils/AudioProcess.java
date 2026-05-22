@@ -12,7 +12,7 @@ import java.io.IOException;
 public class AudioProcess {
 
     //音频存放目录
-    private static final String AUDIO_DIR = "resource/audio/";
+    private static final String AUDIO_DIR = "resource\\audio\\";
     //BGM：带循环
     private static Clip bgmClip;
     private static boolean bgmPlaying = false;

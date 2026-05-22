@@ -8,6 +8,7 @@ public class StatusPanel extends JPanel {
     static JLabel timeLabel;
     static Timer timer;
     static int seconds;
+    //static int score;
 
     public static int getScore() {
         return score;
@@ -181,4 +182,5 @@ public class StatusPanel extends JPanel {
         statusLabel.setText("Score: " + score);
         repaint();
     }
+
 }
