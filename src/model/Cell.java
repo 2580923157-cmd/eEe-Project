@@ -36,4 +36,15 @@ public class Cell {
         isEmpty = empty;
         iconIndex = 0;
     }
+
+    // 判断两个格子是否是相同的图案
+    public boolean isSameIcon(Cell other) {
+        if (other == null) {
+            return false;
+        }
+        if (this.isEmpty || other.isEmpty) {
+            return false;
+        }
+        return this.iconIndex == other.iconIndex;
+    }
 }
