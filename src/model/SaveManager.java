@@ -1,5 +1,7 @@
 package model;
 
+import model.Cell;
+
 import java.io.*;
 import java.util.ArrayList;
 
