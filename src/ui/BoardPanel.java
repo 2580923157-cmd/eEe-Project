@@ -56,91 +56,91 @@ public class BoardPanel extends JPanel {
 
 
     // 获取连通路径
-public List<Position> getLinkPath(Position a, Position b) {
-    Cell ca = gameBoard.getCell(a.getRow(), a.getCol());
-    Cell cb = gameBoard.getCell(b.getRow(), b.getCol());
-    if (!ca.isSameIcon(cb)) return null; //补充一个isSameIcon判断是否是同种图案的方法
+    public List<Position> getLinkPath(Position a, Position b) {
+        Cell ca = gameBoard.getCell(a.getRow(), a.getCol());
+        Cell cb = gameBoard.getCell(b.getRow(), b.getCol());
+        if (!ca.isSameIcon(cb)) return null; //补充一个isSameIcon判断是否是同种图案的方法
 
-    List<Position> path = new ArrayList<>();
-    if (direct(a, b)) {
-        path.add(a); path.add(b); return path;
-    }
-    Position corner1 = oneCorner(a, b);
-    if (corner1 != null) {
-        path.add(a); path.add(corner1); path.add(b); return path;
-    }
-    List<Position> corners = twoCorner(a, b);
-    if (corners != null) {
-        path.add(a);
-        path.add(corners.get(0));
-        path.add(corners.get(1));
-        path.add(b);
-        return path;
-    }
-    return null;
-}
-
-
-// 直线连通
-private boolean direct(Position a, Position b) {
-    if (a.getRow() != b.getRow() && a.getCol() != b.getCol()) {
-        return false;
-    }
-    int r1 = a.getRow(), c1 = a.getCol();
-    int r2 = b.getRow(), c2 = b.getCol();
-    if (r1 == r2) {
-        int min = Math.min(c1, c2), max = Math.max(c1, c2);
-        for (int c = min+1; c < max; c++) {
-            if (!gameBoard.getCell(r1, c).isEmpty()) return false;
+        List<Position> path = new ArrayList<>();
+        if (direct(a, b)) {
+            path.add(a); path.add(b); return path;
         }
-    } else {
-        int min = Math.min(r1, r2), max = Math.max(r1, r2);
-        for (int r = min+1; r < max; r++) {
-            if (!gameBoard.getCell(r, c1).isEmpty()) return false;
+        Position corner1 = oneCorner(a, b);
+        if (corner1 != null) {
+            path.add(a); path.add(corner1); path.add(b); return path;
         }
-    }
-    return true;
-}
-
-
-// 一个拐点
-private Position oneCorner(Position a, Position b) {
-    Position p1 = new Position(a.getRow(), b.getCol());
-    if (direct(a, p1) && direct(p1, b) && gameBoard.getCell(p1.getRow(), p1.getCol()).isEmpty()) {
-        return p1;
-    }
-    Position p2 = new Position(b.getRow(), a.getCol());
-    if (direct(a, p2) && direct(p2, b) && gameBoard.getCell(p2.getRow(), p2.getCol()).isEmpty()) {
-        return p2;
-    }
-    return null;
-}
-
-
-// 两个拐点
-private List<Position> twoCorner(Position a, Position b) {
-    for (int r = 0; r < totalRow; r++) {
-        Position p1 = new Position(r, a.getCol());
-        Position p2 = new Position(r, b.getCol());
-        if (gameBoard.getCell(p1.getRow(), p1.getCol()).isEmpty() &&
-            gameBoard.getCell(p2.getRow(), p2.getCol()).isEmpty() &&
-            direct(a, p1) && direct(p1, p2) && direct(p2, b)) {
-            List<Position> list = new ArrayList<>();
-            list.add(p1); list.add(p2); return list;
+        List<Position> corners = twoCorner(a, b);
+        if (corners != null) {
+            path.add(a);
+            path.add(corners.get(0));
+            path.add(corners.get(1));
+            path.add(b);
+            return path;
         }
+        return null;
     }
-    for (int c = 0; c < totalCol; c++) {
-        Position p1 = new Position(a.getRow(), c);
-        Position p2 = new Position(b.getRow(), c);
-        if (gameBoard.getCell(p1.getRow(), p1.getCol()).isEmpty() &&
-            gameBoard.getCell(p2.getRow(), p2.getCol()).isEmpty() &&
-            direct(a, p1) && direct(p1, p2) && direct(p2, b)) {
-            List<Position> list = new ArrayList<>();
-            list.add(p1); list.add(p2); return list;
+
+
+    // 直线连通
+    private boolean direct(Position a, Position b) {
+        if (a.getRow() != b.getRow() && a.getCol() != b.getCol()) {
+            return false;
         }
+        int r1 = a.getRow(), c1 = a.getCol();
+        int r2 = b.getRow(), c2 = b.getCol();
+        if (r1 == r2) {
+            int min = Math.min(c1, c2), max = Math.max(c1, c2);
+            for (int c = min+1; c < max; c++) {
+                if (!gameBoard.getCell(r1, c).isEmpty()) return false;
+            }
+        } else {
+            int min = Math.min(r1, r2), max = Math.max(r1, r2);
+            for (int r = min+1; r < max; r++) {
+                if (!gameBoard.getCell(r, c1).isEmpty()) return false;
+            }
+        }
+        return true;
     }
-    return null;
-}
+
+
+    // 一个拐点
+    private Position oneCorner(Position a, Position b) {
+        Position p1 = new Position(a.getRow(), b.getCol());
+        if (direct(a, p1) && direct(p1, b) && gameBoard.getCell(p1.getRow(), p1.getCol()).isEmpty()) {
+            return p1;
+        }
+        Position p2 = new Position(b.getRow(), a.getCol());
+        if (direct(a, p2) && direct(p2, b) && gameBoard.getCell(p2.getRow(), p2.getCol()).isEmpty()) {
+            return p2;
+        }
+        return null;
+    }
+
+
+    // 两个拐点
+    private List<Position> twoCorner(Position a, Position b) {
+        for (int r = 0; r < totalRow; r++) {
+            Position p1 = new Position(r, a.getCol());
+            Position p2 = new Position(r, b.getCol());
+            if (gameBoard.getCell(p1.getRow(), p1.getCol()).isEmpty() &&
+                    gameBoard.getCell(p2.getRow(), p2.getCol()).isEmpty() &&
+                    direct(a, p1) && direct(p1, p2) && direct(p2, b)) {
+                List<Position> list = new ArrayList<>();
+                list.add(p1); list.add(p2); return list;
+            }
+        }
+        for (int c = 0; c < totalCol; c++) {
+            Position p1 = new Position(a.getRow(), c);
+            Position p2 = new Position(b.getRow(), c);
+            if (gameBoard.getCell(p1.getRow(), p1.getCol()).isEmpty() &&
+                    gameBoard.getCell(p2.getRow(), p2.getCol()).isEmpty() &&
+                    direct(a, p1) && direct(p1, p2) && direct(p2, b)) {
+                List<Position> list = new ArrayList<>();
+                list.add(p1); list.add(p2); return list;
+            }
+        }
+        return null;
+    }
 
     // 统一判定是否可以消除
     private boolean canEliminate(Position a, Position b) {
