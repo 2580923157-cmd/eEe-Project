@@ -8,6 +8,100 @@ public class StatusPanel extends JPanel {
     static JLabel timeLabel;
     static Timer timer;
     static int seconds;
+    //static int score;
+
+    public static int getScore() {
+        return score;
+    }
+
+    public static void setScore(int score) {
+        StatusPanel.score = score;
+    }
+
+    private static int score = 0;
+
+    public static int getMinutes() {
+        return minutes;
+    }
+
+    public static void setMinutes(int minutes) {
+        StatusPanel.minutes = minutes;
+    }
+
+    public JLabel getStatusLabel() {
+        return statusLabel;
+    }
+
+    public void setStatusLabel(JLabel statusLabel) {
+        this.statusLabel = statusLabel;
+    }
+
+    public static JLabel getTimeLabel() {
+        return timeLabel;
+    }
+
+    public static void setTimeLabel(JLabel timeLabel) {
+        StatusPanel.timeLabel = timeLabel;
+    }
+
+    public static Timer getTimer() {
+        return timer;
+    }
+
+    public static void setTimer(Timer timer) {
+        StatusPanel.timer = timer;
+    }
+
+    public static int getSeconds() {
+        return seconds;
+    }
+
+    public static void setSeconds(int seconds) {
+        StatusPanel.seconds = seconds;
+    }
+
+    public static int getHours() {
+        return hours;
+    }
+
+    public static void setHours(int hours) {
+        StatusPanel.hours = hours;
+    }
+
+    public int getOffSetX() {
+        return offSetX;
+    }
+
+    public void setOffSetX(int offSetX) {
+        this.offSetX = offSetX;
+    }
+
+    public int getOffSetY() {
+        return offSetY;
+    }
+
+    public void setOffSetY(int offSetY) {
+        this.offSetY = offSetY;
+    }
+
+    @Override
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    @Override
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
     static int minutes;
     static int hours;
     int offSetX;
@@ -81,4 +175,12 @@ public class StatusPanel extends JPanel {
         statusLabel.setBounds(x, y, size.width, size.height);
         repaint();
     }
+
+    //刷新显示
+    public void updateLabels() {
+        timeLabel.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
+        statusLabel.setText("Score: " + score);
+        repaint();
+    }
+
 }

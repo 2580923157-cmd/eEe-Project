@@ -1,5 +1,6 @@
 package model;
 
+import model.Cell;
 import ui.GameFrame;
 
 public class GameState {//存数据
