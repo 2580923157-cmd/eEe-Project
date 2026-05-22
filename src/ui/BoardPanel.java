@@ -32,10 +32,11 @@ public class BoardPanel extends JPanel {
     int cellWidth;
     int cellHeight;
 
-    Position firstSelected = null;
-    Position secondSelected = null;
+    Position firstSelected=null;
+    Position secondSelected=null;
 
-    boolean animating = false;
+    boolean animating =false;
+    boolean pause= true;
     private float animProgress = 0.0f;        // 画线进度 0~1
     private Timer animTimer;                  // 动画用定时器
     private Cell animCell1, animCell2;        // 当前正在动画的起点和终点
@@ -82,6 +83,7 @@ public class BoardPanel extends JPanel {
         this.setPreferredSize(new Dimension(this.width, this.height));
         this.cellWidth = this.width / totalCol;
         this.cellHeight = this.height / totalRow;
+        AudioProcess.playBgm();
 
         //接下来读文件（棋子的照片）
         File dir = new File("resource\\images");
@@ -102,7 +104,7 @@ public class BoardPanel extends JPanel {
         });
     }
     public void handleClick(int x, int y) {
-        if (animating) {
+        if (animating) {//如果仍在动画，禁止用鼠标
             return;
         }
 
@@ -143,8 +145,8 @@ public class BoardPanel extends JPanel {
                     gameBoard.getCell(firstSelected.getRow(), firstSelected.getCol()),
                     gameBoard.getCell(secondSelected.getRow(), secondSelected.getCol())
             );
-            AudioProcess.playClear();
-            Timer timer = new Timer(300, e -> {
+            //AudioProcess.playClear();
+            Timer timer = new Timer(200, e -> {
                 Cell c1 = gameBoard.getCell(firstSelected.getRow(), firstSelected.getCol());
                 Cell c2 = gameBoard.getCell(secondSelected.getRow(), secondSelected.getCol());
                 c1.setEmpty(true);
@@ -157,6 +159,9 @@ public class BoardPanel extends JPanel {
                 secondSelected = null;
                 animating = false;
                 repaint();
+                AudioProcess.playClear();
+                StatusPanel.setScore(StatusPanel.getScore()+10);
+                StatusPanel.statusLabel.setText(String.format("当前分数：%d",StatusPanel.getScore()));
             }); //延时，划线动画
             timer.setRepeats(false);
             timer.start();
@@ -173,7 +178,9 @@ public class BoardPanel extends JPanel {
         int y = position.getRow() * cellHeight;
         return new Rectangle(x, y, cellWidth, cellHeight);
     }
+
     @Override
+    //与格子有关的绘制
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g; //画笔

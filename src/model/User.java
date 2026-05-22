@@ -1,4 +1,4 @@
-package model;//实体类
+package model;
 
 public class User {
     public String getUserName() {

@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class StatusPanel extends JPanel {
-    JLabel statusLabel;
+    static JLabel statusLabel;
     static JLabel timeLabel;
     static Timer timer;
     static int seconds;
@@ -132,15 +132,15 @@ public class StatusPanel extends JPanel {
         });
         //开始计时！
         //timer.start();
-        statusLabel.setFont(new Font("Arial", Font.BOLD, 50));
+        statusLabel.setFont(new Font("微软雅黑", Font.PLAIN, 30));
         timeLabel.setFont(new Font("Arial", Font.BOLD, 50));
         Dimension size = statusLabel.getPreferredSize();
         Dimension timeLabelSize = timeLabel.getPreferredSize();
-        int x = (width - size.width) / 3 ;
+        int x = (width - size.width) / 4 ;
         int y = (height - size.height) / 3;
         int time_x = (width - timeLabelSize.width) * 2 / 3;
         int time_y = (height - timeLabelSize.height) * 2 /3;
-        statusLabel.setBounds(x, y, size.width, size.height);
+        statusLabel.setBounds(x-130, y, size.width+150, size.height);
         timeLabel.setBounds(time_x, time_y, timeLabelSize.width, timeLabelSize.height);
         this.add(statusLabel);
         this.add(timeLabel);

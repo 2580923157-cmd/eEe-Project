@@ -100,8 +100,12 @@ public class Login {
                 JOptionPane.showMessageDialog(loginBox, "登录成功！欢迎 " + username);
                 loginBox.dispose(); // 关闭登录窗口，后续进入游戏
                 //这里的游戏设置标题、长、宽
-                GameFrame frame = new GameFrame("Connect+ 连连看", 1000, 1000);
-                frame.repaint();
+                /*GameFrame frame = new GameFrame("Connect+ 连连看", 1000, 1000);
+                frame.repaint();*/
+                SwingUtilities.invokeLater(() -> {
+                    Menu menu = new Menu(username);
+                    menu.setVisible(true);
+                });
             } else {
                 JOptionPane.showMessageDialog(loginBox, "用户名或密码错误！", "登录失败", JOptionPane.ERROR_MESSAGE);
             }
@@ -136,8 +140,12 @@ public class Login {
             loginBox.dispose(); // 关闭窗口，进入游戏
 
             //现在进游戏，这里的游戏设置标题、长、宽
-            GameFrame frame = new GameFrame("Connect+ 连连看", 1000, 1000);
-            frame.repaint();
+            /*GameFrame frame = new GameFrame("Connect+ 连连看", 1000, 1000);
+            frame.repaint();*/
+            SwingUtilities.invokeLater(() -> {
+                Menu menu = new Menu("游客");
+                menu.setVisible(true);
+            });
         });
 
         loginBox.setVisible(true);

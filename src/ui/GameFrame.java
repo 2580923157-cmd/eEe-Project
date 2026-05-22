@@ -28,7 +28,7 @@ public class GameFrame extends JFrame{
         for (int i = 0; i < size + 2; i++) {
             for (int j = 0; j < size + 2; j++) {
                 if (i == 0 || i == size + 1 || j == 0 || j == size + 1) {
-                    board[i][j] = new Cell(new Position(i, j), true, 0); /// 边框
+                    board[i][j] = new Cell(new Position(i, j), true, 0); // 边框
                 }
             }
         }
