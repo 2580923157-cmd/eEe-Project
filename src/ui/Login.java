@@ -13,7 +13,7 @@ public class Login {
     private static UserService userService = new UserService();
 
     public static void loginFrame() {
-        JFrame loginBox = new JFrame("连连看 - 登录");
+        JFrame loginBox = new JFrame("夏日大挑战 - 登录");
         loginBox.setSize(600, 450);
         loginBox.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         loginBox.setLayout(null);

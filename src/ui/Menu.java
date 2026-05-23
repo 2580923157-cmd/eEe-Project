@@ -64,7 +64,7 @@ public class Menu extends JFrame {
         startButton.addActionListener(e -> {
             dispose();                                 // 关闭菜单窗口
             // 注意：GameFrame 构造器中已调用 setVisible(true)，无需重复
-            new GameFrame("Connect+ 连连看", 1000, 1000);
+            new GameFrame("夏日大挑战", 1000, 1000);
         });
 
         // ----- 关卡选择（暂时无操作） -----

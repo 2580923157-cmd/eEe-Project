@@ -50,6 +50,7 @@ public class GameFrame extends JFrame{
         //目前是完全随机
         //BoardPanel boardPanel = new BoardPanel(new GameBoard(size+2, size+2, board), 0, 100, 800, 800);
         this.boardPanel=new BoardPanel(new GameBoard(size+2, size+2, board), 80, 100, 800, 800);
+        boardPanel.setControlPanel(controlPanel);
         //设置棋盘大小
         this.title = title;
         this.width = width;
@@ -59,7 +60,7 @@ public class GameFrame extends JFrame{
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
         this.statusPanel = new StatusPanel(30, 0, 800, 100);
-        this.controlPanel = new ControlPanel(statusPanel, 50, 900, 800, 100);
+        this.controlPanel = new ControlPanel(statusPanel, 50, 900, 1000, 100);
         //这个
         this.boardPanel.setControlPanel(this.controlPanel);
         this.add(this.statusPanel);

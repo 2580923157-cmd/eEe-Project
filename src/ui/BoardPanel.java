@@ -13,6 +13,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+import java.util.Random;
 
 public class BoardPanel extends JPanel {
     int offSetX;
@@ -218,12 +219,7 @@ public class BoardPanel extends JPanel {
             }
         });
     }
-    /**
-     * 几个禁止点击：
-     * 1. 暂停了
-     * 2. 在画线
-     * 除此之外允许点击。画线由多段画成。
-     */
+
 
     // 保存当前棋盘快照
     public void saveHistory() {
@@ -267,6 +263,36 @@ public class BoardPanel extends JPanel {
         // 撤销后重新判断胜负
         checkWin();
     }
+    /**
+     * 重开游戏
+     */
+    public void resetGame() {
+        // 有操作再执行
+        if (!historyStack.isEmpty()) {
+            // 获取栈底元素（第一个保存的状态）
+            Cell[][] initialBoard = historyStack.firstElement();
+            // 将当前棋盘格子全部恢复为该快照
+            for (int i = 0; i < totalRow; i++) {
+                for (int j = 0; j < totalCol; j++) {
+                    Cell cell = gameBoard.getCell(i, j);
+                    Cell saved = initialBoard[i][j];
+                    cell.setEmpty(saved.isEmpty());
+                    cell.setIconIndex(saved.getIconIndex());
+                }
+            }
+        }
+        // 清空所有选择
+        gameBoard.clearAllChosen();
+        firstSelected = null;
+        secondSelected = null;
+        lineVisible = false;
+        lineList.clear();
+        animating = false;
+        // 清空历史并重新保存当前初始状态
+        historyStack.clear();
+        saveHistory();
+        repaint();
+    }
 
     //胜负判断 棋盘空了为胜
     public boolean checkWin() {
@@ -284,6 +310,10 @@ public class BoardPanel extends JPanel {
     }
 
     public void handleClick(int x, int y) {
+        if(controlPanel!=null&&
+                !controlPanel.isBoardActive()){
+            return;
+        }
         if (animating) {
             return;
         }
@@ -376,7 +406,6 @@ public class BoardPanel extends JPanel {
             repaint();
         }
     }
-
 
     /*public void handleClick(int x, int y) {
 

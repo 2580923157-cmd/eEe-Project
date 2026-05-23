@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+
 //这是start那个按钮的控制区域
 //打算在这里加入设置、音乐之类的
 public class ControlPanel extends JPanel {
@@ -19,8 +20,10 @@ public class ControlPanel extends JPanel {
     JButton settingsButton;
     JButton audioButton;
     JButton pauseButton;
+    JButton retryButton;
+    JButton undoButton;
 
-    int offSetX;
+    int offSetX;    //偏移
     int offSetY;
     int width;
     int height;
@@ -33,6 +36,14 @@ public class ControlPanel extends JPanel {
     private ImageIcon audioOffIcon;
     private ImageIcon pauseIcon;
     private ImageIcon continueIcon;
+    private ImageIcon retryIcon;
+    private ImageIcon undoIcon;
+
+    private BoardPanel boardPanel;
+
+    public void setBoardPanel(BoardPanel boardPanel) {
+        this.boardPanel = boardPanel;
+    }
 
     public ControlPanel(StatusPanel statusPanel, int offSetX, int offSetY,int width, int height) {
         loadIcons();
@@ -42,7 +53,7 @@ public class ControlPanel extends JPanel {
         this.offSetY = offSetY;
         this.width = width;
         this.height = height;
-        this.startButton = new JButton("start");
+        this.startButton = new JButton("START");
         this.statusPanel = statusPanel;
         int btnWidth = 150;
         int btnHeight = 50;
@@ -52,6 +63,7 @@ public class ControlPanel extends JPanel {
         startButton.setFont(new Font("Arial", Font.BOLD, 25));
         startButton.setFocusPainted(false);
         this.add(startButton);
+        //开始之后
         this.startButton.addActionListener(e -> {
             //statusPanel.setStatus("RUN");
             StatusPanel.resetTimer();
@@ -61,13 +73,15 @@ public class ControlPanel extends JPanel {
             settingsButton.setVisible(true);
             audioButton.setVisible(true);
             pauseButton.setVisible(true);
+            retryButton.setVisible(true);
+            undoButton.setVisible(true);
         });
 
         //设置按钮
         settingsButton = createIconButton(settingsIcon, "设置");
-        int iconSize = 40;
-        int gap = 10;
-        int leftX = 20;
+        final int iconSize = 45;
+        final int gap = 10;   //两个按钮之间的间距
+        final int leftX = 20;
         int bottomY = height - iconSize-50;
         settingsButton.setBounds(leftX, bottomY, iconSize, iconSize);
         settingsButton.addActionListener(this::onSettingsClick);
@@ -88,15 +102,31 @@ public class ControlPanel extends JPanel {
         pauseButton.addActionListener(this::onPauseClick);
         pauseButton.setVisible(false);
         this.add(pauseButton);
+
+        //重开按钮
+        retryButton = createIconButton(retryIcon, "重新开始");
+
+        pauseButton.setBounds(rightX+iconSize+gap, bottomY, iconSize, iconSize);
+        pauseButton.addActionListener(this::onRetryClick);
+        pauseButton.setVisible(false);
+        this.add(retryButton);
+        //撤销按钮
+        undoButton=createIconButton(undoIcon,"回到上一步");
+        undoButton.setBounds(leftX+iconSize*2+2*gap,bottomY,iconSize,iconSize);
+        undoButton.addActionListener(this::onUndoClick);
+        undoButton.setVisible(false);
+        this.add(undoButton);
     }
     // 加载图标资源
     private void loadIcons() {
         final int iconSize=45;
         settingsIcon = loadAndScaleIcon("settings.png", iconSize, iconSize);
-        audioOnIcon  = loadAndScaleIcon("audio_on.png", iconSize, iconSize);
+        audioOnIcon= loadAndScaleIcon("audio_on.png", iconSize, iconSize);
         audioOffIcon = loadAndScaleIcon("audio_off.png", iconSize, iconSize);
-        pauseIcon    = loadAndScaleIcon("pause.png", iconSize, iconSize);
+        pauseIcon=loadAndScaleIcon("pause.png", iconSize, iconSize);
         continueIcon = loadAndScaleIcon("continue.png", iconSize, iconSize);
+        undoIcon=loadAndScaleIcon("undo.png",iconSize,iconSize);
+        retryIcon=loadAndScaleIcon("retry.png",iconSize,iconSize);
     }
 
     /**
@@ -188,6 +218,27 @@ public class ControlPanel extends JPanel {
             // 恢复游戏交互
         }
 
+    }
+    /** 重来 */
+    private void onRetryClick(ActionEvent e) {
+        AudioProcess.playClick();
+        if (boardPanel != null) {
+            boardPanel.resetGame();
+            statusPanel.resetTimer();
+            statusPanel.resetScore();
+            statusPanel.setStatus("READY");
+            // 重置暂停状态
+            isPaused = false;
+            pauseButton.setIcon(pauseIcon);
+            pauseButton.setToolTipText("暂停");
+        }
+    }
+    /** 撤销 */
+    private void onUndoClick(ActionEvent e) {
+        AudioProcess.playClick();
+        if (boardPanel != null) {
+            boardPanel.undoStep();
+        }
     }
 
     public boolean isPaused() {
