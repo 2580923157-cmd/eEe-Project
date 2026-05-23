@@ -117,13 +117,13 @@ public class ControlPanel extends JPanel {
         btn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                ImageIcon originalIcon=(ImageIcon) btn.getIcon();
+                /*ImageIcon originalIcon=(ImageIcon) btn.getIcon();
                 if(originalIcon!=null) {
                     ImageIcon biggerIcon = new ImageIcon(
                             icon.getImage().getScaledInstance(icon.getIconWidth() + 6, icon.getIconHeight() + 6, Image.SCALE_SMOOTH)
                     );
                     btn.setIcon(biggerIcon);
-                }
+                }*/
 
                 btn.setBorderPainted(true);
                 btn.setBorder(BorderFactory.createLineBorder(new Color(100, 126, 247), 2));
@@ -156,6 +156,7 @@ public class ControlPanel extends JPanel {
 
     //音频启停
     private void onAudioClick(ActionEvent e) {
+        AudioProcess.playClick();
         if (bgmPlaying) {
             AudioProcess.stopBgm();
             audioButton.setIcon(audioOffIcon);
@@ -167,16 +168,18 @@ public class ControlPanel extends JPanel {
             audioButton.setToolTipText("停止音乐");
             bgmPlaying = true;
         }
+
     }
 
     // 暂停/继续：控制计时器
     private void onPauseClick(ActionEvent e) {
+        AudioProcess.playClick();
         if (!isPaused) {
             statusPanel.stopTimer();
             pauseButton.setIcon(continueIcon);
             pauseButton.setToolTipText("继续");
             isPaused = true;
-            // 可以在这里调用游戏暂停逻辑（如禁止棋盘点击）
+
         } else {
             statusPanel.startTimer();
             pauseButton.setIcon(pauseIcon);
@@ -184,6 +187,7 @@ public class ControlPanel extends JPanel {
             isPaused = false;
             // 恢复游戏交互
         }
+
     }
 
     public boolean isPaused() {

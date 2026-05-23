@@ -55,9 +55,14 @@ public class AudioProcess {
         playSoundEffect("clear.wav");
     }
 
-    /** 播放切换/操作音效 */
-    public static void playChange() {
-        playSoundEffect("audio_change.wav");
+    /** 播放按钮控制 */
+    public static void playClick() {
+        playSoundEffect("click.wav");
+    }
+
+    /** 播放获胜*/
+    public static void playWin(){
+        playSoundEffect("win.wav");
     }
 
     // ---------- 内部工具方法 ----------
