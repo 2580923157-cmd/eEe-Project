@@ -3,6 +3,11 @@ package model;
 public class Cell {
     Position pos;
     boolean isEmpty;
+
+    public void setIconIndex(int iconIndex) {
+        this.iconIndex = iconIndex;
+    }
+
     int iconIndex;
     boolean isChosen;
 

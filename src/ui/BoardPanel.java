@@ -12,6 +12,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class BoardPanel extends JPanel {
     int offSetX;
@@ -37,6 +38,8 @@ public class BoardPanel extends JPanel {
     private Timer animTimer;                  // 动画用定时器
     private Cell animCell1, animCell2;        // 当前正在动画的起点和终点
     //过段时间再实现！
+
+    private Stack<Cell[][]> historyStack = new Stack<>();//用于把上一步信息保存在内存栈
 
     public Position getPositionByPoint(int x, int y) {
 
@@ -201,6 +204,11 @@ public class BoardPanel extends JPanel {
                 imageList.add(icon.getImage());
             }
         }
+
+        // 开局保存初始状态
+        saveHistory();
+
+
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -216,7 +224,161 @@ public class BoardPanel extends JPanel {
      * 2. 在画线
      * 除此之外允许点击。画线由多段画成。
      */
+
+    // 保存当前棋盘快照
+    public void saveHistory() {
+        Cell[][] copy = new Cell[totalRow][totalCol];
+        for (int i = 0; i < totalRow; i++) {
+            for (int j = 0; j < totalCol; j++) {
+                Cell orig = gameBoard.getCell(i, j);
+                copy[i][j] = new Cell(orig.getPos(), orig.isEmpty(), orig.getIconIndex());
+            }
+        }
+        historyStack.push(copy);
+    }
+
+    // 撤销
+    public void undoStep() {
+        if (historyStack.size() <= 1) {
+            JOptionPane.showMessageDialog(this, "已经是第一步！");
+            return;
+        }
+
+        // 回退分数
+        StatusPanel.undoScore();
+
+        // 恢复棋盘
+        historyStack.pop();
+        Cell[][] lastBoard = historyStack.peek();
+        for (int i = 0; i < totalRow; i++) {
+            for (int j = 0; j < totalCol; j++) {
+                Cell c = gameBoard.getCell(i, j);
+                Cell saved = lastBoard[i][j];
+                c.setEmpty(saved.isEmpty());
+                c.setIconIndex(saved.getIconIndex());
+            }
+        }
+
+        gameBoard.clearAllChosen();
+        firstSelected = null;
+        secondSelected = null;
+        repaint();
+
+        // 撤销后重新判断胜负
+        checkWin();
+    }
+
+    //胜负判断 棋盘空了为胜
+    public boolean checkWin() {
+        for (int i = 1; i <= totalRow - 2; i++) {
+            for (int j = 1; j <= totalCol - 2; j++) {
+                Cell c = gameBoard.getCell(i, j);
+                if (!c.isEmpty()) {
+                    return false;
+                }
+            }
+        }
+        JOptionPane.showMessageDialog(this, "🎉 恭喜通关！");
+        StatusPanel.stopTimer();
+        return true;
+    }
+
     public void handleClick(int x, int y) {
+        if (animating) {
+            return;
+        }
+
+        Position pos = getPositionByPoint(x, y);
+        if (pos == null) {
+            return;
+        }
+
+        Cell clickedCell = gameBoard.getCell(pos.getRow(), pos.getCol());
+        if (clickedCell == null || clickedCell.isEmpty()) {
+            return;
+        }
+
+        // 第一次选中
+        if (firstSelected == null) {
+            gameBoard.clearAllChosen();
+            clickedCell.setChosen(true);
+            firstSelected = pos;
+            repaint();
+            return;
+        }
+
+        // 重复点击则取消选中
+        if (firstSelected.equals(pos)) {
+            gameBoard.clearAllChosen();
+            firstSelected = null;
+            secondSelected = null;
+            repaint();
+            return;
+        }
+
+        // 第二次选中
+        secondSelected = pos;
+        Cell secondCell = gameBoard.getCell(secondSelected.getRow(), secondSelected.getCol());
+        secondCell.setChosen(true);
+        repaint();
+
+
+        //先判断能否消除
+        if (canEliminate(firstSelected, secondSelected)) {
+            //获取路径端点
+            List<Position> path = getLinkPath(firstSelected, secondSelected);
+            animating = true;
+
+            //根据路径分段画线
+            lineList.clear();
+            for (int i = 0; i < path.size() - 1; i++) {
+                Position p1 = path.get(i);
+                Position p2 = path.get(i + 1);
+                Cell c1 = gameBoard.getCell(p1.getRow(), p1.getCol());
+                Cell c2 = gameBoard.getCell(p2.getRow(), p2.getCol());
+                showLine(c1, c2); // 多次调用画线 拼接成完整折线
+            }
+
+            // 延时消除
+            Timer timer = new Timer(300, e -> {
+                Cell c1 = gameBoard.getCell(firstSelected.getRow(), firstSelected.getCol());
+                Cell c2 = gameBoard.getCell(secondSelected.getRow(), secondSelected.getCol());
+
+                // 保存历史
+                saveHistory();
+
+                c1.setEmpty(true);
+                c2.setEmpty(true);
+                c1.setChosen(false);
+                c2.setChosen(false);
+
+                // 加分
+                StatusPanel.addScore(10);
+                lineVisible = false;
+                lineList.clear();
+                firstSelected = null;
+                secondSelected = null;
+                animating = false;
+                repaint();
+                // 判断胜利
+                checkWin();
+            });
+            timer.setRepeats(false);
+            timer.start();
+
+        } else {
+            // 不能消除则切换选中并且将连消计数combo重置
+            StatusPanel.breakCombo();
+            gameBoard.clearAllChosen();
+            secondCell.setChosen(true);
+            firstSelected = secondSelected;
+            secondSelected = null;
+            repaint();
+        }
+    }
+
+
+    /*public void handleClick(int x, int y) {
 
         if(controlPanel!=null&&!controlPanel.isBoardActive()){
             return;
@@ -303,7 +465,7 @@ public class BoardPanel extends JPanel {
             secondSelected = null;
             repaint();
         }
-    }
+    }*/
 
 
 

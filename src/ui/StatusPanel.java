@@ -8,7 +8,40 @@ public class StatusPanel extends JPanel {
     static JLabel timeLabel;
     static Timer timer;
     static int seconds;
+    private static int score = 0;
+    private static int combo = 0;
     //static int score;
+
+    //加分(包括连消)
+    public static void addScore(int base) {
+        combo++;
+        int add = base * combo;
+        score += add;
+        updateLabels();
+    }
+    //撤销分数
+    public static void undoScore() {
+        if (score >= 10) {
+            int lastAdd = 10 * combo;
+            score = Math.max(0, score - lastAdd);
+            combo = Math.max(0, combo - 1);
+            updateLabels();
+        }
+    }
+    //连消中断（点错时调用）
+    public static void breakCombo() {
+        combo = 0;
+        updateLabels();
+    }
+
+    // 静态刷新 显示分数、连消
+    public static void updateLabels() {
+        if (timeLabel == null || timeLabel.getParent() == null) return;
+        StatusPanel panel = (StatusPanel) timeLabel.getParent();
+        timeLabel.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
+        panel.statusLabel.setText("Score: " + score + "  ×" + combo);
+        panel.repaint();
+    }
 
     public static int getScore() {
         return score;
@@ -18,7 +51,7 @@ public class StatusPanel extends JPanel {
         StatusPanel.score = score;
     }
 
-    private static int score = 0;
+
 
     public static int getMinutes() {
         return minutes;
@@ -177,10 +210,10 @@ public class StatusPanel extends JPanel {
     }
 
     //刷新显示
-    public void updateLabels() {
+    /*public void updateLabels() {
         timeLabel.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
         statusLabel.setText("Score: " + score);
         repaint();
-    }
+    }*/
 
 }
