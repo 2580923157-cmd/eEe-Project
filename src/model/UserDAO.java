@@ -5,7 +5,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UserDAO {
-    private static final String USER_FILE =  "users.txt";//final 一旦赋值不能修改
+    private static final String USER_HOME = System.getProperty("user.home");
+    //系统用户主目录 C:\Users\用户名
+    private static final String APP_DIR = USER_HOME + File.separator + "myGames";
+    private static final String USER_FILE = APP_DIR + File.separator + "users.txt";
+    //final 一旦赋值不能修改
     private Map<String, String> userMap = new HashMap<>();//HashMap是Map接口最常用的实现类
     /*HashMap put(key, value) 把键值对存进Map 若key已经存在 会覆盖原来的value
               contains(key) 判断Map中有没有该key 返回true或false
@@ -13,6 +17,10 @@ public class UserDAO {
      */
 
     public UserDAO(){
+        File dir = new File(APP_DIR);
+        if(!dir.exists()){
+            dir.mkdir();
+        }
         loadUsersFromFile();
     }
 

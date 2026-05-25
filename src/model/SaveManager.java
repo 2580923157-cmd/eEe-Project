@@ -41,7 +41,10 @@ public class SaveManager {
     public GameState load(String userName){
          String path = getPath(userName);
          File file = new File(path);
-         if(!file.exists()) return null;
+         if(!file.exists()){
+             System.out.println("存档无效，文件不存在");
+             return null;
+         }
 
         ArrayList<String> lines = new ArrayList<>();
         try(BufferedReader br = new BufferedReader(new FileReader(file))){
@@ -53,32 +56,60 @@ public class SaveManager {
                 }
             }
         }catch(IOException e){
-            System.out.println(e.getMessage());
+            System.out.println("存档无效，读取文件失败" + e.getMessage());
             return null;
         }
 
-        if(lines.size()<=1) return null;//棋盘都没有
+        if(lines.size()<=1) {
+            System.out.println("存档无效，内容不完整");
+            return null;//棋盘都没有
+        }
 
         //读取第一行：时间
         String timeLine = lines.get(0);
         String[] timeArr = timeLine.split(", ");//save时时间用,分隔
+
+        if (timeArr.length != 4) {
+            System.out.println("存档无效，时间/分数格式错误");
+            return null;
+        }
+
         int hour = Integer.parseInt(timeArr[0]);
         int minute = Integer.parseInt(timeArr[1]);
         int  second = Integer.parseInt(timeArr[2]);
         int score = Integer.parseInt(timeArr[3]);
 
         //读棋盘部分 即lines.get(i) i>=1
-        ArrayList<String> boradLines = new ArrayList<>();//虽然iconIndex是int 但是读取到file之后就变成String
+        ArrayList<String> boardLines = new ArrayList<>();//虽然iconIndex是int 但是读取到file之后就变成String
         for(int  i=1;i<lines.size();i++){
-            boradLines.add(lines.get(i));
+            boardLines.add(lines.get(i));
         }
 
         //接下来计算棋盘的行列 该功能可能在棋盘大小随机生成的场景能用到
-        int row = boradLines.size();
-        int col = boradLines.get(0).split(" ").length;//save时cell用空格分隔
+        int row = boardLines.size();
+        int col = boardLines.get(0).split(" ").length;//save时cell用空格分隔
         Cell[][] board = new Cell[row][col];
+
+        for (int i = 0; i < row; i++) {
+            String[] info = boardLines.get(i).split(" ");
+            if (info.length != col) {
+                System.out.println("存档无效：棋盘行列损坏");
+                return null;
+            }
+            for (int j = 0; j < col; j++) {
+                int iconIndex;
+                try {
+                    iconIndex = Integer.parseInt(info[j]);
+                } catch (NumberFormatException ex) {
+                    System.out.println("存档无效，格子数据不是数字");
+                    return null;
+                }
+            }
+        }
+
+
         for (int i = 0; i < board.length; i++) {
-            String[] inFo = boradLines.get(i).split(" ");
+            String[] inFo = boardLines.get(i).split(" ");
             for (int i1 = 0; i1 < board[i].length; i1++) {
                 int iconIndex = Integer.parseInt(inFo[i]);
                 boolean isEmpty = (iconIndex == 0);

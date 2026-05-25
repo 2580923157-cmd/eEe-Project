@@ -163,7 +163,7 @@ public class TestMain {
     }
 
 
-    // 存档接口
+    // 存档方法
     public static void saveGame(String userName) {
         if (gameFrame == null || userName == null || userName.isBlank()) {
             JOptionPane.showMessageDialog(null, "游戏未打开或用户名为空！");
@@ -174,7 +174,7 @@ public class TestMain {
         JOptionPane.showMessageDialog(null, "存档成功！");
     }
 
-    // 读档接口
+    // 读档方法
     public static void loadGame(String userName) {
         if (gameFrame == null || userName == null || userName.isBlank()) {
             JOptionPane.showMessageDialog(null, "游戏未打开或用户名为空！");

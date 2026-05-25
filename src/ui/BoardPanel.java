@@ -248,8 +248,8 @@ public class BoardPanel extends JPanel {
         StatusPanel.undoScore();
 
         // 恢复棋盘
-        historyStack.pop();
-        Cell[][] lastBoard = historyStack.peek();
+        //historyStack.pop();
+        Cell[][] lastBoard = historyStack.pop();
         for (int i = 0; i < totalRow; i++) {
             for (int j = 0; j < totalCol; j++) {
                 Cell c = gameBoard.getCell(i, j);
