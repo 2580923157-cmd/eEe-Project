@@ -10,6 +10,7 @@ import utils.AudioProcess;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import ui.GameFrame.*;
 
 
 //这是start那个按钮的控制区域
@@ -39,7 +40,12 @@ public class ControlPanel extends JPanel {
     private ImageIcon retryIcon;
     private ImageIcon undoIcon;
 
-    private BoardPanel boardPanel;
+    /*public BoardPanel boardP;
+
+    public void setBoardPanel(BoardPanel boardPanel) {
+        this.boardP = boardPanel;
+    }*/
+    private BoardPanel boardPanel;   // 新增
 
     public void setBoardPanel(BoardPanel boardPanel) {
         this.boardPanel = boardPanel;
@@ -79,9 +85,10 @@ public class ControlPanel extends JPanel {
 
         //设置按钮
         settingsButton = createIconButton(settingsIcon, "设置");
-        final int iconSize = 45;
+        final int iconSize = 45;    //icon大小
         final int gap = 10;   //两个按钮之间的间距
-        final int leftX = 20;
+        final int leftX = 20;   //左边距离
+        int rightX = width -5*iconSize - 20;    //右边距离
         int bottomY = height - iconSize-50;
         settingsButton.setBounds(leftX, bottomY, iconSize, iconSize);
         settingsButton.addActionListener(this::onSettingsClick);
@@ -97,7 +104,6 @@ public class ControlPanel extends JPanel {
 
         //暂停按钮
         pauseButton = createIconButton(pauseIcon, "暂停");
-        int rightX = width - iconSize - 20;
         pauseButton.setBounds(rightX, bottomY, iconSize, iconSize);
         pauseButton.addActionListener(this::onPauseClick);
         pauseButton.setVisible(false);
@@ -105,10 +111,9 @@ public class ControlPanel extends JPanel {
 
         //重开按钮
         retryButton = createIconButton(retryIcon, "重新开始");
-
-        pauseButton.setBounds(rightX+iconSize+gap, bottomY, iconSize, iconSize);
-        pauseButton.addActionListener(this::onRetryClick);
-        pauseButton.setVisible(false);
+        retryButton.setBounds(rightX-iconSize-gap, bottomY, iconSize, iconSize);
+        retryButton.addActionListener(this::onRetryClick);
+        retryButton.setVisible(false);
         this.add(retryButton);
         //撤销按钮
         undoButton=createIconButton(undoIcon,"回到上一步");
@@ -130,10 +135,10 @@ public class ControlPanel extends JPanel {
     }
 
     /**
-    * 创建纯图标按钮，鼠标靠近时候会”凸起“，这里利用swing的border实现；累死我啦
-     * 其中的tootip是鼠标靠近时候显示的文字
+    * 创建纯图标按钮，鼠标靠近时候会有一个边框，这里利用swing的border实现；累死我啦
+     * 其中的tooltip是鼠标靠近时候显示的文字
     * */
-    private JButton createIconButton(ImageIcon icon, String tooltip) {
+    private JButton createIconButton(ImageIcon icon,String tooltip) {
         JButton btn = new JButton(icon);
         btn.setToolTipText(tooltip);
         btn.setBorderPainted(false);
@@ -201,7 +206,7 @@ public class ControlPanel extends JPanel {
 
     }
 
-    // 暂停/继续：控制计时器
+    /** 暂停/继续,能控制计时器*/
     private void onPauseClick(ActionEvent e) {
         AudioProcess.playClick();
         if (!isPaused) {
@@ -220,7 +225,7 @@ public class ControlPanel extends JPanel {
 
     }
     /** 重来 */
-    private void onRetryClick(ActionEvent e) {
+    /*private void onRetryClick(ActionEvent e) {
         AudioProcess.playClick();
         if (boardPanel != null) {
             boardPanel.resetGame();
@@ -232,6 +237,31 @@ public class ControlPanel extends JPanel {
             pauseButton.setIcon(pauseIcon);
             pauseButton.setToolTipText("暂停");
         }
+    }*/
+    private void onRetryClick(ActionEvent e) {
+        AudioProcess.playClick();
+        if (boardPanel!=null) {
+            boardPanel.resetGame();
+        }
+        statusPanel.resetTimer();
+        statusPanel.resetScore();
+        statusPanel.setStatus("READY");
+        resetToStart();   // 让控制面板恢复初始状态
+    }
+    /**
+     * 重来之后的重置控制面板到初始状态
+     */
+    public void resetToStart() {
+        startButton.setVisible(true);
+        settingsButton.setVisible(false);
+        audioButton.setVisible(false);
+        pauseButton.setVisible(false);
+        retryButton.setVisible(false);
+        undoButton.setVisible(false);
+        // 重置暂停状态
+        isPaused = false;
+        pauseButton.setIcon(pauseIcon);
+        pauseButton.setToolTipText("暂停");
     }
     /** 撤销 */
     private void onUndoClick(ActionEvent e) {

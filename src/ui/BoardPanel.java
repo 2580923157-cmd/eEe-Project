@@ -289,7 +289,9 @@ public class BoardPanel extends JPanel {
         lineList.clear();
         animating = false;
         // 清空历史并重新保存当前初始状态
-        historyStack.clear();
+        /*historyStack.clear();
+        controlPanel=null;*/
+        System.gc();
         saveHistory();
         repaint();
     }
@@ -304,6 +306,7 @@ public class BoardPanel extends JPanel {
                 }
             }
         }
+        AudioProcess.playWin();
         JOptionPane.showMessageDialog(this, "🎉 恭喜通关！");
         StatusPanel.stopTimer();
         return true;
@@ -368,6 +371,7 @@ public class BoardPanel extends JPanel {
                 Cell c2 = gameBoard.getCell(p2.getRow(), p2.getCol());
                 showLine(c1, c2); // 多次调用画线 拼接成完整折线
             }
+            AudioProcess.playClear();
 
             // 延时消除
             Timer timer = new Timer(300, e -> {
@@ -495,8 +499,6 @@ public class BoardPanel extends JPanel {
             repaint();
         }
     }*/
-
-
 
 
     public Rectangle getRectangle(Position position) {

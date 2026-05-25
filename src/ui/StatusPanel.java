@@ -33,6 +33,7 @@ public class StatusPanel extends JPanel {
         combo = 0;
         updateLabels();
     }
+
     /** 重新开始的一部分：分数重置*/
     public void resetScore() {
         setScore(0);
@@ -198,7 +199,7 @@ public class StatusPanel extends JPanel {
         }
     }
 
-    // 重置时间
+    /** 重开的一部分：重置时间*/
     public static void resetTimer() {
         stopTimer();
         seconds = 0;

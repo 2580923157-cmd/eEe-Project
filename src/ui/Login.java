@@ -62,7 +62,7 @@ public class Login {
         passField.setFont(new Font("微软雅黑", Font.PLAIN, 16));
         passField.setSize(250, 35);
         passField.setLocation(230, 208);
-        passField.setEchoChar('*');
+        passField.setEchoChar('*'); //回显
         passField.setBorder(BorderFactory.createLineBorder(new Color(100, 149, 237), 1));
         loginBox.add(passField);
 

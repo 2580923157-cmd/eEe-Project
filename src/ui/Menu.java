@@ -25,7 +25,7 @@ public class Menu extends JFrame {
     private String username;
 
     public Menu(String username) {
-        super("连连看 - 主菜单");
+        super("夏日大挑战 - 主菜单");
         this.username = username;
         setSize(600, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
