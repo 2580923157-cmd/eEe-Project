@@ -65,8 +65,6 @@ public class AudioProcess {
         playSoundEffect("win.wav");
     }
 
-    // ---------- 内部工具方法 ----------
-
     /**
      * 播放指定音效文件。该方法会创建一个新的 Clip 并播放一次，
      * 播放完毕后自动关闭 Clip 释放资源，因此多个音效可以同时播放。

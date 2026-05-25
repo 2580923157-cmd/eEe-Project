@@ -34,6 +34,13 @@ public class StatusPanel extends JPanel {
         updateLabels();
     }
 
+    /** 重新开始的一部分：分数重置*/
+    public void resetScore() {
+        setScore(0);
+        breakCombo();  // 重置连击计数
+        statusLabel.setText("Score: 0");  // 或调用 setStatus("...")
+    }
+
     // 静态刷新 显示分数、连消
     public static void updateLabels() {
         if (timeLabel == null || timeLabel.getParent() == null) return;
@@ -149,7 +156,7 @@ public class StatusPanel extends JPanel {
         this.offSetY = offSetY;
         this.width = width;
         this.height = height;
-        statusLabel = new JLabel("ready");
+        statusLabel = new JLabel("READY");
         timeLabel = new JLabel("00:00:00");
         timer = new Timer(1000, e -> {
             seconds++;
@@ -192,7 +199,7 @@ public class StatusPanel extends JPanel {
         }
     }
 
-    // 重置时间
+    /** 重开的一部分：重置时间*/
     public static void resetTimer() {
         stopTimer();
         seconds = 0;
@@ -203,8 +210,8 @@ public class StatusPanel extends JPanel {
     public void setStatus(String text) {
         statusLabel.setText(text);
         Dimension size = statusLabel.getPreferredSize();
-        int x = (width - size.width) / 3;
-        int y = (height - size.height) / 3;
+        int x = (width - size.width)/4;
+        int y = (height - size.height)/3;
         statusLabel.setBounds(x, y, size.width, size.height);
         repaint();
     }

@@ -13,7 +13,7 @@ public class Login {
     private static UserService userService = new UserService();
 
     public static void loginFrame() {
-        JFrame loginBox = new JFrame("连连看 - 登录");
+        JFrame loginBox = new JFrame("夏日大挑战 - 登录");
         loginBox.setSize(600, 450);
         loginBox.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         loginBox.setLayout(null);
@@ -62,7 +62,7 @@ public class Login {
         passField.setFont(new Font("微软雅黑", Font.PLAIN, 16));
         passField.setSize(250, 35);
         passField.setLocation(230, 208);
-        passField.setEchoChar('*');
+        passField.setEchoChar('*'); //回显
         passField.setBorder(BorderFactory.createLineBorder(new Color(100, 149, 237), 1));
         loginBox.add(passField);
 
