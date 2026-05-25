@@ -34,7 +34,7 @@ public class GameFrame extends JFrame{
     public GameFrame(String title, int width, int height,User user) {
         super(title);
         this.setResizable(false);
-        int size = 8;//有效棋盘大小（中间格子数量）
+        int size = 4;//有效棋盘大小（中间格子数量）
         Cell[][] board = new Cell[size + 2][size + 2];
 
         for (int i = 0; i < size + 2; i++) {
@@ -52,10 +52,17 @@ public class GameFrame extends JFrame{
             }
         }
         //目前是完全随机
+
+        /*//测试用：全1
+        for (int i = 1; i <= size; i++) {
+            for (int j = 1; j <= size; j++) {
+                board[i][j] = new Cell(new Position(i, j), false, 1);   //格子全是1
+            }
+        }*/
         //BoardPanel boardPanel = new BoardPanel(new GameBoard(size+2, size+2, board), 0, 100, 800, 800);
         this.boardPanel=new BoardPanel(new GameBoard(size+2, size+2, board), 80, 100, 800, 800);
         this.statusPanel = new StatusPanel(30, 0, 800, 100);
-        this.controlPanel = new ControlPanel(statusPanel, 50, 900, 1000, 100);
+        this.controlPanel = new ControlPanel(statusPanel, 0, 900, 1000, 100);
         //状态注入
         boardPanel.setControlPanel(controlPanel);
         controlPanel.setBoardPanel(boardPanel);

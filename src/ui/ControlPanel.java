@@ -10,7 +10,6 @@ import utils.AudioProcess;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import ui.GameFrame.*;
 
 
 //这是start那个按钮的控制区域
@@ -69,11 +68,11 @@ public class ControlPanel extends JPanel {
         this.height = height;
         this.startButton = new JButton("START");
         this.statusPanel = statusPanel;
-        int btnWidth = 150;
-        int btnHeight = 50;
-        int x = (width - btnWidth) / 2;
-        int y = (height - btnHeight) / 2-20;
-        startButton.setBounds(x, y, btnWidth, btnHeight);
+        int startWidth = 150;
+        int startHeight = 50;
+        int startX = (width - startWidth) / 2;
+        int startY = (height - startHeight) / 2-20;
+        startButton.setBounds(startX, startY, startWidth, startHeight);
         startButton.setFont(new Font("Arial", Font.BOLD, 25));
         startButton.setFocusPainted(false);
         this.add(startButton);
@@ -83,6 +82,9 @@ public class ControlPanel extends JPanel {
             StatusPanel.resetTimer();
             StatusPanel.startTimer();
             startButton.setVisible(false);
+
+            statusPanel.setStatus("Score: 0 ×0");
+            //welcomeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
             // 显示控制按钮
             //settingsButton.setVisible(true);
             audioButton.setVisible(true);
@@ -99,7 +101,7 @@ public class ControlPanel extends JPanel {
         final int iconSize = 45;    //icon大小
         final int gap = 10;   //两个按钮之间的间距
         final int leftX = 20;   //左边距离
-        int rightX = width -5*iconSize - 40;    //右边距离
+        int rightX = width-iconSize-20;    //右边极点
         int bottomY = height - iconSize-50;
         /*settingsButton.setBounds(leftX, bottomY, iconSize, iconSize);
         settingsButton.addActionListener(this::onSettingsClick);
@@ -115,14 +117,14 @@ public class ControlPanel extends JPanel {
 
         //暂停按钮
         pauseButton = createIconButton(pauseIcon, "暂停");
-        pauseButton.setBounds(rightX, bottomY, iconSize, iconSize);
+        pauseButton.setBounds(rightX-iconSize-gap, bottomY, iconSize, iconSize);
         pauseButton.addActionListener(this::onPauseClick);
         pauseButton.setVisible(false);
         this.add(pauseButton);
 
         //重开按钮
         retryButton = createIconButton(retryIcon, "重新开始");
-        retryButton.setBounds(rightX-iconSize-gap, bottomY, iconSize, iconSize);
+        retryButton.setBounds(rightX-2*iconSize-2*gap, bottomY, iconSize, iconSize);
         retryButton.addActionListener(this::onRetryClick);
         retryButton.setVisible(false);
         this.add(retryButton);
@@ -144,9 +146,9 @@ public class ControlPanel extends JPanel {
         //int exitX = width - iconSize - 20;               // 靠右
         //int pauseX = exitX - iconSize - gap;             // 暂停在左边
         exitButton = createIconButton(exitIcon, "退出");
-        exitButton.setBounds(rightX+gap+iconSize, bottomY, iconSize, iconSize);
+        exitButton.setBounds(rightX-10, bottomY, iconSize, iconSize);
         exitButton.addActionListener(this::onExitClick);
-        exitButton.setVisible(false);
+        //exitButton.setVisible(false);
         this.add(exitButton);
 
     }

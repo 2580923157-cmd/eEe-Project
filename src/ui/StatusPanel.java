@@ -157,6 +157,7 @@ public class StatusPanel extends JPanel {
         this.width = width;
         this.height = height;
         statusLabel = new JLabel("READY");
+        statusLabel.setHorizontalAlignment(SwingConstants.LEFT);
         timeLabel = new JLabel("00:00:00");
         timer = new Timer(1000, e -> {
             seconds++;
@@ -210,9 +211,10 @@ public class StatusPanel extends JPanel {
     public void setStatus(String text) {
         statusLabel.setText(text);
         Dimension size = statusLabel.getPreferredSize();
+        statusLabel.setHorizontalAlignment(SwingConstants.LEFT);
         int x = (width - size.width)/4;
         int y = (height - size.height)/3;
-        statusLabel.setBounds(x, y, size.width, size.height);
+        statusLabel.setBounds(x-130, y, size.width+150, size.height);
         repaint();
     }
 
