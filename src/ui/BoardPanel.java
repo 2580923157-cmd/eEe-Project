@@ -166,14 +166,18 @@ public class BoardPanel extends JPanel {
 
 
     //接下来需要写一个记录消除路线的方法 再写一个点击方法 点击时调用前者
-
     public void showLine(Cell c1, Cell c2) {
         lineList.clear();
         lineList.add(new Line(c1, c2));
         lineVisible = true;
         repaint();
     }
-
+    /**添加一条折线*/
+    public void addLinePart(Cell c1, Cell c2) {
+        lineList.add(new Line(c1, c2));
+        lineVisible = true;
+        repaint();
+    }
 
 
     public void clearLine() {
@@ -289,9 +293,9 @@ public class BoardPanel extends JPanel {
         lineList.clear();
         animating = false;
         // 清空历史并重新保存当前初始状态
-        /*historyStack.clear();
-        controlPanel=null;*/
-        System.gc();
+        historyStack.clear();
+        /*controlPanel=null;
+        System.gc();*/
         saveHistory();
         repaint();
     }
@@ -369,8 +373,11 @@ public class BoardPanel extends JPanel {
                 Position p2 = path.get(i + 1);
                 Cell c1 = gameBoard.getCell(p1.getRow(), p1.getCol());
                 Cell c2 = gameBoard.getCell(p2.getRow(), p2.getCol());
-                showLine(c1, c2); // 多次调用画线 拼接成完整折线
+                //showLine(c1, c2); // 多次调用画线 拼接成完整折线
+                addLinePart(c1,c2); //画几段
             }
+            lineVisible=true;
+            repaint();
             AudioProcess.playClear();
 
             // 延时消除

@@ -6,6 +6,7 @@ import model.GameState;
 import model.Position;
 import utils.AudioProcess;
 import utils.AudioProcess.*;
+import model.User;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,7 +31,7 @@ public class GameFrame extends JFrame{
     /*public BoardPanel getBoardPanel(){
         return boardPanel;
     }*/
-    public GameFrame(String title, int width, int height) {
+    public GameFrame(String title, int width, int height,User user) {
         super(title);
         this.setResizable(false);
         int size = 8;//有效棋盘大小（中间格子数量）
@@ -47,7 +48,7 @@ public class GameFrame extends JFrame{
         Random rand=new Random(LocalTime.now().getSecond()+LocalTime.now().getMinute()+LocalTime.now().getHour());
         for (int i = 1; i <= size; i++) {
             for (int j = 1; j <= size; j++) {
-                board[i][j] = new Cell(new Position(i, j), false, rand.nextInt(1,7));   //格子
+                board[i][j] = new Cell(new Position(i, j), false, rand.nextInt(1,9));   //格子
             }
         }
         //目前是完全随机
@@ -58,6 +59,15 @@ public class GameFrame extends JFrame{
         //状态注入
         boardPanel.setControlPanel(controlPanel);
         controlPanel.setBoardPanel(boardPanel);
+        //用来退回menu
+        controlPanel.exitAction(() -> {
+            dispose();                              // 关闭当前游戏窗口
+            SwingUtilities.invokeLater(() -> {      // 返回主菜单
+                Menu menu=new Menu(user);  // 需要把当前用户传回菜单
+                AudioProcess.stopBgm();
+                menu.setVisible(true);
+            });
+        });
 
         //设置棋盘大小
         this.title = title;

@@ -15,6 +15,8 @@ public class Menu extends JPanel {
 
 package ui;
 
+import model.User;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -22,11 +24,12 @@ import java.awt.*;
  * 主菜单窗口
  */
 public class Menu extends JFrame {
-    private String username;
+    //private String username;
+    private User user;
 
-    public Menu(String username) {
+    public Menu(User user) {
         super("夏日大挑战 - 主菜单");
-        this.username = username;
+        this.user = user;
         setSize(600, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -34,11 +37,11 @@ public class Menu extends JFrame {
         getContentPane().setBackground(new Color(240, 248, 255));
 
         // ===== 右上角欢迎文字 =====
-        JLabel welcomeLabel = new JLabel("欢迎，" + username);
-        welcomeLabel.setFont(new Font("微软雅黑", Font.PLAIN, 18));
+        JLabel welcomeLabel = new JLabel("欢迎，" + user.getUserName());
+        welcomeLabel.setFont(new Font("微软雅黑", Font.PLAIN, 15));
         welcomeLabel.setForeground(new Color(25, 25, 112));
-        welcomeLabel.setSize(250, 30);
-        welcomeLabel.setLocation(330, 15);
+        welcomeLabel.setSize(300, 30);
+        welcomeLabel.setLocation(260, 25);
         welcomeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         add(welcomeLabel);
 
@@ -52,9 +55,9 @@ public class Menu extends JFrame {
         add(logoLabel);
 
         // ===== 功能按钮 =====
-        JButton startButton = createButton("开始游戏", 225, 160);
-        JButton levelButton = createButton("关卡选择", 225, 230);
-        JButton exitButton  = createButton("退出游戏", 225, 300);
+        JButton startButton = createButton("开始游戏", 225, 190);
+        JButton levelButton = createButton("关卡选择", 225, 260);
+        JButton exitButton  = createButton("退出游戏", 225, 330);
 
         add(startButton);
         add(levelButton);
@@ -64,7 +67,7 @@ public class Menu extends JFrame {
         startButton.addActionListener(e -> {
             dispose();                                 // 关闭菜单窗口
             // 注意：GameFrame 构造器中已调用 setVisible(true)，无需重复
-            new GameFrame("夏日大挑战", 1000, 1000);
+            new GameFrame("夏日大挑战", 1000, 1000,user);
         });
 
         // ----- 关卡选择（暂时无操作） -----

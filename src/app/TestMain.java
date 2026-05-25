@@ -277,10 +277,11 @@ public class TestMain {
             String u = loginUser.getText().trim();
             String p = new String(loginPwd.getPassword()).trim();
             boolean ok = userDAO.validateUser(u, p);
+            User user=new User(u,p);
             if (ok) {
                 JOptionPane.showMessageDialog(frame, "登录成功！游戏已打开");
                 // 登录成功自动打开游戏
-                gameFrame = new GameFrame("连连看", 1000, 1000);
+                gameFrame = new GameFrame("连连看", 1000, 1000,user);
             } else {
                 JOptionPane.showMessageDialog(frame, "用户名或密码错误");
             }

@@ -103,7 +103,7 @@ public class Login {
                 /*GameFrame frame = new GameFrame("Connect+ 连连看", 1000, 1000);
                 frame.repaint();*/
                 SwingUtilities.invokeLater(() -> {
-                    Menu menu = new Menu(username);
+                    Menu menu = new Menu(userService.getCurrentUser());
                     menu.setVisible(true);
                 });
             } else {
@@ -142,8 +142,9 @@ public class Login {
             //现在进游戏，这里的游戏设置标题、长、宽
             /*GameFrame frame = new GameFrame("Connect+ 连连看", 1000, 1000);
             frame.repaint();*/
+            User guest=new User();
             SwingUtilities.invokeLater(() -> {
-                Menu menu = new Menu("游客");
+                Menu menu = new Menu(guest);
                 menu.setVisible(true);
             });
         });

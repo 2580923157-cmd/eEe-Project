@@ -18,11 +18,17 @@ import ui.GameFrame.*;
 public class ControlPanel extends JPanel {
     StatusPanel statusPanel;
     JButton startButton;
-    JButton settingsButton;
+    //JButton settingsButton;
     JButton audioButton;
     JButton pauseButton;
     JButton retryButton;
     JButton undoButton;
+    JButton saveButton;
+    JButton exitButton;
+
+    //退出
+    private Runnable onExitAction;
+    public void exitAction(Runnable action) { this.onExitAction = action; }
 
     int offSetX;    //偏移
     int offSetY;
@@ -32,13 +38,15 @@ public class ControlPanel extends JPanel {
     // 按钮状态
     private boolean isPaused=false;
     private boolean bgmPlaying=true;
-    private ImageIcon settingsIcon;
+    //private ImageIcon settingsIcon;
     private ImageIcon audioOnIcon;
     private ImageIcon audioOffIcon;
     private ImageIcon pauseIcon;
     private ImageIcon continueIcon;
     private ImageIcon retryIcon;
     private ImageIcon undoIcon;
+    private ImageIcon saveIcon;
+    private ImageIcon exitIcon;
 
     /*public BoardPanel boardP;
 
@@ -76,24 +84,27 @@ public class ControlPanel extends JPanel {
             StatusPanel.startTimer();
             startButton.setVisible(false);
             // 显示控制按钮
-            settingsButton.setVisible(true);
+            //settingsButton.setVisible(true);
             audioButton.setVisible(true);
             pauseButton.setVisible(true);
             retryButton.setVisible(true);
             undoButton.setVisible(true);
+            exitButton.setVisible(true);
+            saveButton.setVisible(true);
         });
 
         //设置按钮
-        settingsButton = createIconButton(settingsIcon, "设置");
+        //settingsButton = createIconButton(settingsIcon, "设置");
+
         final int iconSize = 45;    //icon大小
         final int gap = 10;   //两个按钮之间的间距
         final int leftX = 20;   //左边距离
-        int rightX = width -5*iconSize - 20;    //右边距离
+        int rightX = width -5*iconSize - 40;    //右边距离
         int bottomY = height - iconSize-50;
-        settingsButton.setBounds(leftX, bottomY, iconSize, iconSize);
+        /*settingsButton.setBounds(leftX, bottomY, iconSize, iconSize);
         settingsButton.addActionListener(this::onSettingsClick);
         settingsButton.setVisible(false);
-        this.add(settingsButton);
+        this.add(settingsButton);*/
 
         //音频控制按钮
         audioButton = createIconButton(audioOnIcon, "音频控制"); // 初始未播放
@@ -121,17 +132,36 @@ public class ControlPanel extends JPanel {
         undoButton.addActionListener(this::onUndoClick);
         undoButton.setVisible(false);
         this.add(undoButton);
+
+        // 保存按钮（原设置按钮位置）
+        saveButton = createIconButton(saveIcon, "保存");
+        saveButton.setBounds(leftX, bottomY, iconSize, iconSize);
+        saveButton.addActionListener(this::onSaveClick);
+        saveButton.setVisible(false);
+        this.add(saveButton);
+
+        // 退出按钮（最右边）
+        //int exitX = width - iconSize - 20;               // 靠右
+        //int pauseX = exitX - iconSize - gap;             // 暂停在左边
+        exitButton = createIconButton(exitIcon, "退出");
+        exitButton.setBounds(rightX+gap+iconSize, bottomY, iconSize, iconSize);
+        exitButton.addActionListener(this::onExitClick);
+        exitButton.setVisible(false);
+        this.add(exitButton);
+
     }
     // 加载图标资源
     private void loadIcons() {
         final int iconSize=45;
-        settingsIcon = loadAndScaleIcon("settings.png", iconSize, iconSize);
+        //settingsIcon = loadAndScaleIcon("settings.png", iconSize, iconSize);
         audioOnIcon= loadAndScaleIcon("audio_on.png", iconSize, iconSize);
         audioOffIcon = loadAndScaleIcon("audio_off.png", iconSize, iconSize);
         pauseIcon=loadAndScaleIcon("pause.png", iconSize, iconSize);
         continueIcon = loadAndScaleIcon("continue.png", iconSize, iconSize);
         undoIcon=loadAndScaleIcon("undo.png",iconSize,iconSize);
         retryIcon=loadAndScaleIcon("retry.png",iconSize,iconSize);
+        saveIcon = loadAndScaleIcon("save.png", iconSize, iconSize);
+        exitIcon = loadAndScaleIcon("exit.png", iconSize, iconSize);
     }
 
     /**
@@ -183,13 +213,13 @@ public class ControlPanel extends JPanel {
 
     // ========== 事件处理 ==========
 
-    //设置
+    /*//设置
     private void onSettingsClick(ActionEvent e) {
         //后续实现！
 
     }
 
-    //音频启停
+    /**音频启停*/
     private void onAudioClick(ActionEvent e) {
         AudioProcess.playClick();
         if (bgmPlaying) {
@@ -240,6 +270,7 @@ public class ControlPanel extends JPanel {
     }*/
     private void onRetryClick(ActionEvent e) {
         AudioProcess.playClick();
+        pauseButton.setToolTipText("重新开始");
         if (boardPanel!=null) {
             boardPanel.resetGame();
         }
@@ -253,11 +284,13 @@ public class ControlPanel extends JPanel {
      */
     public void resetToStart() {
         startButton.setVisible(true);
-        settingsButton.setVisible(false);
+        //settingsButton.setVisible(false);
         audioButton.setVisible(false);
         pauseButton.setVisible(false);
         retryButton.setVisible(false);
         undoButton.setVisible(false);
+        exitButton.setVisible(false);
+        saveButton.setVisible(false);
         // 重置暂停状态
         isPaused = false;
         pauseButton.setIcon(pauseIcon);
@@ -269,6 +302,20 @@ public class ControlPanel extends JPanel {
         if (boardPanel != null) {
             boardPanel.undoStep();
         }
+        pauseButton.setToolTipText("撤销");
+    }
+    /**保存*/
+    private void onSaveClick(ActionEvent e) {
+        // 后续实现存档功能
+        pauseButton.setToolTipText("保存");
+    }
+    /**退出*/
+    private void onExitClick(ActionEvent e) {
+        AudioProcess.playClick();
+        if (onExitAction != null) {
+            onExitAction.run();
+        }
+        pauseButton.setToolTipText("退出");
     }
 
     public boolean isPaused() {
