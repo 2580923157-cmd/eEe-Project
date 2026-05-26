@@ -313,7 +313,7 @@ public class ControlPanel extends JPanel {
     }
     /**退出*/
     private void onExitClick(ActionEvent e) {
-        AudioProcess.playClick();
+        AudioProcess.playClickSpecial();
         if (onExitAction != null) {
             onExitAction.run();
         }

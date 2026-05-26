@@ -240,6 +240,7 @@ public class BoardPanel extends JPanel {
     // 撤销
     public void undoStep() {
         if (historyStack.size() <= 1) {
+            AudioProcess.playClickSpecial();
             JOptionPane.showMessageDialog(this, "已经是第一步！");
             return;
         }
