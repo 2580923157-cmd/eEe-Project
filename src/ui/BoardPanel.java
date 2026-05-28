@@ -506,6 +506,10 @@ public class BoardPanel extends JPanel {
         }
 
     }
+
+
+
+
 }
 //老的判定
 /*public void handleClick(int x, int y) {

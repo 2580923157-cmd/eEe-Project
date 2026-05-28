@@ -1,5 +1,7 @@
 package support;
 
+import model.Cell;
+
 import java.util.Random;
 
 
@@ -1415,20 +1417,21 @@ public class mapPool {
             }
     };
 
-    // ====================== 随机抽取 ======================
-    private static final Random random = new Random();
+        //随机抽取
+        private static final Random random = new Random();
 
-    // 抽简单地图
-    public static int[][] getRandomEasyMap() {
-        int index = random.nextInt(EASYMAPS.length);
-        return EASYMAPS[index];
-    }
+        // 抽简单地图
+        public static int[][] getRandomEasyMap() {
+                int index = random.nextInt(EASYMAPS.length);
+                return EASYMAPS[index];
+        }
 
-    // 抽困难地图
-    public static int[][] getRandomHardMap() {
-        int index = random.nextInt(HARDMAPS.length);
-        return HARDMAPS[index];
-    }
+        // 抽困难地图
+        public static int[][] getRandomHardMap() {
+                int index = random.nextInt(HARDMAPS.length);
+                return HARDMAPS[index];
+        }
+
 
 
 }
