@@ -166,7 +166,9 @@ public class Login {
         button.setBorder(BorderFactory.createRaisedBevelBorder());
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
-    //这个用来测试界面，到时候删了
+
+
+    //这里就是主入口
     public static void main(String[] args) {
         SwingUtilities.invokeLater(Login::loginFrame);
     }

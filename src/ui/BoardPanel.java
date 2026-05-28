@@ -302,7 +302,7 @@ public class BoardPanel extends JPanel {
         repaint();
     }
 
-    //胜负判断 棋盘空了为胜
+    //胜负判断，棋盘空了为胜
     public boolean checkWin() {
         for (int i = 1; i <= totalRow - 2; i++) {
             for (int j = 1; j <= totalCol - 2; j++) {
@@ -317,7 +317,26 @@ public class BoardPanel extends JPanel {
         StatusPanel.stopTimer();
         return true;
     }
+    /**加载棋盘，与load存档共同使用*/
+    public void loadBoard(Cell[][] newBoard) {
+        for (int i = 0; i < totalRow && i < newBoard.length; i++) {
+            for (int j = 0; j < totalCol && j < newBoard[i].length; j++) {
+                Cell src = newBoard[i][j];
+                Cell target = gameBoard.getCell(i, j);
+                target.setEmpty(src.isEmpty());
+                target.setIconIndex(src.getIconIndex());
+            }
+        }
+        // 清空选中状态和历史
+        gameBoard.clearAllChosen();
+        firstSelected = null;
+        secondSelected = null;
+        historyStack.clear();
+        saveHistory();      //重新入栈
+        repaint();
+    }
 
+    /**点击的相关处理*/
     public void handleClick(int x, int y) {
         if(controlPanel!=null&&
                 !controlPanel.isBoardActive()){
@@ -419,8 +438,77 @@ public class BoardPanel extends JPanel {
             repaint();
         }
     }
+    public GameBoard getGameBoard() {
+        return gameBoard;
+    }
 
-    /*public void handleClick(int x, int y) {
+    public Rectangle getRectangle(Position position) {
+        int x = position.getCol() * cellWidth;
+        int y = position.getRow() * cellHeight;
+        return new Rectangle(x, y, cellWidth, cellHeight);
+    }
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g; //画笔
+        for (int i = 0; i < gameBoard.getRowCnt(); i++) {
+            for (int j = 0; j < gameBoard.getColCnt(); j++) {
+                Rectangle rec = getRectangle(new Position(i, j));
+                g2.drawImage(
+                        imageList.get(gameBoard.getCell(i, j).getIconIndex()),
+                        rec.getX(), rec.getY(), rec.getWidth(), rec.getHeight(),
+                        this
+                );
+                //在格子外画正方形
+                if (gameBoard.getCell(i, j).getIsChosen()) {
+                    /*g2.setColor(Color.RED);
+                    g2.setStroke(new BasicStroke(3));
+                    g2.drawRect(
+                            rec.getX() + 1,
+                            rec.getY() + 1,
+                            rec.getWidth() - 3,
+                            rec.getHeight() - 3
+                    );     */
+/*                    g2.drawLine(rec.getX()+6,rec.getY(),rec.getWidth()+rec.getX()-6,rec.getY());
+                    g2.drawArc(rec.getWidth()+rec.getX()-6,rec.getY(),1,1,0,90);*/
+                    g2.setColor(Color.RED);
+                    g2.setStroke(new BasicStroke(3));
+                    //x, y, width, height, arcWidth, arcHeight
+                    int arcSize=20; //弧度
+                    g2.drawRoundRect(
+                            rec.getX() + 2,
+                            rec.getY() + 2,
+                            rec.getWidth() - 4,
+                            rec.getHeight() - 4,
+                            arcSize,
+                            arcSize
+                    );  //选中画圆角矩形
+                } else {
+                    g2.setColor(Color.GRAY);
+                    g2.setStroke(new BasicStroke(1));
+                    g2.drawRect(
+                            rec.getX(),
+                            rec.getY(),
+                            rec.getWidth() - 1,
+                            rec.getHeight() - 1
+                    );  //未选中画灰
+                }
+            }
+        }
+        g2.setColor(Color.RED);
+        g2.setStroke(new BasicStroke(3));
+        if (lineVisible) {
+            for (Line line: lineList) {
+                Rectangle rec1 = getRectangle(line.getCell1().getPos());
+                Rectangle rec2 = getRectangle(line.getCell2().getPos());
+                g.drawLine((int) rec1.getCenterPosition().getX(), (int) rec1.getCenterPosition().getY(), (int) rec2.getCenterPosition().getX(), (int) rec2.getCenterPosition().getY());
+            }
+        }
+
+    }
+}
+//老的判定
+/*public void handleClick(int x, int y) {
 
         if(controlPanel!=null&&!controlPanel.isBoardActive()){
             return;
@@ -508,71 +596,3 @@ public class BoardPanel extends JPanel {
             repaint();
         }
     }*/
-
-
-    public Rectangle getRectangle(Position position) {
-        int x = position.getCol() * cellWidth;
-        int y = position.getRow() * cellHeight;
-        return new Rectangle(x, y, cellWidth, cellHeight);
-    }
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) g; //画笔
-        for (int i = 0; i < gameBoard.getRowCnt(); i++) {
-            for (int j = 0; j < gameBoard.getColCnt(); j++) {
-                Rectangle rec = getRectangle(new Position(i, j));
-                g2.drawImage(
-                        imageList.get(gameBoard.getCell(i, j).getIconIndex()),
-                        rec.getX(), rec.getY(), rec.getWidth(), rec.getHeight(),
-                        this
-                );
-                //在格子外画正方形
-                if (gameBoard.getCell(i, j).getIsChosen()) {
-                    /*g2.setColor(Color.RED);
-                    g2.setStroke(new BasicStroke(3));
-                    g2.drawRect(
-                            rec.getX() + 1,
-                            rec.getY() + 1,
-                            rec.getWidth() - 3,
-                            rec.getHeight() - 3
-                    );     */
-/*                    g2.drawLine(rec.getX()+6,rec.getY(),rec.getWidth()+rec.getX()-6,rec.getY());
-                    g2.drawArc(rec.getWidth()+rec.getX()-6,rec.getY(),1,1,0,90);*/
-                    g2.setColor(Color.RED);
-                    g2.setStroke(new BasicStroke(3));
-                    //x, y, width, height, arcWidth, arcHeight
-                    int arcSize=20; //弧度
-                    g2.drawRoundRect(
-                            rec.getX() + 2,
-                            rec.getY() + 2,
-                            rec.getWidth() - 4,
-                            rec.getHeight() - 4,
-                            arcSize,
-                            arcSize
-                    );  //选中画圆角矩形
-                } else {
-                    g2.setColor(Color.GRAY);
-                    g2.setStroke(new BasicStroke(1));
-                    g2.drawRect(
-                            rec.getX(),
-                            rec.getY(),
-                            rec.getWidth() - 1,
-                            rec.getHeight() - 1
-                    );  //未选中画灰
-                }
-            }
-        }
-        g2.setColor(Color.RED);
-        g2.setStroke(new BasicStroke(3));
-        if (lineVisible) {
-            for (Line line: lineList) {
-                Rectangle rec1 = getRectangle(line.getCell1().getPos());
-                Rectangle rec2 = getRectangle(line.getCell2().getPos());
-                g.drawLine((int) rec1.getCenterPosition().getX(), (int) rec1.getCenterPosition().getY(), (int) rec2.getCenterPosition().getX(), (int) rec2.getCenterPosition().getY());
-            }
-        }
-
-    }
-
-}

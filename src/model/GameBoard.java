@@ -11,6 +11,10 @@ public class GameBoard {
         this.board = border;
     }
 
+    public Cell[][] getBoard() {
+        return board;
+    }
+
     public int getRowCnt() {
         return rowCnt;
     }

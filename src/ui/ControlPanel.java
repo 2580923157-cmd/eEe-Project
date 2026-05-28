@@ -6,6 +6,7 @@ import java.awt.*;
 // 或使用 BorderFactory
 //import javax.swing.BorderFactory;
 
+import model.GameState;
 import utils.AudioProcess;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -25,9 +26,15 @@ public class ControlPanel extends JPanel {
     JButton saveButton;
     JButton exitButton;
 
+    //以下两个用Runnable实现多线程
     //退出
-    private Runnable onExitAction;
-    public void exitAction(Runnable action) { this.onExitAction = action; }
+    private Runnable exitAction;
+    public void exitAction(Runnable action) { this.exitAction = action; }
+    //保存
+    private Runnable saveAction;                       // 新增
+    public void setSaveAction(Runnable action) {       // 新增
+        this.saveAction=action;
+    }
 
     int offSetX;    //偏移
     int offSetY;
@@ -308,16 +315,38 @@ public class ControlPanel extends JPanel {
     }
     /**保存*/
     private void onSaveClick(ActionEvent e) {
-        // 后续实现存档功能
+        AudioProcess.playClick();
+        if (saveAction!=null) {
+            saveAction.run();
+        }
         pauseButton.setToolTipText("保存");
     }
     /**退出*/
     private void onExitClick(ActionEvent e) {
         AudioProcess.playClickSpecial();
-        if (onExitAction != null) {
-            onExitAction.run();
+        if (exitAction!=null) {
+            exitAction.run();
         }
         pauseButton.setToolTipText("退出");
+    }
+    /**即load之后的“强制”暂停*/
+    public void forcedPause() {
+        if (!isPaused) {
+            statusPanel.stopTimer();
+            isPaused = true;
+            pauseButton.setIcon(continueIcon);
+            pauseButton.setToolTipText("继续");
+        }
+    }
+    /**即load之后的“强制”开始*/
+    public void forceToGameMode() {
+        startButton.setVisible(false);
+        audioButton.setVisible(true);
+        pauseButton.setVisible(true);
+        retryButton.setVisible(true);
+        undoButton.setVisible(true);
+        saveButton.setVisible(true);
+        exitButton.setVisible(true);
     }
 
     public boolean isPaused() {
