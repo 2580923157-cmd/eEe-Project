@@ -20,6 +20,7 @@ import model.User;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import utils.LanguageProcess;
 
 /**
  * 主菜单窗口
@@ -27,7 +28,6 @@ import java.io.File;
 public class Menu extends JFrame {
     //private String username;
     private User user;
-
     public Menu(User user) {
         super("夏日大挑战 - 主菜单");
         this.user = user;
@@ -37,7 +37,7 @@ public class Menu extends JFrame {
         setLayout(null);
         getContentPane().setBackground(new Color(240, 248, 255));
 
-        // ===== 右上角欢迎文字 =====
+        //欢迎文字(右上)
         JLabel welcomeLabel = new JLabel("欢迎，" + user.getUserName());
         welcomeLabel.setFont(new Font("微软雅黑", Font.PLAIN, 15));
         welcomeLabel.setForeground(new Color(25, 25, 112));
@@ -46,7 +46,7 @@ public class Menu extends JFrame {
         welcomeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         add(welcomeLabel);
 
-        //顶部图片区域
+        //welcome logo（正上）
         JLabel logoLabel = new JLabel();
         logoLabel.setSize(200, 80);
         logoLabel.setLocation(200, 20);
@@ -55,19 +55,34 @@ public class Menu extends JFrame {
         // logoLabel.setIcon(logoIcon);
         add(logoLabel);
 
-        //功能按钮
-        boolean hasSave = new File("saves/" + user.getUserName() + ".txt").exists();
+        //功能按钮（中）
+        boolean hasSave = new File("saves\\" + user.getUserName() + ".txt").exists();
         String startText = hasSave ? "继续游戏" : "开始游戏";
         JButton startButton = createButton(startText, 225, 190);
         //JButton startButton = createButton("开始游戏", 225, 190);
         JButton levelButton = createButton("关卡选择", 225, 260);
         JButton exitButton  = createButton("退出游戏", 225, 330);
 
+        //语言按钮（左上）
+        //private JButton languageButton, helpButton;
+        JButton languageButton = new JButton();
+        try {
+            ImageIcon icon = new ImageIcon("resource\\menus\\language.png");
+            Image langImg = icon.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
+            languageButton.setIcon(new ImageIcon(langImg));
+        } catch (Exception e) {
+            languageButton.setText("🌐");
+        }
+        languageButton.setToolTipText(LanguageProcess.getCurrentLanguage().getLanguageTooltip());
+        languageButton.setBounds(15, 15, 32, 32);
+        //languageButton.addActionListener(this::onLanguageSwitch);
+
         add(startButton);
         add(levelButton);
         add(exitButton);
+        add(languageButton);
 
-        //开始游戏：进入主界面
+        //开始游戏
         startButton.addActionListener(e -> {
             dispose();                                 // 关闭菜单窗口
             // 注意：GameFrame 构造器中已调用 setVisible(true)，无需重复
@@ -77,13 +92,13 @@ public class Menu extends JFrame {
             }
         });
 
-        // ----- 关卡选择（暂时无操作） -----
+        //关卡选择（准备替换为别的）
         levelButton.addActionListener(e -> {
             JOptionPane.showMessageDialog(this, "关卡选择功能暂未开放", "提示", JOptionPane.INFORMATION_MESSAGE);
         });
 
-        // ----- 退出游戏 -----
-        exitButton.addActionListener(e -> System.exit(0));
+        //退出游戏
+        exitButton.addActionListener(e -> System.exit(-1));
     }
 
     /**
