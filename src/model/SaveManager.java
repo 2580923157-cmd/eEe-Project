@@ -24,7 +24,7 @@ public class SaveManager {
         String path = getPath(userName);
         Cell[][] board = state.getBoard();;
         try(PrintWriter pw = new PrintWriter(new FileWriter(path))){
-            pw.println(state.getHours() + ", " + state.getMinutes() + ", " + state.getSeconds() + "+" + state.getScore());
+            pw.println(state.getHours() + ", " + state.getMinutes() + ", " + state.getSeconds() + ", " + state.getScore());
             //时间 分数
             for (int i = 0; i < board.length; i++) {
                 for (int i1 = 0; i1 < board[i].length; i1++) {
@@ -81,7 +81,7 @@ public class SaveManager {
 
         //读棋盘部分 即lines.get(i) i>=1
         ArrayList<String> boardLines = new ArrayList<>();//虽然iconIndex是int 但是读取到file之后就变成String
-        for(int  i=1;i<lines.size();i++){
+        for(int i=1;i<lines.size();i++){
             boardLines.add(lines.get(i));
         }
 
