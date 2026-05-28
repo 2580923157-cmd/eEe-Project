@@ -9,16 +9,49 @@ public class StatusPanel extends JPanel {
     static Timer timer;
     static int seconds;
     private static int score = 0;
-    private static int combo = 0;
-    //static int score;
 
-    //加分(包括连消)
-    public static void addScore(int base) {
-        combo++;
-        int add = base * combo;
+    private static int combo = 0;
+    // 上一次消除的图案ID（用于判断是否相同）
+    private static int lastEliminateIcon = -1;
+
+    private static long lastEliminateTime = 0;   // 上一次消除时间（毫秒）
+    private static final long comboTimeLimit  = 5000; // 5 秒连击限时
+
+
+    public static int getCombo() {
+        return combo;
+    }
+
+    public static void setCombo(int combo) {
+        StatusPanel.combo = combo;
+    }
+
+    public static int getLastEliminateIcon() {
+        return lastEliminateIcon;
+    }
+
+    public static void setLastEliminateIcon(int lastEliminateIcon) {
+        StatusPanel.lastEliminateIcon = lastEliminateIcon;
+    }
+
+
+
+    // 加分
+    public static void addScore(int currentIconIndex) {
+        long now = System.currentTimeMillis();
+        // 判断当前消除的图案和上一次消除的图案是否相同
+        if (currentIconIndex == lastEliminateIcon&& (now - lastEliminateTime) <= comboTimeLimit) {
+            combo++;
+        } else {
+            setCombo(1);
+        }
+        lastEliminateIcon = currentIconIndex;
+        lastEliminateTime = now;
+        int add = 10 * combo;
         score += add;
         updateLabels();
     }
+
     //撤销分数
     public static void undoScore() {
         if (score >= 10) {
@@ -30,8 +63,10 @@ public class StatusPanel extends JPanel {
     }
     //连消中断（点错时调用）
     public static void breakCombo() {
-        combo = 0;
+        setCombo(0);
         updateLabels();
+        lastEliminateTime = 0;
+
     }
 
     /** 重新开始的一部分：分数重置*/

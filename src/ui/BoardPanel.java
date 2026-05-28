@@ -2,6 +2,7 @@ package ui;
 
 import model.*;
 import model.Rectangle;
+import support.mapPool;
 import utils.AudioProcess;
 
 import javax.swing.*;
@@ -414,7 +415,7 @@ public class BoardPanel extends JPanel {
                 c2.setChosen(false);
 
                 // 加分
-                StatusPanel.addScore(10);
+                StatusPanel.addScore(c1.getIconIndex());
                 lineVisible = false;
                 lineList.clear();
                 firstSelected = null;
@@ -505,6 +506,10 @@ public class BoardPanel extends JPanel {
         }
 
     }
+
+
+
+
 }
 //老的判定
 /*public void handleClick(int x, int y) {

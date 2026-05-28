@@ -4,6 +4,7 @@ import model.Cell;
 import model.GameBoard;
 import model.GameState;
 import model.Position;
+import support.mapPool;
 import utils.AudioProcess;
 import utils.AudioProcess.*;
 import model.User;
@@ -49,12 +50,13 @@ public class GameFrame extends JFrame{
             }
         }
 
-        Random rand=new Random(LocalTime.now().getSecond()+LocalTime.now().getMinute()+LocalTime.now().getHour());
+        /*Random rand=new Random(LocalTime.now().getSecond()+LocalTime.now().getMinute()+LocalTime.now().getHour());
         for (int i = 1; i <= size; i++) {
             for (int j = 1; j <= size; j++) {
                 board[i][j] = new Cell(new Position(i, j), false, rand.nextInt(1,14));   //格子
             }
-        }
+        }*/
+
         //目前是完全随机
 
         /*//测试用：全1
@@ -184,4 +186,41 @@ public class GameFrame extends JFrame{
         JOptionPane.showMessageDialog(this, "读档成功！");
     }
 
+
+    //把伪随机的int[][]棋盘转换成Cell[][] 以此适配loadBoard
+    private Cell[][] convertToCellBoard(int[][] map) {
+        int rows = map.length;
+        int cols = map[0].length;
+        Cell[][] cellBoard = new Cell[rows][cols];
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                Position pos = new Position(i, j);
+                int value = map[i][j];
+
+                if (value == 0) {
+                    cellBoard[i][j] = new Cell(pos, true, 0);
+                } else {
+                    cellBoard[i][j] = new Cell(pos, false, value);
+                }
+            }
+        }
+        return cellBoard;
+    }
+
+    //选择简单模式
+    public void startEasyMode() {
+        int[][] map = mapPool.getRandomEasyMap();
+        Cell[][] cellMap = convertToCellBoard(map); // 转换
+        boardPanel.loadBoard(cellMap);                   // 加载地图
+        boardPanel.repaint();
+    }
+
+    //选择困难模式
+    public void startHardMode() {
+        int[][] map = mapPool.getRandomHardMap();
+        Cell[][] cellMap = convertToCellBoard(map);
+        boardPanel.loadBoard(cellMap);
+        boardPanel.repaint();
+    }
 }
