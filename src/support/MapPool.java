@@ -1,13 +1,12 @@
-package support;
+/*package support;
 
-import model.Cell;
-
+import java.time.LocalTime;
 import java.util.Random;
 
 
-public class mapPool {
+public class MapPool {*/
 
-    //简单模式
+    /*//简单模式
     private static final int[][][] EASYMAPS = {
 
             // 1
@@ -1417,8 +1416,9 @@ public class mapPool {
             }
     };
 
-        //随机抽取
-        private static final Random random = new Random();
+
+        //随机抽取，根据现在时间跑随机种子
+        private static final Random random = new Random(LocalTime.now().getSecond()+LocalTime.now().getMinute()+LocalTime.now().getHour());
 
         // 抽简单地图
         public static int[][] getRandomEasyMap() {
@@ -1432,6 +1432,198 @@ public class mapPool {
                 return HARDMAPS[index];
         }
 
+}*/
 
+/*package support;
 
+import java.io.*;
+import java.util.*;
+
+public class MapPool {
+        private static final int ROWS = 12;
+        private static final int COLS = 12;
+
+        private static List<int[][]> easyMaps = new ArrayList<>();
+        private static List<int[][]> hardMaps = new ArrayList<>();
+
+        static {
+                easyMaps = loadMapGroup("maps/easy", "easy_map_");
+                hardMaps = loadMapGroup("maps/hard", "hard_map_");
+                System.out.println("Easy maps loaded: " + easyMaps.size());
+                System.out.println("Hard maps loaded: " + hardMaps.size());
+        }
+
+        *//**
+         * 加载一组地图（编号从 1 开始递增，直到文件不存在）
+         * @param dir      类路径下的目录，如 "maps/easy"
+         * @param prefix   文件名前缀，如 "easy_map_"
+         *//*
+        private static List<int[][]> loadMapGroup(String dir, String prefix) {
+                List<int[][]> maps = new ArrayList<>();
+                int index = 1;
+                while (true) {
+                        String path = dir + "/" + prefix + index + ".txt";
+                        InputStream in = MapPool.class.getClassLoader().getResourceAsStream(path);
+                        if (in == null) break; // 没有更多文件
+                        int[][] map = readMap(in, path);
+                        if (map != null) maps.add(map);
+                        index++;
+                }
+                // 如果 maps 为空，可以添加一个默认地图，避免空指针
+                if (maps.isEmpty()) {
+                        maps.add(createDefaultMap());
+                }
+                return maps;
+        }
+
+        *//**
+         * 从输入流读取 12×12 的地图
+         *//*
+        private static int[][] readMap(InputStream in, String resourceName) {
+                try (BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
+                        int[][] map = new int[ROWS][COLS];
+                        String line;
+                        int row = 0;
+                        while ((line = br.readLine()) != null && row < ROWS) {
+                                line = line.trim();
+                                if (line.isEmpty()) continue;
+                                String[] parts = line.split("\\s+");
+                                for (int col = 0; col < Math.min(parts.length, COLS); col++) {
+                                        map[row][col] = Integer.parseInt(parts[col]);
+                                }
+                                row++;
+                        }
+                        if (row < ROWS) {
+                                System.err.println("地图行数不足: " + resourceName);
+                                return null;
+                        }
+                        return map;
+                } catch (IOException | NumberFormatException e) {
+                        System.err.println("读取地图失败: " + resourceName + " - " + e.getMessage());
+                        return null;
+                }
+        }
+
+        private static int[][] createDefaultMap() {
+                int[][] def = new int[ROWS][COLS];
+                // 填充一个简单的可通关地图（示例），可根据需要修改
+                for (int i = 1; i < ROWS-1; i++) {
+                        for (int j = 1; j < COLS-1; j++) {
+                                def[i][j] = 1; // 仅一种图案，没有实际游戏意义
+                        }
+                }
+                return def;
+        }
+
+        *//** 随机抽取一张简单地图 *//*
+        public static int[][] getRandomEasyMap() {
+                if (easyMaps.isEmpty()) return createDefaultMap();
+                return easyMaps.get(new Random().nextInt(easyMaps.size()));
+        }
+
+        *//** 随机抽取一张困难地图 *//*
+        public static int[][] getRandomHardMap() {
+                if (hardMaps.isEmpty()) return createDefaultMap();
+                return hardMaps.get(new Random().nextInt(hardMaps.size()));
+        }
+}*/
+
+package support;
+import java.io.*;
+import java.time.LocalTime;
+import java.util.*;
+
+public class MapPool {
+        private static final int ROWS = 12;
+        private static final int COLS = 12;
+
+        //为了维护，实时计数
+        private static int easyCount=0;
+        private static int hardCount=0;
+
+        //一次加载，后续不再动了
+        static {
+                easyCount = countMaps("maps\\easy", "easy_map_");
+                hardCount = countMaps("maps\\hard", "hard_map_");
+        }
+
+        /**
+         * 计算某个目录下有多少张地图（文件编号从1开始连续）
+         * @param dir 文件目录
+         * @param prefix 文件前缀（map_easy/hard_，别忘了这几个下划线！）
+         */
+        private static int countMaps(String dir, String prefix) {
+                int count = 0;
+                int index = 1;
+                while (true) {
+                        String path = dir + "\\" + prefix + index + ".txt";
+                        InputStream in = MapPool.class.getClassLoader().getResourceAsStream(path);
+                        if (in == null) break;
+                        try {
+                                in.close();
+                        } catch (IOException ignored) {
+                                //算了
+                        }
+                        count++;
+                        index++;
+                }
+                return count;
+        }
+
+        /**
+         * 按编号读取指定地图
+         */
+        private static int[][] loadMap(String dir, String prefix, int number) {
+                String path = dir + "\\" + prefix + number + ".txt";
+                InputStream in = MapPool.class.getClassLoader().getResourceAsStream(path);      //为了打包后还能够继续运行
+                if (in == null)
+                        return createDefaultMap();
+                return readMap(in, path);
+        }
+
+        private static int[][] readMap(InputStream in, String resourceName) {
+                try (BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
+                        int[][] map = new int[ROWS][COLS];
+                        String line;
+                        int row = 0;
+                        while ((line = br.readLine()) != null && row < ROWS) {
+                                line = line.trim();
+                                if (line.isEmpty()) continue;
+                                String[] parts = line.split("\\s+");
+                                for (int col = 0; col < Math.min(parts.length, COLS); col++) {
+                                        map[row][col] = Integer.parseInt(parts[col]);
+                                }
+                                row++;
+                        }
+                        return map;
+                } catch (IOException | NumberFormatException e) {
+                        System.err.println("读取地图失败: " + resourceName);
+                        return createDefaultMap();
+                }
+        }
+
+        /**如果有问题，就只返回一张全是0的*/
+        private static int[][] createDefaultMap() {
+                int[][] def = new int[ROWS][COLS];
+                for (int i = 1; i < ROWS-1; i++)
+                        for (int j = 1; j < COLS-1; j++)
+                                def[i][j] =0;
+                return def;
+        }
+
+        /** 随机抽取一张简单地图*/
+        public static int[][] getRandomEasyMap() {
+                if (easyCount == 0) return createDefaultMap();
+                Random rand=new Random(LocalTime.now().getSecond()+LocalTime.now().getMinute()+LocalTime.now().getHour());
+                int num = 1+rand.nextInt(easyCount);
+                return loadMap("resource\\maps\\easy", "easy_map_", num);
+        }
+
+        /** 随机抽取一张困难地图 */
+        public static int[][] getRandomHardMap() {
+                if (hardCount == 0) return createDefaultMap();
+                Random rand=new Random(LocalTime.now().getSecond()+LocalTime.now().getMinute()+LocalTime.now().getHour());
+                int num = 1+rand.nextInt(hardCount);
+                return loadMap("resource\\maps\\hard", "hard_map_", num);
+        }
 }

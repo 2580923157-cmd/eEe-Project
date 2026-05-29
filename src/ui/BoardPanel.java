@@ -2,7 +2,6 @@ package ui;
 
 import model.*;
 import model.Rectangle;
-import support.mapPool;
 import utils.AudioProcess;
 
 import javax.swing.*;
@@ -14,7 +13,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-import java.util.Random;
 
 public class BoardPanel extends JPanel {
     int offSetX;

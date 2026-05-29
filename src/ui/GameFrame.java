@@ -4,17 +4,12 @@ import model.Cell;
 import model.GameBoard;
 import model.GameState;
 import model.Position;
-import support.mapPool;
+import support.MapPool;
 import utils.AudioProcess;
-import utils.AudioProcess.*;
 import model.User;
 import model.SaveManager;
 
 import javax.swing.*;
-import java.awt.*;
-
-import java.time.LocalTime;
-import java.util.Random;
 
 /**
  * 主游戏框架及界面。重要的游戏主内容都在这里实现。
@@ -103,8 +98,8 @@ public class GameFrame extends JFrame{
     }
 
 
-    // 存档接口
-    //返回的是
+    /**存档接口</br>
+    返回的是GameState给下面的save game用*/
     public GameState exportGameState() {
         Cell[][] board = boardPanel.gameBoard.getBoard();
         int score = statusPanel.getScore();
@@ -114,7 +109,8 @@ public class GameFrame extends JFrame{
         return new GameState(board, score, h, m, s);
     }
 
-    //读档接口
+    /**读档接口</br>
+     * 下面调用*/
     public void loadGameState(GameState state) {
         if (state == null)
             return;
@@ -163,6 +159,7 @@ public class GameFrame extends JFrame{
         gameFrame.loadGameState(state);
         JOptionPane.showMessageDialog(null, "读档成功！");
     }*/
+    /**Save game接口*/
     public void saveGame() {
         if (user == null || user.isGuest()) {
             JOptionPane.showMessageDialog(this, "游客无法存档");
@@ -171,7 +168,7 @@ public class GameFrame extends JFrame{
         saveManager.save(user.getUserName(), exportGameState());
         JOptionPane.showMessageDialog(this, "存档成功！");
     }
-
+    /**load game接口*/
     public void loadGame() {
         if (user == null || user.isGuest()) {
             JOptionPane.showMessageDialog(this, "游客无法读档");
@@ -210,7 +207,7 @@ public class GameFrame extends JFrame{
 
     //选择简单模式
     public void startEasyMode() {
-        int[][] map = mapPool.getRandomEasyMap();
+        int[][] map = MapPool.getRandomEasyMap();
         Cell[][] cellMap = convertToCellBoard(map); // 转换
         boardPanel.loadBoard(cellMap);                   // 加载地图
         boardPanel.repaint();
@@ -218,7 +215,7 @@ public class GameFrame extends JFrame{
 
     //选择困难模式
     public void startHardMode() {
-        int[][] map = mapPool.getRandomHardMap();
+        int[][] map = MapPool.getRandomHardMap();
         Cell[][] cellMap = convertToCellBoard(map);
         boardPanel.loadBoard(cellMap);
         boardPanel.repaint();
