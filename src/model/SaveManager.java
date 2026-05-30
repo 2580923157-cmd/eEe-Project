@@ -34,7 +34,7 @@ public class SaveManager {
             }
             //存棋盘
         }catch(IOException e){
-            System.out.println("存档失败" + e.getMessage());
+            System.err.println("存档失败" + e.getMessage());
         }
     }
 
@@ -42,7 +42,7 @@ public class SaveManager {
          String path = getPath(userName);
          File file = new File(path);
          if(!file.exists()){
-             System.out.println("存档无效，文件不存在");
+             System.err.println("存档无效，文件不存在");
              return null;
          }
 
@@ -56,21 +56,21 @@ public class SaveManager {
                 }
             }
         }catch(IOException e){
-            System.out.println("存档无效，读取文件失败" + e.getMessage());
+            System.err.println("存档无效，读取文件失败" + e.getMessage());
             return null;
         }
 
         if(lines.size()<=1) {
-            System.out.println("存档无效，内容不完整");
+            System.err.println("存档无效，内容不完整");
             return null;//棋盘都没有
         }
 
-        //读取第一行：时间
+        //读取第一行：时间及分数
         String timeLine = lines.get(0);
         String[] timeArr = timeLine.split(", ");//save时时间用,分隔
 
         if (timeArr.length != 4) {
-            System.out.println("存档无效，时间/分数格式错误");
+            System.err.println("存档无效，时间/分数格式错误");
             return null;
         }
 
@@ -93,7 +93,7 @@ public class SaveManager {
         for (int i = 0; i < row; i++) {
             String[] info = boardLines.get(i).split(" ");
             if (info.length != col) {
-                System.out.println("存档无效：棋盘行列损坏");
+                System.err.println("存档无效：棋盘行列损坏");
                 return null;
             }
             for (int j = 0; j < col; j++) {
@@ -101,7 +101,7 @@ public class SaveManager {
                 try {
                     iconIndex = Integer.parseInt(info[j]);
                 } catch (NumberFormatException ex) {
-                    System.out.println("存档无效，格子数据不是数字");
+                    System.err.println("存档无效，格子数据不是数字");
                     return null;
                 }
             }
@@ -109,9 +109,9 @@ public class SaveManager {
 
 
         for (int i = 0; i < board.length; i++) {
-            String[] inFo = boardLines.get(i).split(" ");
+            String[] inFo = boardLines.get(i).split(" ");   //如果数字之间可能有多余空格，可将 split(" ") 改为 split("\\s+")，避免空字符串造成解析异常（robustness）
             for (int i1 = 0; i1 < board[i].length; i1++) {
-                int iconIndex = Integer.parseInt(inFo[i]);
+                int iconIndex = Integer.parseInt(inFo[i1]);
                 boolean isEmpty = (iconIndex == 0);
                 board[i][i1] =  new Cell(new Position(i,i1), isEmpty, iconIndex);
             }

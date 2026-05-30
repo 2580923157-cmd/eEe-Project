@@ -6,7 +6,6 @@ import java.awt.*;
 // 或使用 BorderFactory
 //import javax.swing.BorderFactory;
 
-import model.GameState;
 import utils.AudioProcess;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -230,7 +229,7 @@ public class ControlPanel extends JPanel {
 
     /**音频启停*/
     private void onAudioClick(ActionEvent e) {
-        AudioProcess.playClick();
+        AudioProcess.playClick1();
         if (bgmPlaying) {
             AudioProcess.stopBgm();
             audioButton.setIcon(audioOffIcon);
@@ -247,7 +246,7 @@ public class ControlPanel extends JPanel {
 
     /** 暂停/继续,能控制计时器*/
     private void onPauseClick(ActionEvent e) {
-        AudioProcess.playClick();
+        AudioProcess.playClick1();
         if (!isPaused) {
             statusPanel.stopTimer();
             pauseButton.setIcon(continueIcon);
@@ -265,7 +264,7 @@ public class ControlPanel extends JPanel {
     }
     /** 重来 */
     /*private void onRetryClick(ActionEvent e) {
-        AudioProcess.playClick();
+        AudioProcess.playClick1();
         if (boardPanel != null) {
             boardPanel.resetGame();
             statusPanel.resetTimer();
@@ -278,7 +277,7 @@ public class ControlPanel extends JPanel {
         }
     }*/
     private void onRetryClick(ActionEvent e) {
-        AudioProcess.playClick();
+        AudioProcess.playClick1();
         pauseButton.setToolTipText("重新开始");
         if (boardPanel!=null) {
             boardPanel.resetGame();
@@ -307,7 +306,7 @@ public class ControlPanel extends JPanel {
     }
     /** 撤销 */
     private void onUndoClick(ActionEvent e) {
-        AudioProcess.playClick();
+        AudioProcess.playClick1();
         if (boardPanel != null) {
             boardPanel.undoStep();
         }
@@ -315,7 +314,7 @@ public class ControlPanel extends JPanel {
     }
     /**保存*/
     private void onSaveClick(ActionEvent e) {
-        AudioProcess.playClick();
+        AudioProcess.playClick1();
         if (saveAction!=null) {
             saveAction.run();
         }

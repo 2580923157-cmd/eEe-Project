@@ -56,8 +56,8 @@ public class AudioProcess {
     }
 
     /** 播放按钮控制 */
-    public static void playClick() {
-        playSoundEffect("click.wav");
+    public static void playClick1() {
+        playSoundEffect("click1.wav");
     }
 
     /** 播放获胜*/

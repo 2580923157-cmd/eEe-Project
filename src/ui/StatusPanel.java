@@ -73,7 +73,7 @@ public class StatusPanel extends JPanel {
     public void resetScore() {
         setScore(0);
         breakCombo();  // 重置连击计数
-        statusLabel.setText("Score: 0");  // 或调用 setStatus("...")
+        statusLabel.setText("分数: 0");  // 或调用 setStatus("...")
     }
 
     // 静态刷新 显示分数、连消
@@ -81,7 +81,7 @@ public class StatusPanel extends JPanel {
         if (timeLabel == null || timeLabel.getParent() == null) return;
         StatusPanel panel = (StatusPanel) timeLabel.getParent();
         timeLabel.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
-        panel.statusLabel.setText("Score: " + score + "  ×" + combo);
+        panel.statusLabel.setText("分数: " + score + "  ×" + combo);
         panel.repaint();
     }
 

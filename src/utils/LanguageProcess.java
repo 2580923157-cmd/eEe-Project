@@ -7,6 +7,7 @@ import java.util.List;
 import support.Language;
 import support.Chinese;
 import support.English;
+//import support.French;
 
 public class LanguageProcess {
     private static Language currentLanguage = Chinese.INSTANCE;
@@ -19,7 +20,9 @@ public class LanguageProcess {
     public static void switchLanguage() {
         if (currentLanguage == Chinese.INSTANCE) {
             currentLanguage = English.INSTANCE;
-        } else {
+        } /*else if (currentLanguage == English.INSTANCE) {
+            currentLanguage = French.INSTANCE;
+        } */else {
             currentLanguage = Chinese.INSTANCE;
         }
         notifyListeners();
