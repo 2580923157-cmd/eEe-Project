@@ -40,6 +40,4 @@ public enum English implements Language {
     public String gameSave() {
         return "";
     }
-
-
 }

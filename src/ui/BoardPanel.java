@@ -209,7 +209,7 @@ public class BoardPanel extends JPanel {
             }
         }
 
-        // 开局保存初始状态
+
         saveHistory();
 
 
@@ -230,6 +230,7 @@ public class BoardPanel extends JPanel {
         for (int i = 0; i < totalRow; i++) {
             for (int j = 0; j < totalCol; j++) {
                 Cell orig = gameBoard.getCell(i, j);
+                if (orig == null) continue;
                 copy[i][j] = new Cell(orig.getPos(), orig.isEmpty(), orig.getIconIndex());
             }
         }
@@ -451,6 +452,10 @@ public class BoardPanel extends JPanel {
         Graphics2D g2 = (Graphics2D) g; //画笔
         for (int i = 0; i < gameBoard.getRowCnt(); i++) {
             for (int j = 0; j < gameBoard.getColCnt(); j++) {
+                //加一层空判断
+                Cell cell = gameBoard.getCell(i, j);
+                if (cell == null) continue;
+
                 Rectangle rec = getRectangle(new Position(i, j));
                 g2.drawImage(
                         imageList.get(gameBoard.getCell(i, j).getIconIndex()),
@@ -497,6 +502,11 @@ public class BoardPanel extends JPanel {
         g2.setStroke(new BasicStroke(3));
         if (lineVisible) {
             for (Line line: lineList) {
+                //再加一层空判断
+                Cell c1 = line.getCell1();
+                Cell c2 = line.getCell2();
+                if (c1 == null || c2 == null) continue;
+
                 Rectangle rec1 = getRectangle(line.getCell1().getPos());
                 Rectangle rec2 = getRectangle(line.getCell2().getPos());
                 g.drawLine((int) rec1.getCenterPosition().getX(), (int) rec1.getCenterPosition().getY(), (int) rec2.getCenterPosition().getX(), (int) rec2.getCenterPosition().getY());

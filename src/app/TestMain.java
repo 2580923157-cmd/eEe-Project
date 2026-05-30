@@ -184,7 +184,7 @@ public class TestMain {
         gameFrame.loadGameState(state);
         JOptionPane.showMessageDialog(null, "读档成功！");
     }
-    // ==================================================================
+
 
     // 测试主界面
     private static void createTestFrame() {

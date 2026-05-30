@@ -10,6 +10,8 @@ import model.User;
 import model.SaveManager;
 
 import javax.swing.*;
+import java.time.LocalTime;
+import java.util.Random;
 
 /**
  * 主游戏框架及界面。重要的游戏主内容都在这里实现。
@@ -33,7 +35,7 @@ public class GameFrame extends JFrame{
     public GameFrame(String title, int width, int height,User user) {
         super(title);
         this.setResizable(false);
-        int size = 4;//有效棋盘大小（中间格子数量）
+        int size = 10;//有效棋盘大小（中间格子数量）
         this.user=user;
         Cell[][] board = new Cell[size + 2][size + 2];
 
@@ -45,12 +47,12 @@ public class GameFrame extends JFrame{
             }
         }
 
-        /*Random rand=new Random(LocalTime.now().getSecond()+LocalTime.now().getMinute()+LocalTime.now().getHour());
+        Random rand=new Random(LocalTime.now().getSecond()+LocalTime.now().getMinute()+ LocalTime.now().getHour());
         for (int i = 1; i <= size; i++) {
             for (int j = 1; j <= size; j++) {
                 board[i][j] = new Cell(new Position(i, j), false, rand.nextInt(1,14));   //格子
             }
-        }*/
+        }
 
         //目前是完全随机
 
