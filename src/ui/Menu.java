@@ -21,8 +21,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 
+import model.UserDAO;
 import support.Language;
 import utils.LanguageProcess;
+import utils.ResourceProcess;
+import model.UserDAO.*;
 
 /**
  * 主菜单窗口
@@ -40,11 +43,32 @@ public class Menu extends JFrame {
         super("夏日大挑战 - 主菜单");
         this.user = user;
         setSize(600, 500);
+        Image bgImage = ResourceProcess.loadImage("backgrounds\\beach.png");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(null);
         getContentPane().setBackground(new Color(240, 248, 255));
+        setContentPane(new JPanel() {
+            @Override
+            public void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(bgImage, 0, 0, getWidth(), getHeight(), this);
+            }
+        });
+        getContentPane().setLayout(null);
+// 确保背景面板不透明，否则可能不显示
+        ((JPanel) getContentPane()).setOpaque(true);
 
+        /*setContentPane(new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(bgImage, 0, 0, getWidth(), getHeight(), this);
+            }
+        });
+        getContentPane().setLayout(null);*/
+// 确保背景面板不透明，否则可能不显示
+        ((JPanel) getContentPane()).setOpaque(true);
         Language lang = LanguageProcess.getCurrentLanguage();
         //欢迎文字(右上)
         JLabel welcomeLabel = new JLabel(/*"欢迎，" + user.getUserName()*/);
@@ -57,15 +81,23 @@ public class Menu extends JFrame {
 
         //welcome logo（正上）
         JLabel logoLabel = new JLabel();
-        logoLabel.setSize(200, 80);
-        logoLabel.setLocation(200, 20);
+        logoLabel.setSize(360, 180);
+        logoLabel.setLocation(207, 20);
         // 若要显示图片，取消以下注释并确保路径正确
-        // ImageIcon logoIcon = new ImageIcon("resource/menus/logo.png");
-        // logoLabel.setIcon(logoIcon);
+        Image titleImage = ResourceProcess.loadImage("backgrounds/title.png");
+        //ImageIcon logoIcon = new ImageIcon("resource/menus/logo.png");
+        //ImageIcon titleIcon=new ImageIcon(titleImage);
+        //logoLabel.setIcon(titleIcon);
+        if (titleImage != null) {
+            Image scaled=titleImage.getScaledInstance(201, 154, Image.SCALE_SMOOTH);
+            logoLabel.setIcon(new ImageIcon(scaled));
+        } else {
+            logoLabel.setText("Title");  // 加载失败时显示文字
+        }
         add(logoLabel);
 
         //功能按钮（中）
-        hasSave = new File("saves\\" + user.getUserName() + ".txt").exists();
+        hasSave = new File(UserDAO.getAppDir() + user.getUserName() + ".txt").exists();
         if(user.getUserName().equals("Guest"))
             hasSave=false;
         //String startText = hasSave ? "开始新游戏" : "开始游戏";
@@ -179,21 +211,51 @@ public class Menu extends JFrame {
 
         });
     }
+    /**模式选择，0为简单，1为困难*/
+    public int gameMode(){
+        Language l = LanguageProcess.getCurrentLanguage();
+        int choice = JOptionPane.showOptionDialog(this,
+                l.menuExitConfirmMessage(),
+                l.menuExitConfirmTitle(),
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                new Object[]{l.yes(), l.no()},   // 自定义按钮文字
+                l.no());
+        return choice;
+    }
 
     /**
      * 快速创建统一样式的按钮
      */
     private JButton createButton(String text, int x, int y) {
         JButton button = new JButton(text);
+        ImageIcon btnBg = ResourceProcess.loadIcon("menus\\menu_button.png");
+        //JButton button = new JButton(text);
         button.setFont(new Font("微软雅黑", Font.BOLD, 20));
         button.setHorizontalAlignment(SwingConstants.CENTER);
-        button.setBackground(new Color(70, 130, 180));
-        button.setForeground(Color.WHITE);
+        //button.setBackground(new Color(70, 130, 180));
+        button.setForeground(Color.BLACK);
         button.setFocusPainted(false);
-        button.setBorder(BorderFactory.createRaisedBevelBorder());
+        //button.setBorder(BorderFactory.createRaisedBevelBorder());
+        button.setBorderPainted(false);
+        button.setContentAreaFilled(false);
+        button.setOpaque(false);
         button.setCursor(Cursor.getDefaultCursor());
         button.setSize(150, 40);
         button.setLocation(x, y);
+        if (btnBg != null) {
+            Image img = btnBg.getImage().getScaledInstance(150, 80, Image.SCALE_SMOOTH);
+            button.setIcon(new ImageIcon(img));
+            button.setHorizontalTextPosition(SwingConstants.CENTER); // 文字居中在图标之上
+            button.setVerticalTextPosition(SwingConstants.CENTER);
+        }else{
+            // 图片加载失败则使用默认背景色
+            button.setBackground(new Color(70, 130, 180));
+            button.setContentAreaFilled(true);
+            button.setOpaque(true);
+        }
+
         return button;
     }
 }

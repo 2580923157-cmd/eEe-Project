@@ -44,7 +44,8 @@ public interface Language {
     String menuNewGameWarningMessage(); // 之前进度可能丢失，确定开始新游戏？
     String menuSaveNotFound();          // 存档不存在
     //String menuSaveNotFoundTitle();     // 提示
-
+    String chooseDifficulty();
+    String difficultyTitle();
     //Main
     String gameSave();
 
@@ -53,4 +54,7 @@ public interface Language {
     // 通用按钮文字
     String yes();  // 是 / Yes
     String no();   // 否 / No
+    String easy();
+    String hard();
+
 }

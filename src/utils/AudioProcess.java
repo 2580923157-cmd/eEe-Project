@@ -16,7 +16,7 @@ import java.io.IOException;
 public class AudioProcess {
 
     //音频存放目录
-    private static final String AUDIO_DIR = "resource\\audio\\";
+    //private static final String AUDIO_DIR = "resource\\audio\\";
     //BGM：带循环
     private static Clip bgmClip;
     private static boolean bgmPlaying = false;
@@ -55,7 +55,7 @@ public class AudioProcess {
         playSoundEffect("clear.wav");
     }
 
-    /** 播放按钮控制 */
+    /** 播放普通按钮控制 */
     public static void playClick1() {
         playSoundEffect("click1.wav");
     }
@@ -66,7 +66,7 @@ public class AudioProcess {
     }
 
     /**点击部分按钮的特殊音效，
-     * 目前应该有：*/
+     * 目前应该有：退出、错误*/
     public static void playClickSpecial(){
         playSoundEffect("click_special.wav");
     }
@@ -92,7 +92,7 @@ public class AudioProcess {
      * 从 resource/audio/ 目录加载指定文件名的音频，返回一个已经打开的 Clip。
      * 如果文件不存在或格式不支持，返回 null。
      */
-    private static Clip loadClip(String fileName) {
+    /*private static Clip loadClip(String fileName) {
         try {
             File file = new File(AUDIO_DIR + fileName);
             if (!file.exists()) {
@@ -112,8 +112,24 @@ public class AudioProcess {
             System.err.println("线路问题：" + fileName);
         }
         return null;
-    }
+    }*/
 
+    private static Clip loadClip(String fileName) {
+        final String AUDIO_PATH="audio\\";
+        String path=AUDIO_PATH+fileName;
+        AudioInputStream audioIn=ResourceProcess.loadAudio(path);
+        if (audioIn == null)
+            return null;
+
+        try {
+            Clip clip=AudioSystem.getClip();
+            clip.open(audioIn);
+            return clip;
+        } catch (LineUnavailableException | IOException e) {    //多异常捕获，不用写两个catch了
+            System.err.println("无法打开音频线路: " + path + "\n原因是" + e.getMessage());
+        }
+        return null;
+    }
     /**
      * 释放所有音频资源（程序退出时调用）。
      */

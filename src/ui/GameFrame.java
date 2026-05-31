@@ -50,7 +50,7 @@ public class GameFrame extends JFrame{
         Random rand=new Random(LocalTime.now().getSecond()+LocalTime.now().getMinute()+ LocalTime.now().getHour());
         for (int i = 1; i <= size; i++) {
             for (int j = 1; j <= size; j++) {
-                board[i][j] = new Cell(new Position(i, j), false, rand.nextInt(1,14));   //格子
+                board[i][j]=new Cell(new Position(i, j),false,rand.nextInt(1,14));   //格子
             }
         }
 

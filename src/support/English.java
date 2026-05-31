@@ -97,7 +97,8 @@ public enum English implements Language {
     @Override public String menuNewGameWarningMessage() { return "Previous progress may be lost!\nStart a new game anyway?"; }
     @Override public String menuSaveNotFound()       { return "Save not found!"; }
     //@Override public String menuSaveNotFoundTitle()  { return "Info"; }
-
+    @Override public String chooseDifficulty() { return "Please choose difficulty"; }
+    @Override public String difficultyTitle() { return "Difficulty Choice"; }
 
     //Main
     @Override public String gameSave()           { return "Save Game"; }
@@ -105,5 +106,7 @@ public enum English implements Language {
 
     @Override public String yes() { return "Yes"; }
     @Override public String no()  { return "No"; }
+    @Override public String easy() { return "Easy"; }
+    @Override public String hard() { return "Hard"; }
 
 }

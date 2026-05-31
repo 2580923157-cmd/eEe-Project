@@ -45,7 +45,8 @@ public enum Chinese implements Language{
     @Override public String menuNewGameWarningMessage() { return "之前的进度可能丢失！\n确定要开始新游戏吗？"; }
     @Override public String menuSaveNotFound()       { return "存档不存在！"; }
     //@Override public String menuSaveNotFoundTitle()  { return "提示"; }
-
+    @Override public String chooseDifficulty() { return "请选择难度"; }
+    @Override public String difficultyTitle() { return "难度选择"; }
 
     //Main
     @Override
@@ -56,5 +57,7 @@ public enum Chinese implements Language{
 
     @Override public String yes() { return "是"; }
     @Override public String no()  { return "否"; }
+    @Override public String easy() { return "简单"; }
+    @Override public String hard() { return "困难"; }
 
 }
