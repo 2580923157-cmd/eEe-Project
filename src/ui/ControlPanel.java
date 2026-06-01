@@ -11,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import utils.ResourceProcess;
+
 
 //这是start那个按钮的控制区域
 //打算在这里加入设置、音乐之类的
@@ -52,6 +54,8 @@ public class ControlPanel extends JPanel {
     private ImageIcon undoIcon;
     private ImageIcon saveIcon;
     private ImageIcon exitIcon;
+    private ImageIcon newIcon;
+    private ImageIcon langIcon;
 
     /*public BoardPanel boardP;
 
@@ -170,6 +174,8 @@ public class ControlPanel extends JPanel {
         retryIcon=loadAndScaleIcon("retry.png",iconSize,iconSize);
         saveIcon = loadAndScaleIcon("save.png", iconSize, iconSize);
         exitIcon = loadAndScaleIcon("exit.png", iconSize, iconSize);
+        langIcon=loadAndScaleIcon("language.png",iconSize,iconSize);
+        newIcon=loadAndScaleIcon("new_game.png",iconSize,iconSize);
     }
 
     /**
@@ -214,8 +220,8 @@ public class ControlPanel extends JPanel {
 
     // 从文件加载图标并缩放
     private ImageIcon loadAndScaleIcon(String filename, int w, int h) {
-        ImageIcon icon = new ImageIcon("resource\\menus\\" + filename);
-        Image img = icon.getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH);
+        Image icon =ResourceProcess.loadImage("menus/"+filename);
+        Image img = icon.getScaledInstance(w, h, Image.SCALE_SMOOTH);
         return new ImageIcon(img);
     }
 
@@ -276,7 +282,7 @@ public class ControlPanel extends JPanel {
             pauseButton.setToolTipText("暂停");
         }
     }*/
-    private void onRetryClick(ActionEvent e) {
+    private void onRetryClick(ActionEvent re) {
         AudioProcess.playClick1();
         pauseButton.setToolTipText("重新开始");
         if (boardPanel!=null) {
@@ -305,7 +311,7 @@ public class ControlPanel extends JPanel {
         pauseButton.setToolTipText("暂停");
     }
     /** 撤销 */
-    private void onUndoClick(ActionEvent e) {
+    private void onUndoClick(ActionEvent undo) {
         AudioProcess.playClick1();
         if (boardPanel != null) {
             boardPanel.undoStep();
@@ -313,7 +319,7 @@ public class ControlPanel extends JPanel {
         pauseButton.setToolTipText("撤销");
     }
     /**保存*/
-    private void onSaveClick(ActionEvent e) {
+    private void onSaveClick(ActionEvent save) {
         AudioProcess.playClick1();
         if (saveAction!=null) {
             saveAction.run();
@@ -327,6 +333,16 @@ public class ControlPanel extends JPanel {
             exitAction.run();
         }
         pauseButton.setToolTipText("退出");
+    }
+
+    /***/
+    private void onLangClick(){
+
+    }
+    /***/
+    private void onNewClick(ActionEvent n){
+        AudioProcess.playClickSpecial();
+
     }
     /**即load之后的“强制”暂停*/
     public void forcedPause() {

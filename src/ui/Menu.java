@@ -21,11 +21,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 
-import model.UserDAO;
 import support.Language;
 import utils.LanguageProcess;
 import utils.ResourceProcess;
-import model.UserDAO.*;
 
 /**
  * 主菜单窗口
@@ -43,7 +41,7 @@ public class Menu extends JFrame {
         super("夏日大挑战 - 主菜单");
         this.user = user;
         setSize(600, 500);
-        Image bgImage = ResourceProcess.loadImage("backgrounds\\beach.png");
+        Image bgImage = ResourceProcess.loadImage("backgrounds/beach.png");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(null);
@@ -82,14 +80,13 @@ public class Menu extends JFrame {
         //welcome logo（正上）
         JLabel logoLabel = new JLabel();
         logoLabel.setSize(360, 180);
-        logoLabel.setLocation(207, 20);
-        // 若要显示图片，取消以下注释并确保路径正确
+        logoLabel.setLocation(158, 20);
         Image titleImage = ResourceProcess.loadImage("backgrounds/title.png");
         //ImageIcon logoIcon = new ImageIcon("resource/menus/logo.png");
         //ImageIcon titleIcon=new ImageIcon(titleImage);
         //logoLabel.setIcon(titleIcon);
         if (titleImage != null) {
-            Image scaled=titleImage.getScaledInstance(201, 154, Image.SCALE_SMOOTH);
+            Image scaled=titleImage.getScaledInstance(289, 139, Image.SCALE_SMOOTH);
             logoLabel.setIcon(new ImageIcon(scaled));
         } else {
             logoLabel.setText("Title");  // 加载失败时显示文字
@@ -97,7 +94,7 @@ public class Menu extends JFrame {
         add(logoLabel);
 
         //功能按钮（中）
-        hasSave = new File(UserDAO.getAppDir() + user.getUserName() + ".txt").exists();
+        hasSave=new File("saves\\"+user.getUserName()+".txt").exists();
         if(user.getUserName().equals("Guest"))
             hasSave=false;
         //String startText = hasSave ? "开始新游戏" : "开始游戏";
@@ -109,10 +106,12 @@ public class Menu extends JFrame {
         //语言按钮（左上）
         //private JButton languageButton, helpButton;
 
+        Image languageIcon= ResourceProcess.loadImage("menus/language.png");
         try {
-            ImageIcon icon = new ImageIcon("resource\\menus\\language.png");
-            Image langImg = icon.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
-            languageButton.setIcon(new ImageIcon(langImg));
+            //ImageIcon icon = new ImageIcon("resource\\menus\\language.png");
+            //Image langImg = icon.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
+            Image img=languageIcon.getScaledInstance(32,32,Image.SCALE_SMOOTH);
+            languageButton.setIcon(new ImageIcon(img));
         } catch (Exception e) {
             languageButton.setText("🌐");
         }
@@ -140,8 +139,11 @@ public class Menu extends JFrame {
         startButton.addActionListener(e -> {
             //dispose();
             Language l =LanguageProcess.getCurrentLanguage();
-            int choice=1;
+            //String[] diffOptions=new String[]{l.easy(),l.hard()};
+
+            //int choice=1;
             if (hasSave) {
+                int choice=1,diff=0;
                 choice = JOptionPane.showOptionDialog(this,
                         l.menuNewGameWarningMessage(),
                         l.WarningTitle(),
@@ -152,14 +154,47 @@ public class Menu extends JFrame {
                         l.no());
                 if (choice==1){
                     return;
+                }else{
+                    diff=JOptionPane.showOptionDialog(this,
+                            l.chooseDifficulty(),
+                            l.difficultyTitle(),
+                            JOptionPane.DEFAULT_OPTION,
+                            JOptionPane.QUESTION_MESSAGE,
+                            null,
+                            new Object[]{l.easy(),l.hard()},
+                            l.easy());
+                    if (diff==JOptionPane.CLOSED_OPTION) {
+                        return; // 用户关闭了对话框
+                    }
                 }
 
-
                 GameFrame gameFrame=new GameFrame("夏日大挑战", 1000, 1000, user);
+                if(diff==0){
+                    gameFrame.startEasyMode();
+                }else{
+                    gameFrame.startHardMode();
+                }
                 dispose();
             }else{
+                int diff=JOptionPane.showOptionDialog(this,
+                        l.chooseDifficulty(),
+                        l.difficultyTitle(),
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        new Object[]{l.easy(),l.hard()},
+                        l.easy());
+                if (diff==JOptionPane.CLOSED_OPTION) {
+                    return; // 用户关闭了对话框
+                }
                 GameFrame gameFrame=new GameFrame("夏日大挑战", 1000, 1000, user);
                 dispose();
+                if(diff==0){
+                    gameFrame.startEasyMode();
+                }else{
+                    gameFrame.startHardMode();
+                }
+                //dispose();
             }
 
 
@@ -182,6 +217,8 @@ public class Menu extends JFrame {
             }
         });
 
+
+        //语言切换
         languageButton.addActionListener(e -> {
             LanguageProcess.switchLanguage();          // 切换为下一语言
             Language nowLang = LanguageProcess.getCurrentLanguage();
@@ -211,7 +248,7 @@ public class Menu extends JFrame {
 
         });
     }
-    /**模式选择，0为简单，1为困难*/
+    /**模式选择，0为简单，1为困难
     public int gameMode(){
         Language l = LanguageProcess.getCurrentLanguage();
         int choice = JOptionPane.showOptionDialog(this,
@@ -223,14 +260,14 @@ public class Menu extends JFrame {
                 new Object[]{l.yes(), l.no()},   // 自定义按钮文字
                 l.no());
         return choice;
-    }
+    }*/
 
     /**
      * 快速创建统一样式的按钮
      */
     private JButton createButton(String text, int x, int y) {
         JButton button = new JButton(text);
-        ImageIcon btnBg = ResourceProcess.loadIcon("menus\\menu_button.png");
+        ImageIcon btnBg = ResourceProcess.loadIcon("menus/menu_button.png");
         //JButton button = new JButton(text);
         button.setFont(new Font("微软雅黑", Font.BOLD, 20));
         button.setHorizontalAlignment(SwingConstants.CENTER);

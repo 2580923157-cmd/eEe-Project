@@ -9,6 +9,7 @@ import java.awt.*;
 
 import support.Language;
 import utils.LanguageProcess;
+import utils.ResourceProcess;
 
 public class Login {
 
@@ -106,13 +107,22 @@ public class Login {
         //退出按钮
         JButton exitButton=new JButton();
         //styleButton(exitButton,new Color());
+        Image exitIcon= ResourceProcess.loadImage("menus/exit.png");
         try {
+            //ImageIcon icon = new ImageIcon("resource\\menus\\language.png");
+            //Image langImg = icon.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
+            Image img=exitIcon.getScaledInstance(42,42,Image.SCALE_SMOOTH);
+            exitButton.setIcon(new ImageIcon(img));
+        } catch (Exception e) {
+            exitButton.setText("Esc");
+        }
+        /*try {
             ImageIcon icon = new ImageIcon("resource\\menus\\exit.png");
             Image exitImg = icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
             exitButton.setIcon(new ImageIcon(exitImg));
         } catch (Exception e) {
             exitButton.setText("Esc");
-        }
+        }*/
         //exitButton.setToolTipText(LanguageProcess.getCurrentLanguage().getLanguageTooltip());
         exitButton.setContentAreaFilled(false);
         exitButton.setOpaque(false);
@@ -123,10 +133,12 @@ public class Login {
 
 
         JButton languageButton = new JButton(/*"Language"*/);
+        Image languageIcon= ResourceProcess.loadImage("menus/language.png");
         try {
-            ImageIcon icon = new ImageIcon("resource\\menus\\language.png");
-            Image langImg = icon.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
-            languageButton.setIcon(new ImageIcon(langImg));
+            //ImageIcon icon = new ImageIcon("resource\\menus\\language.png");
+            //Image langImg = icon.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
+            Image img=languageIcon.getScaledInstance(32,32,Image.SCALE_SMOOTH);
+            languageButton.setIcon(new ImageIcon(img));
         } catch (Exception e) {
             languageButton.setText("🌐");
         }

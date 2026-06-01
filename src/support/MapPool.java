@@ -1543,8 +1543,8 @@ public class MapPool {
 
         //一次加载，后续不再动了
         static {
-                easyCount = countMaps("maps\\easy", "easy_map_");
-                hardCount = countMaps("maps\\hard", "hard_map_");
+                easyCount=countMaps("maps/easy", "easy_map_");
+                hardCount=countMaps("maps/hard", "hard_map_");
         }
 
         /**
@@ -1556,12 +1556,13 @@ public class MapPool {
                 int count = 0;
                 int index = 1;
                 while (true) {
-                        String path = dir + "\\" + prefix + index + ".txt";
+                        String path = dir+"/"+prefix+index+".txt";
                         InputStream in = MapPool.class.getClassLoader().getResourceAsStream(path);
                         if (in == null) break;
                         try {
                                 in.close();
-                        } catch (IOException ignored) {
+                        } catch (IOException n) {
+                                System.err.println("未知错误");
                                 //算了
                         }
                         count++;
@@ -1574,11 +1575,11 @@ public class MapPool {
          * 按编号读取指定地图
          */
         private static int[][] loadMap(String dir, String prefix, int number) {
-                String path = dir + "\\" + prefix + number + ".txt";
+                String path = dir + "/" + prefix + number + ".txt";
                 InputStream in = MapPool.class.getClassLoader().getResourceAsStream(path);      //为了打包后还能够继续运行
                 if (in == null)
                         return createDefaultMap();
-                return readMap(in, path);
+                return readMap(in,path);
         }
 
         private static int[][] readMap(InputStream in, String resourceName) {
@@ -1613,17 +1614,19 @@ public class MapPool {
 
         /** 随机抽取一张简单地图*/
         public static int[][] getRandomEasyMap() {
-                if (easyCount == 0) return createDefaultMap();
+                if (easyCount == 0)
+                        return createDefaultMap();
                 Random rand=new Random(LocalTime.now().getSecond()+LocalTime.now().getMinute()+LocalTime.now().getHour());
                 int num = 1+rand.nextInt(easyCount);
-                return loadMap("resource\\maps\\easy", "easy_map_", num);
+                return loadMap("maps/easy", "easy_map_", num);
         }
 
         /** 随机抽取一张困难地图 */
         public static int[][] getRandomHardMap() {
-                if (hardCount == 0) return createDefaultMap();
+                if (hardCount == 0)
+                        return createDefaultMap();
                 Random rand=new Random(LocalTime.now().getSecond()+LocalTime.now().getMinute()+LocalTime.now().getHour());
                 int num = 1+rand.nextInt(hardCount);
-                return loadMap("resource\\maps\\hard", "hard_map_", num);
+                return loadMap("maps/hard", "hard_map_", num);
         }
 }

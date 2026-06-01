@@ -2,6 +2,7 @@ package ui;
 
 import javax.swing.*;
 import java.awt.*;
+import utils.ResourceProcess;
 
 public class StatusPanel extends JPanel {
     static JLabel statusLabel;
@@ -16,7 +17,8 @@ public class StatusPanel extends JPanel {
 
     private static long lastEliminateTime = 0;   // 上一次消除时间（毫秒）
     private static final long comboTimeLimit  = 5000; // 5 秒连击限时
-
+    private Image comboIcon;
+    private static JLabel comboLabel;
 
     public static int getCombo() {
         return combo;
@@ -42,8 +44,10 @@ public class StatusPanel extends JPanel {
         // 判断当前消除的图案和上一次消除的图案是否相同
         if (currentIconIndex == lastEliminateIcon&& (now - lastEliminateTime) <= comboTimeLimit) {
             combo++;
+            comboLabel.setVisible(true);
         } else {
             setCombo(1);
+            comboLabel.setVisible(false);
         }
         lastEliminateIcon = currentIconIndex;
         lastEliminateTime = now;
@@ -194,6 +198,18 @@ public class StatusPanel extends JPanel {
         statusLabel = new JLabel("READY");
         statusLabel.setHorizontalAlignment(SwingConstants.LEFT);
         timeLabel = new JLabel("00:00:00");
+        comboLabel=new JLabel("COMBO!");
+        comboLabel.setVisible(false);
+
+        comboIcon=ResourceProcess.loadImage("effects/combo.png");
+        try {
+            //ImageIcon icon = new ImageIcon("resource\\menus\\language.png");
+            //Image langImg = icon.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
+            Image img=comboIcon.getScaledInstance(42,42,Image.SCALE_SMOOTH);
+            comboLabel.setIcon(new ImageIcon(img));
+        } catch (Exception e) {
+            comboLabel.setText("Esc");
+        }
         timer = new Timer(1000, e -> {
             seconds++;
             if (seconds == 60) {
@@ -212,14 +228,17 @@ public class StatusPanel extends JPanel {
         timeLabel.setFont(new Font("Arial", Font.BOLD, 50));
         Dimension size = statusLabel.getPreferredSize();
         Dimension timeLabelSize = timeLabel.getPreferredSize();
+        Dimension comboSize=comboLabel.getPreferredSize();
         int x = (width - size.width) / 4 ;
         int y = (height - size.height) / 3;
         int time_x = (width - timeLabelSize.width) * 2 / 3;
         int time_y = (height - timeLabelSize.height) * 2 /3;
         statusLabel.setBounds(x-130, y, size.width+150, size.height);
-        timeLabel.setBounds(time_x, time_y, timeLabelSize.width, timeLabelSize.height);
+        timeLabel.setBounds(192,147, timeLabelSize.width, timeLabelSize.height);
+        comboLabel.setBounds(800,147, comboSize.width, comboSize.height);
         this.add(statusLabel);
         this.add(timeLabel);
+        this.add(comboLabel);
     }
     //启动计时器，外部调用用
     public static void startTimer() {

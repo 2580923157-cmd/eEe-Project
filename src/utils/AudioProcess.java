@@ -115,7 +115,7 @@ public class AudioProcess {
     }*/
 
     private static Clip loadClip(String fileName) {
-        final String AUDIO_PATH="audio\\";
+        final String AUDIO_PATH="audio/";
         String path=AUDIO_PATH+fileName;
         AudioInputStream audioIn=ResourceProcess.loadAudio(path);
         if (audioIn == null)

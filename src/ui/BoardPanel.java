@@ -177,8 +177,6 @@ public class BoardPanel extends JPanel {
         lineVisible = true;
         repaint();
     }
-
-
     public void clearLine() {
         lineVisible = false;
         lineList.clear();
@@ -208,8 +206,6 @@ public class BoardPanel extends JPanel {
                 imageList.add(icon.getImage());
             }
         }
-
-
         saveHistory();
 
 
@@ -320,10 +316,17 @@ public class BoardPanel extends JPanel {
     public void loadBoard(Cell[][] newBoard) {
         for (int i = 0; i < totalRow && i < newBoard.length; i++) {
             for (int j = 0; j < totalCol && j < newBoard[i].length; j++) {
-                Cell src = newBoard[i][j];
-                Cell target = gameBoard.getCell(i, j);
-                target.setEmpty(src.isEmpty());
-                target.setIconIndex(src.getIconIndex());
+                Cell src=newBoard[i][j];
+                Cell target=gameBoard.getCell(i, j);
+                if(target==null){
+                    target=new Cell(new Position(i, j), src.isEmpty(), src.getIconIndex());
+                    gameBoard.setCell(i,j,target);
+                } else {
+                    target.setEmpty(src.isEmpty());
+                    target.setIconIndex(src.getIconIndex());
+                }
+                /*target.setEmpty(src.isEmpty());
+                target.setIconIndex(src.getIconIndex());*/
             }
         }
         // 清空选中状态和历史

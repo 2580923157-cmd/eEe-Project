@@ -11,7 +11,7 @@ import support.English;
 
 public class LanguageProcess {
     private static Language currentLanguage = Chinese.INSTANCE;
-    private static List<Runnable> listeners = new ArrayList<>();
+    private static ArrayList<Runnable> listeners = new ArrayList<>();
 
     public static Language getCurrentLanguage() {
         return currentLanguage;

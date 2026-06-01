@@ -25,6 +25,9 @@ public class GameBoard {
     public Cell getCell(int row, int col) {
         return board[row][col];
     }
+    public void setCell(int row, int col, Cell cell){
+        this.board[row][col]=cell;
+    }
     public void clearAllChosen() {
         for (int i = 0; i < rowCnt; i++) {
             for (int j = 0; j < colCnt; j++) {
