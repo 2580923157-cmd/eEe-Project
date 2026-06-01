@@ -6,11 +6,13 @@ import java.awt.*;
 // 或使用 BorderFactory
 //import javax.swing.BorderFactory;
 
+import support.Language;
 import utils.AudioProcess;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import utils.LanguageProcess;
 import utils.ResourceProcess;
 
 
@@ -26,7 +28,10 @@ public class ControlPanel extends JPanel {
     JButton undoButton;
     JButton saveButton;
     JButton exitButton;
+    JButton langButton;
+    JButton newButton;
 
+    Language lang = LanguageProcess.getCurrentLanguage();
     //以下两个用Runnable实现多线程
     //退出
     private Runnable exitAction;
@@ -103,6 +108,8 @@ public class ControlPanel extends JPanel {
             undoButton.setVisible(true);
             exitButton.setVisible(true);
             saveButton.setVisible(true);
+            newButton.setVisible(true);
+            langButton.setVisible(true);
         });
 
         //设置按钮
@@ -161,6 +168,17 @@ public class ControlPanel extends JPanel {
         //exitButton.setVisible(false);
         this.add(exitButton);
 
+        langButton=createIconButton(langIcon,"切换语言");
+        langButton.setBounds(leftX+gap*3+iconSize*4,bottomY,iconSize,iconSize);
+        langButton.addActionListener(this::onLangClick);
+        langButton.setVisible(false);
+        this.add(langButton);
+
+        newButton=createIconButton(newIcon,"开始新游戏");
+        newButton.setBounds(leftX+gap*3+iconSize*4,bottomY,iconSize,iconSize);
+        newButton.addActionListener(this::onNewClick);
+        newButton.setVisible(false);
+        this.add(newButton);
     }
     // 加载图标资源
     private void loadIcons() {
@@ -305,6 +323,7 @@ public class ControlPanel extends JPanel {
         undoButton.setVisible(false);
         exitButton.setVisible(false);
         saveButton.setVisible(false);
+
         // 重置暂停状态
         isPaused = false;
         pauseButton.setIcon(pauseIcon);
@@ -336,8 +355,8 @@ public class ControlPanel extends JPanel {
     }
 
     /***/
-    private void onLangClick(){
-
+    private void onLangClick(ActionEvent l){
+        AudioProcess.playClickSpecial();
     }
     /***/
     private void onNewClick(ActionEvent n){

@@ -198,18 +198,20 @@ public class StatusPanel extends JPanel {
         statusLabel = new JLabel("READY");
         statusLabel.setHorizontalAlignment(SwingConstants.LEFT);
         timeLabel = new JLabel("00:00:00");
-        comboLabel=new JLabel("COMBO!");
+        comboLabel=new JLabel();
         comboLabel.setVisible(false);
 
         comboIcon=ResourceProcess.loadImage("effects/combo.png");
-        try {
+        Image img=comboIcon.getScaledInstance(92,73,Image.SCALE_SMOOTH);
+        comboLabel.setIcon(new ImageIcon(img));
+        /*try {
             //ImageIcon icon = new ImageIcon("resource\\menus\\language.png");
             //Image langImg = icon.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
             Image img=comboIcon.getScaledInstance(42,42,Image.SCALE_SMOOTH);
             comboLabel.setIcon(new ImageIcon(img));
         } catch (Exception e) {
-            comboLabel.setText("Esc");
-        }
+            comboLabel.setText("COMBO");
+        }*/
         timer = new Timer(1000, e -> {
             seconds++;
             if (seconds == 60) {
@@ -234,8 +236,8 @@ public class StatusPanel extends JPanel {
         int time_x = (width - timeLabelSize.width) * 2 / 3;
         int time_y = (height - timeLabelSize.height) * 2 /3;
         statusLabel.setBounds(x-130, y, size.width+150, size.height);
-        timeLabel.setBounds(192,147, timeLabelSize.width, timeLabelSize.height);
-        comboLabel.setBounds(800,147, comboSize.width, comboSize.height);
+        timeLabel.setBounds(300,47, timeLabelSize.width, timeLabelSize.height);
+        comboLabel.setBounds(680,1, comboSize.width, comboSize.height);
         this.add(statusLabel);
         this.add(timeLabel);
         this.add(comboLabel);

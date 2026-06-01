@@ -57,7 +57,7 @@ public class BoardPanel extends JPanel {
         return dr + dc == 1;
     }
     */
-    private ControlPanel controlPanel = null;
+    private ControlPanel controlPanel;
 
     public void setControlPanel(ControlPanel controlPanel) {
         this.controlPanel = controlPanel;
@@ -359,7 +359,7 @@ public class BoardPanel extends JPanel {
         }
 
         // 第一次选中
-        if (firstSelected == null) {
+        if (firstSelected==null) {
             gameBoard.clearAllChosen();
             clickedCell.setChosen(true);
             firstSelected = pos;
@@ -370,7 +370,7 @@ public class BoardPanel extends JPanel {
         // 重复点击则取消选中
         if (firstSelected.equals(pos)) {
             gameBoard.clearAllChosen();
-            firstSelected = null;
+            firstSelected=null;
             secondSelected = null;
             repaint();
             return;

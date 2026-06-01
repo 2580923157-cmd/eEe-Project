@@ -213,7 +213,10 @@ public class Menu extends JFrame {
             if (hasSave) {
                 gameFrame.loadGame();  // 读取存档并恢复游戏状态
             }else{
-                JOptionPane.showMessageDialog(this, l.menuSaveNotFound(), l.WarningTitle(), JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this,
+                        l.menuSaveNotFound(),
+                        l.WarningTitle(),
+                        JOptionPane.WARNING_MESSAGE);
             }
         });
 
