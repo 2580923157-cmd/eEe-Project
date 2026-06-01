@@ -36,6 +36,7 @@ public class Menu extends JFrame {
     JButton continueButton=new JButton();
     JButton exitButton=new JButton();
     JButton languageButton=new JButton();
+    JButton helpButton = new JButton();
     boolean hasSave;
     public Menu(User user) {
         super("夏日大挑战 - 主菜单");

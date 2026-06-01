@@ -161,6 +161,7 @@ public class BoardPanel extends JPanel {
         if(direct(a,b)) return true;
         if(oneCorner(a,b) != null) return true;
         if(twoCorner(a,b) != null) return true;
+        AudioProcess.playWrong();
         return false;
     }
 
@@ -439,8 +440,42 @@ public class BoardPanel extends JPanel {
 
         } else {
             // 不能消除则切换选中并且将连消计数combo重置
+            animating=true;
             StatusPanel.breakCombo();
             gameBoard.clearAllChosen();
+            AudioProcess.playWrong();
+
+            /*Position blinkPos1 = firstSelected;
+            Position blinkPos2 = secondSelected;*/
+            Cell blinkCell1 = gameBoard.getCell(firstSelected.getRow(), firstSelected.getCol());
+            Cell blinkCell2 = gameBoard.getCell(secondSelected.getRow(), secondSelected.getCol());
+            //"Blink" animation
+
+            int[] blinkCount={0};
+            Timer blinkTimer = new Timer(200, blk -> {
+                //int count = blinkCount[0];
+                //int count=0;
+                //count++;
+                if (blinkCount[0] >= 4) {
+                    // 闪烁结束，清除选中状态
+                    ((Timer) blk.getSource()).stop();   //blinkTimer并不“存在于”这里
+                    gameBoard.clearAllChosen();
+                    firstSelected=null;
+                    secondSelected=null;
+                    animating=false;
+                    repaint();
+                    return;
+                }
+                // 偶数次为灭，奇数次为亮
+                boolean on = (blinkCount[0] % 2 == 1);
+                blinkCell1.setChosen(on);
+                blinkCell2.setChosen(on);
+                blinkCount[0]++;
+
+                repaint();
+            });
+            blinkTimer.setRepeats(true);
+            blinkTimer.start();
             secondCell.setChosen(true);
             firstSelected = secondSelected;
             secondSelected = null;

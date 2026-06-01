@@ -372,6 +372,7 @@ public class ControlPanel extends JPanel {
     private void onNewClick(ActionEvent n){
         AudioProcess.playClickSpecial();
 
+
     }
     /**即load之后的“强制”暂停*/
     public void forcedPause() {

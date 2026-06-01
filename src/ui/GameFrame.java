@@ -65,7 +65,7 @@ public class GameFrame extends JFrame{
         }*/
         //BoardPanel boardPanel = new BoardPanel(new GameBoard(size+2, size+2, board), 0, 100, 800, 800);
         this.boardPanel=new BoardPanel(new GameBoard(size+2, size+2, board), 80, 100, 800, 800);
-        this.statusPanel = new StatusPanel(50, 0,800, 100);
+        this.statusPanel = new StatusPanel(50, 0,1000, 100);
         this.controlPanel = new ControlPanel(statusPanel, 0, 900, 1000, 100);
         //状态注入
         boardPanel.setControlPanel(controlPanel);

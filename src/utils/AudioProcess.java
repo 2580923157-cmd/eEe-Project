@@ -73,6 +73,9 @@ public class AudioProcess {
     public static void playFail(){
         playSoundEffect("fail.wav");
     }
+    public static void playWrong(){
+        playSoundEffect("wrong.wav");
+    }
 
     /**
      * 播放指定音效文件。该方法会创建一个新的 Clip 并播放一次，
