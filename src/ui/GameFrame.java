@@ -8,10 +8,10 @@ import support.MapPool;
 import utils.AudioProcess;
 import model.User;
 import model.SaveManager;
+import support.Language;
+import utils.LanguageProcess;
 
 import javax.swing.*;
-import java.time.LocalTime;
-import java.util.Random;
 
 /**
  * 主游戏框架及界面。重要的游戏主内容都在这里实现。
@@ -27,6 +27,7 @@ public class GameFrame extends JFrame{
     ControlPanel controlPanel;
     BoardPanel boardPanel;
     SaveManager saveManager = new SaveManager();
+    public int diff;
     //boardPanel.setControlPanel(controlPanel);
 
     /*public BoardPanel getBoardPanel(){
@@ -63,8 +64,8 @@ public class GameFrame extends JFrame{
             }
         }*/
         //BoardPanel boardPanel = new BoardPanel(new GameBoard(size+2, size+2, board), 0, 100, 800, 800);
-        this.boardPanel=new BoardPanel(new GameBoard(size+2, size+2, board), 80, 130, 800, 800);
-        this.statusPanel = new StatusPanel(0, 0,this.width, 150);
+        this.boardPanel=new BoardPanel(new GameBoard(size+2, size+2, board), 80, 100, 800, 800);
+        this.statusPanel = new StatusPanel(50, 0,800, 100);
         this.controlPanel = new ControlPanel(statusPanel, 0, 900, 1000, 100);
         //状态注入
         boardPanel.setControlPanel(controlPanel);
@@ -80,6 +81,77 @@ public class GameFrame extends JFrame{
         });
         //用来保存
         controlPanel.setSaveAction(this::saveGame);
+
+        StatusPanel.setOnTimeUp(() -> {
+            Language l =LanguageProcess.getCurrentLanguage();
+            AudioProcess.stopBgm();
+            //SystemSleepEvent();
+            AudioProcess.playFail();
+            int choice=JOptionPane.showOptionDialog(this,
+                    l.fail(),
+                    l.failTitle(),
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    new Object[]{l.restart(),l.new_game(),l.end()},
+                    l.restart());
+            if (choice==JOptionPane.CLOSED_OPTION) {
+                return; // 用户关闭了对话框
+            }else if(choice==0){
+                controlPanel.resetToStart();
+                AudioProcess.playBgm();
+            }else if(choice==1){
+                if(diff==0){
+                    startEasyMode();
+                }else{
+                    startHardMode();
+                }
+                controlPanel.resetToStart();
+                AudioProcess.playBgm();
+            }else{
+                Menu menu=new Menu(user);  // 需要把当前用户传回菜单
+                AudioProcess.stopBgm();
+                menu.setVisible(true);
+                dispose();
+            }
+            //JOptionPane.showMessageDialog(this, l.fail());
+            //controlPanel.resetToStart();  // 回到开始状态
+            // 可扩展：直接返回菜单或重开
+        });
+
+        BoardPanel.setOnWin(() -> {
+            Language l =LanguageProcess.getCurrentLanguage();
+            AudioProcess.stopBgm();
+            //SystemSleepEvent();
+            AudioProcess.playFail();
+            int choice=JOptionPane.showOptionDialog(this,
+                    l.win(),
+                    l.winTitle(),
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    new Object[]{l.restart(),l.new_game(),l.end()},
+                    l.restart());
+            if (choice==JOptionPane.CLOSED_OPTION) {
+                return; // 用户关闭了对话框
+            }else if(choice==0){
+                controlPanel.resetToStart();
+                AudioProcess.playBgm();
+            }else if(choice==1){
+                if(diff==0){
+                    startEasyMode();
+                }else{
+                    startHardMode();
+                }
+                controlPanel.resetToStart();
+                AudioProcess.playBgm();
+            }else{
+                Menu menu=new Menu(user);  // 需要把当前用户传回菜单
+                AudioProcess.stopBgm();
+                menu.setVisible(true);
+                dispose();
+            }
+        });
 
         //设置棋盘大小
         this.title = title;
@@ -125,10 +197,12 @@ public class GameFrame extends JFrame{
         this.controlPanel = new ControlPanel(statusPanel, 0, 900, 1000, 100);*/
         // 恢复分数和时间
         statusPanel.setScore(state.getScore());
-        statusPanel.setHours(state.getHours());
+        /*statusPanel.setHours(state.getHours());
         statusPanel.setMinutes(state.getMinutes());
-        statusPanel.setSeconds(state.getSeconds());
+        statusPanel.setSeconds(state.getSeconds());*/
         statusPanel.updateLabels();
+        //int rem=state.getHours()*3600+state.getMinutes()*60+state.getSeconds();
+        StatusPanel.setRemainingTime(state.getHours(),state.getMinutes(),state.getSeconds());
 
         // 恢复棋盘
         boardPanel.loadBoard(state.getBoard());
@@ -161,6 +235,8 @@ public class GameFrame extends JFrame{
         gameFrame.loadGameState(state);
         JOptionPane.showMessageDialog(null, "读档成功！");
     }*/
+
+
     /**Save game接口*/
     public void saveGame() {
         if (user == null || user.isGuest()) {
@@ -211,6 +287,8 @@ public class GameFrame extends JFrame{
     public void startEasyMode() {
         int[][] map = MapPool.getRandomEasyMap();
         Cell[][] cellMap = convertToCellBoard(map); // 转换
+        diff=0;
+        StatusPanel.setGameTime(60);
         boardPanel.loadBoard(cellMap);                   // 加载地图
         boardPanel.repaint();
     }
@@ -219,7 +297,18 @@ public class GameFrame extends JFrame{
     public void startHardMode() {
         int[][] map = MapPool.getRandomHardMap();
         Cell[][] cellMap = convertToCellBoard(map);
+        diff=1;
+        StatusPanel.setGameTime(300);
         boardPanel.loadBoard(cellMap);
         boardPanel.repaint();
+    }
+
+    private void startGame(int[][] map,int difficulty,int time) {
+        Cell[][] cellMap = convertToCellBoard(map);
+        boardPanel.loadBoard(cellMap);
+        statusPanel.resetScore();
+        statusPanel.setStatus("SCORE: 0 ×0");
+        controlPanel.resetToStart();   // 显示 START 按钮，隐藏其他控制按钮
+        // 计时器在 Start 按钮点击后启动，由 ControlPanel 控制
     }
 }

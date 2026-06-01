@@ -47,7 +47,14 @@ public interface Language {
     String chooseDifficulty();
     String difficultyTitle();
     //Main
+    String gameTitle();
     String gameSave();
+    String fail();
+    String failTitle();
+    String win();
+    String winTitle();
+    String ready();
+    String score(int sc);
 
 
     //General
@@ -56,5 +63,9 @@ public interface Language {
     String no();   // 否 / No
     String easy();
     String hard();
+    String restart();
+    String new_game();
+    String end();
+    String start();
 
 }

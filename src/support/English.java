@@ -102,11 +102,26 @@ public enum English implements Language {
 
     //Main
     @Override public String gameSave()           { return "Save Game"; }
-
+    @Override public String gameTitle(){return "Summer Challenge";}
+    @Override public String fail() {
+        return "Time's up! You lose.\nWhat's your next action?";
+    }
+    @Override public String failTitle(){return "Fail";}
+    @Override public String win() {
+        return "🎉 You win!🎉\nWhat's your next action?";
+    }
+    @Override public String winTitle(){return "Win";}
+    @Override public String ready(){return "Ready...";}
+    @Override public String score(int sc){
+        return "Score: "+Integer.toString(sc);
+    }
 
     @Override public String yes() { return "Yes"; }
     @Override public String no()  { return "No"; }
     @Override public String easy() { return "Easy"; }
     @Override public String hard() { return "Hard"; }
-
+    @Override public String restart(){return "Retry";};
+    @Override public String new_game(){return "Start new game";};
+    @Override public String end(){return "Exit";};
+    @Override public String start(){return "START";}
 }

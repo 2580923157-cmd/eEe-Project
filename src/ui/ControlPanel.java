@@ -6,6 +6,7 @@ import java.awt.*;
 // 或使用 BorderFactory
 //import javax.swing.BorderFactory;
 
+import support.Chinese;
 import support.Language;
 import utils.AudioProcess;
 import java.awt.event.ActionEvent;
@@ -81,14 +82,19 @@ public class ControlPanel extends JPanel {
         this.offSetY = offSetY;
         this.width = width;
         this.height = height;
-        this.startButton = new JButton("START");
+        this.startButton = new JButton(LanguageProcess.getCurrentLanguage().start());
         this.statusPanel = statusPanel;
         int startWidth = 150;
         int startHeight = 50;
         int startX = (width - startWidth) / 2;
         int startY = (height - startHeight) / 2-20;
         startButton.setBounds(startX, startY, startWidth, startHeight);
-        startButton.setFont(new Font("Arial", Font.BOLD, 25));
+        if(LanguageProcess.getCurrentLanguage()==Chinese.INSTANCE){
+            startButton.setFont(new Font("微软雅黑", Font.BOLD, 25));
+        }else{
+            startButton.setFont(new Font("Arial", Font.BOLD, 25));
+        }
+
         startButton.setFocusPainted(false);
         this.add(startButton);
         //开始之后
@@ -169,13 +175,13 @@ public class ControlPanel extends JPanel {
         this.add(exitButton);
 
         langButton=createIconButton(langIcon,"切换语言");
-        langButton.setBounds(leftX+gap*3+iconSize*4,bottomY,iconSize,iconSize);
+        langButton.setBounds(leftX+gap*3+iconSize*3,bottomY,iconSize,iconSize);
         langButton.addActionListener(this::onLangClick);
         langButton.setVisible(false);
         this.add(langButton);
 
         newButton=createIconButton(newIcon,"开始新游戏");
-        newButton.setBounds(leftX+gap*3+iconSize*4,bottomY,iconSize,iconSize);
+        newButton.setBounds(rightX-gap*3-iconSize*3,bottomY,iconSize,iconSize);
         newButton.addActionListener(this::onNewClick);
         newButton.setVisible(false);
         this.add(newButton);
@@ -308,7 +314,7 @@ public class ControlPanel extends JPanel {
         }
         statusPanel.resetTimer();
         statusPanel.resetScore();
-        statusPanel.setStatus("READY");
+        statusPanel.setStatus(LanguageProcess.getCurrentLanguage().ready());
         resetToStart();   // 让控制面板恢复初始状态
     }
     /**
@@ -323,11 +329,14 @@ public class ControlPanel extends JPanel {
         undoButton.setVisible(false);
         exitButton.setVisible(false);
         saveButton.setVisible(false);
+        langButton.setVisible(false);
+        newButton.setVisible(false);
 
         // 重置暂停状态
         isPaused = false;
         pauseButton.setIcon(pauseIcon);
         pauseButton.setToolTipText("暂停");
+        //AudioProcess.playBgm();
     }
     /** 撤销 */
     private void onUndoClick(ActionEvent undo) {
@@ -356,7 +365,8 @@ public class ControlPanel extends JPanel {
 
     /***/
     private void onLangClick(ActionEvent l){
-        AudioProcess.playClickSpecial();
+        LanguageProcess.switchLanguage();
+        AudioProcess.playClick1();
     }
     /***/
     private void onNewClick(ActionEvent n){
@@ -381,6 +391,19 @@ public class ControlPanel extends JPanel {
         undoButton.setVisible(true);
         saveButton.setVisible(true);
         exitButton.setVisible(true);
+        langButton.setVisible(true);
+        newButton.setVisible(true);
+    }
+    public void setTips() {
+        startButton.setVisible(false);
+        audioButton.setVisible(true);
+        pauseButton.setVisible(true);
+        retryButton.setVisible(true);
+        undoButton.setVisible(true);
+        saveButton.setVisible(true);
+        exitButton.setVisible(true);
+        langButton.setVisible(true);
+        newButton.setVisible(true);
     }
 
     public boolean isPaused() {

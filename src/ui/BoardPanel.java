@@ -38,6 +38,7 @@ public class BoardPanel extends JPanel {
     private Timer animTimer;                  // 动画用定时器
     private Cell animCell1, animCell2;        // 当前正在动画的起点和终点
     //过段时间再实现！
+    public static Runnable onWin;
 
     private Stack<Cell[][]> historyStack = new Stack<>();//用于把上一步信息保存在内存栈
 
@@ -308,7 +309,10 @@ public class BoardPanel extends JPanel {
             }
         }
         AudioProcess.playWin();
-        JOptionPane.showMessageDialog(this, "🎉 恭喜通关！");
+        //JOptionPane.showMessageDialog(this, "🎉 恭喜通关！");
+        if (onWin != null) {
+            SwingUtilities.invokeLater(onWin);   // 通知 GameFrame
+        }
         StatusPanel.stopTimer();
         return true;
     }
@@ -338,6 +342,9 @@ public class BoardPanel extends JPanel {
         repaint();
     }
 
+    public static void setOnWin(Runnable callback) {
+         onWin=callback;
+    }
     /**点击的相关处理*/
     public void handleClick(int x, int y) {
         if(controlPanel!=null&&

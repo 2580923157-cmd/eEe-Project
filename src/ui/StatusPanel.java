@@ -2,13 +2,14 @@ package ui;
 
 import javax.swing.*;
 import java.awt.*;
+
+import utils.LanguageProcess;
 import utils.ResourceProcess;
 
 public class StatusPanel extends JPanel {
     static JLabel statusLabel;
     static JLabel timeLabel;
     static Timer timer;
-    static int seconds;
     private static int score = 0;
 
     private static int combo = 0;
@@ -85,7 +86,7 @@ public class StatusPanel extends JPanel {
         if (timeLabel == null || timeLabel.getParent() == null) return;
         StatusPanel panel = (StatusPanel) timeLabel.getParent();
         timeLabel.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
-        panel.statusLabel.setText("分数: " + score + "  ×" + combo);
+        panel.statusLabel.setText(LanguageProcess.getCurrentLanguage().score(score) +"×" + combo);
         panel.repaint();
     }
 
@@ -183,10 +184,14 @@ public class StatusPanel extends JPanel {
 
     static int minutes;
     static int hours;
+    static int seconds;
     int offSetX;
     int offSetY;
     int width;
     int height;
+    private static int totalGameSeconds=60;
+    private static Runnable onTimeUp;
+    static int remainingSeconds=totalGameSeconds;
 
     public StatusPanel(int offSetX, int offSetY,int width, int height) {
         this.setLayout(null);
@@ -195,11 +200,12 @@ public class StatusPanel extends JPanel {
         this.offSetY = offSetY;
         this.width = width;
         this.height = height;
-        statusLabel = new JLabel("READY");
+        statusLabel = new JLabel(LanguageProcess.getCurrentLanguage().ready());
         statusLabel.setHorizontalAlignment(SwingConstants.LEFT);
         timeLabel = new JLabel("00:00:00");
         comboLabel=new JLabel();
         comboLabel.setVisible(false);
+
 
         comboIcon=ResourceProcess.loadImage("effects/combo.png");
         Image img=comboIcon.getScaledInstance(92,73,Image.SCALE_SMOOTH);
@@ -212,7 +218,28 @@ public class StatusPanel extends JPanel {
         } catch (Exception e) {
             comboLabel.setText("COMBO");
         }*/
-        timer = new Timer(1000, e -> {
+        // 倒计时计时器
+        timer=new Timer(1000, t -> {
+            // 借位逻辑
+            if (seconds > 0) {
+                seconds--;
+            } else if (minutes > 0) {
+                minutes--;
+                seconds=59;
+            } else if (hours > 0) {
+                hours--;
+                minutes = 59;
+                seconds = 59;
+            } else {
+                // 时间耗尽
+                stopTimer();
+                if (onTimeUp != null) {
+                    onTimeUp.run();
+                }
+            }
+            updateTimer();
+        });
+        /*timer = new Timer(1000, e -> {
             seconds++;
             if (seconds == 60) {
                 minutes++;
@@ -223,7 +250,8 @@ public class StatusPanel extends JPanel {
                 }
             }
             timeLabel.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
-        });
+            updateT
+        });*/
         //开始计时！
         //timer.start();
         statusLabel.setFont(new Font("微软雅黑", Font.PLAIN, 30));
@@ -237,7 +265,7 @@ public class StatusPanel extends JPanel {
         int time_y = (height - timeLabelSize.height) * 2 /3;
         statusLabel.setBounds(x-130, y, size.width+150, size.height);
         timeLabel.setBounds(300,47, timeLabelSize.width, timeLabelSize.height);
-        comboLabel.setBounds(680,1, comboSize.width, comboSize.height);
+        comboLabel.setBounds(800,1, comboSize.width, comboSize.height);
         this.add(statusLabel);
         this.add(timeLabel);
         this.add(comboLabel);
@@ -259,10 +287,36 @@ public class StatusPanel extends JPanel {
     /** 重开的一部分：重置时间*/
     public static void resetTimer() {
         stopTimer();
-        seconds = 0;
-        minutes = 0;
-        hours = 0;
-        timeLabel.setText("00:00:00");
+        int totalTime=totalGameSeconds;
+        hours=totalTime/3600;
+        minutes=(totalTime%3600)/60;
+        seconds=totalTime%60;
+        //timeLabel.setText("00:00:00");
+        updateTimer();
+    }
+    /**计时器更新显示，SP类里直接调用*/
+    private static void updateTimer() {
+        if (timeLabel!=null) {
+            timeLabel.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
+        }
+    }
+    /**用来决定游戏时间
+     * @param totalSec 传入游戏时间（秒数），简单60s，困难180s；准备写挑战*/
+    public static void setGameTime(int totalSec) {
+        totalGameSeconds=totalSec;
+        resetTimer();
+    }
+
+    public static void setOnTimeUp(Runnable callback) {
+        onTimeUp = callback;
+    }
+    public static void setRemainingTime(int h, int m, int s) {
+        stopTimer();
+        hours=h;
+        minutes=m;
+        seconds=s;
+        remainingSeconds=h*3600+m*60+s;
+        updateTimer();
     }
     public void setStatus(String text) {
         statusLabel.setText(text);

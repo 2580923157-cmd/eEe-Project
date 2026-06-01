@@ -49,15 +49,29 @@ public enum Chinese implements Language{
     @Override public String difficultyTitle() { return "难度选择"; }
 
     //Main
-    @Override
-    public String gameSave() {
-        return "Save Game";
+    @Override public String gameSave() {
+        return "保存游戏";
     }
-
+    @Override public String gameTitle(){return "夏日大挑战";}
+    @Override public String fail() {
+        return "时间用完了！游戏结束。\n下一步操作是？";
+    }
+    @Override public String failTitle(){return "失败";}
+    @Override public String win() {
+        return "🎉 恭喜通关！🎉\n下一步操作是？";
+    }
+    @Override public String winTitle(){return "胜利";}
+    @Override public String ready(){return "准备...";}
+    @Override public String score(int sc){
+        return "分数："+Integer.toString(sc);
+    }
 
     @Override public String yes() { return "是"; }
     @Override public String no()  { return "否"; }
     @Override public String easy() { return "简单"; }
     @Override public String hard() { return "困难"; }
-
+    @Override public String restart(){return "重新开始";};
+    @Override public String new_game(){return "开始新一关";};
+    @Override public String end(){return "退出";};
+    @Override public String start(){return "开始";}
 }
