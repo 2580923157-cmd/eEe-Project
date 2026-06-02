@@ -191,6 +191,30 @@ public class Login {
         });
 
         // 注册
+//        regButton.addActionListener(e -> {
+//            Language nowLang = LanguageProcess.getCurrentLanguage();
+//            String username = userField.getText().trim();
+//            String password = new String(passField.getPassword()).trim();
+//            if (username.isEmpty() || password.isEmpty()) {
+//                JOptionPane.showMessageDialog(loginBox, nowLang.loginEmptyFields()/*"用户名或密码不能为空！"*/, nowLang.loginRegFailTitle()/*"注册失败"*/, JOptionPane.WARNING_MESSAGE);
+//                return;
+//            }
+//            if (username.contains(",")) {
+//                JOptionPane.showMessageDialog(loginBox,nowLang.loginCommaError() /*"用户名不能包含逗号！"*/, nowLang.loginRegFailTitle()/*"注册失败"*/, JOptionPane.WARNING_MESSAGE);
+//                return;
+//            }
+//
+//            boolean success = userService.register(username, password);
+//            if (success) {
+//                JOptionPane.showMessageDialog(loginBox, nowLang.loginRegSuccess()/*"注册成功！请登录"*/, nowLang.loginRegSuccessTitle()/*"注册"*/, JOptionPane.INFORMATION_MESSAGE);
+//                userField.setText("");
+//                passField.setText("");
+//            } else {
+//                JOptionPane.showMessageDialog(loginBox, nowLang.loginRegFail()/*"用户名已存在，请更换！"*/, nowLang.loginRegFailTitle()/*"注册失败"*/, JOptionPane.WARNING_MESSAGE);
+//            }
+//        });
+
+        // 注册
         regButton.addActionListener(e -> {
             Language nowLang = LanguageProcess.getCurrentLanguage();
             String username = userField.getText().trim();
@@ -204,6 +228,16 @@ public class Login {
                 return;
             }
 
+            //密码强度校验
+            // 正则表达式解释：
+            // (?=.*[A-Za-z])：必须包含至少一个字母（大小写均可）
+            // (?=.*\d)：必须包含至少一个数字
+            // .{6,}：总长度至少为 6 位
+            if (!password.matches("^(?=.*[A-Za-z])(?=.*\\d).{6,}$")) {
+                // 这里的提示文字如果你有国际化处理（Language Process），建议后续替换为 nowLang 里的对应方法
+                JOptionPane.showMessageDialog(loginBox, "密码不符合要求！（需至少6位且同时包含字母和数字）", nowLang.loginRegFailTitle()/*"注册失败"*/, JOptionPane.WARNING_MESSAGE);
+                return;
+            }
             boolean success = userService.register(username, password);
             if (success) {
                 JOptionPane.showMessageDialog(loginBox, nowLang.loginRegSuccess()/*"注册成功！请登录"*/, nowLang.loginRegSuccessTitle()/*"注册"*/, JOptionPane.INFORMATION_MESSAGE);

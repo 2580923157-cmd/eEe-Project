@@ -562,6 +562,49 @@ public class BoardPanel extends JPanel {
     }
 
 
+    public int getRemainingPairsCount() {
+        List<Position> activePositions = new ArrayList<>();
+
+        // 收集所有非空格子的坐标
+        for (int r = 0; r < totalRow; r++) {
+            for (int c = 0; c < totalCol; c++) {
+                Cell cell = gameBoard.getCell(r, c);
+                if (cell != null && !cell.isEmpty()) {
+                    activePositions.add(new Position(r, c));
+                }
+            }
+        }
+
+        int pairsCount = 0;
+        int size = activePositions.size();
+
+        // 2. 两两配对，利用你原有的 canEliminate 方法判断是否能消除
+        for (int i = 0; i < size; i++) {
+            Position p1 = activePositions.get(i);
+            for (int j = i + 1; j < size; j++) {
+                Position p2 = activePositions.get(j);
+
+                // 只有当两个格子图案索引相同时，才进行寻路判定
+                if (gameBoard.getCell(p1.getRow(), p1.getCol()).getIconIndex() ==
+                        gameBoard.getCell(p2.getRow(), p2.getCol()).getIconIndex()) {
+
+                    if (canEliminate(p1, p2)) {
+                        pairsCount++;
+                    }
+                }
+            }
+        }
+        return pairsCount;
+    }
+
+   //四局判断
+   public void checkDeadlock() {
+       int pairs = getRemainingPairsCount();
+       if (pairs == 0) {
+           AudioProcess.playWrong(); // 播放一个警告音效
+           JOptionPane.showMessageDialog(this, "当前棋盘已无解，陷入死局！建议重新开始或洗牌。");
+       }
+   }
 
 
 }
