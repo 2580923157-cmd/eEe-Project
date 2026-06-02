@@ -47,6 +47,7 @@ public interface Language {
     //String menuSaveNotFoundTitle();     // 提示
     String chooseDifficulty();
     String difficultyTitle();
+
     //Main
     String gameTitle();
     String gameSave();
@@ -58,6 +59,7 @@ public interface Language {
     String ready();
     String score(int sc);
     String pairs(int nowP,int totalP);
+    String exitConfirm();  // 退出确认消息
 
 
 

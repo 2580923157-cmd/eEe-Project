@@ -3,6 +3,8 @@ package ui;
 import model.*;
 import model.Rectangle;
 import utils.AudioProcess;
+import utils.LanguageProcess;
+import utils.ResourceProcess;
 
 import javax.swing.*;
 import java.awt.*;
@@ -162,7 +164,7 @@ public class BoardPanel extends JPanel {
         if(direct(a,b)) return true;
         if(oneCorner(a,b) != null) return true;
         if(twoCorner(a,b) != null) return true;
-        AudioProcess.playWrong();
+        //AudioProcess.playWrong();
         return false;
     }
 
@@ -201,16 +203,26 @@ public class BoardPanel extends JPanel {
         this.cellHeight = this.height / totalRow;
 
         //接下来读文件（棋子的照片）
-        File dir = new File("resource\\images");
+        /*File dir = new File("resource\\images");
         File[] files = dir.listFiles();
         for (File file : files) {
             if (file.getName().endsWith(".png")) {
                 ImageIcon icon = new ImageIcon(file.getPath());
                 imageList.add(icon.getImage());
             }
+        }*/
+        for (int i = 0; i <=14; i++) {
+            String path = "images/"+i+".png";
+            Image img = ResourceProcess.loadImage(path);
+            if (img!=null) {
+                imageList.add(img);
+            } else {
+                System.err.println("缺少棋子图片: " + path);
+            }
         }
         saveHistory();
-        StatusPanel.updatePairsLabel(getRemainingPairsCount());
+        StatusPanel.updatePairsLabel(StatusPanel.nowPairs);
+        //checkDeadlock();
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -264,8 +276,13 @@ public class BoardPanel extends JPanel {
         repaint();
 
         // 撤销后重新判断胜负
-        checkWin();
-        StatusPanel.updatePairsLabel(getRemainingPairsCount());
+        //checkWin();
+        StatusPanel.nowPairs+=1;
+        StatusPanel.updatePairsLabel(StatusPanel.nowPairs);
+        boolean win=checkWin();
+        if (!win) {
+            checkDeadlock();
+        }
     }
     /**
      * 重开游戏
@@ -342,7 +359,8 @@ public class BoardPanel extends JPanel {
         historyStack.clear();
         saveHistory();      //重新入栈
         repaint();
-        StatusPanel.updatePairsLabel(getRemainingPairsCount());
+        StatusPanel.updatePairsLabel(StatusPanel.nowPairs);
+        checkDeadlock();
     }
 
     public static void setOnWin(Runnable callback) {
@@ -435,8 +453,12 @@ public class BoardPanel extends JPanel {
                 animating = false;
                 repaint();
                 // 判断胜利
-                StatusPanel.updatePairsLabel(getRemainingPairsCount());
-                checkWin();
+                StatusPanel.nowPairs-=1;
+                StatusPanel.updatePairsLabel(StatusPanel.nowPairs);
+                boolean win=checkWin();
+                if (!win) {
+                    checkDeadlock();
+                }
             });
             timer.setRepeats(false);
             timer.start();
@@ -484,6 +506,8 @@ public class BoardPanel extends JPanel {
             secondSelected = null;
             repaint();
         }
+        ControlPanel.nowSaved=false;
+        System.out.println(getRemainingPairsCount());
     }
     public GameBoard getGameBoard() {
         return gameBoard;
@@ -603,8 +627,8 @@ public class BoardPanel extends JPanel {
    public void checkDeadlock() {
        int pairs = getRemainingPairsCount();
        if (pairs==0) {
-           AudioProcess.playFail(); // 播放一个警告音效
-           JOptionPane.showMessageDialog(this, "当前棋盘已无解，陷入死局！建议重新开始或洗牌。");
+           AudioProcess.playWrong(); // 播放一个警告音效
+           JOptionPane.showMessageDialog(this, LanguageProcess.getCurrentLanguage().deadFail());
        }
    }
 

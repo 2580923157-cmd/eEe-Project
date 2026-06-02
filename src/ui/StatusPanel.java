@@ -12,11 +12,11 @@ public class StatusPanel extends JPanel {
     static JLabel pairsLabel;
     static Timer timer;
     private static int score = 0;
-
     private static int combo = 0;
     // 上一次消除的图案ID（用于判断是否相同）
     private static int lastEliminateIcon = -1;
     public static int pairs=16;
+    public static int nowPairs=16;
 
     private static long lastEliminateTime = 0;   // 上一次消除时间（毫秒）
     private static final long comboTimeLimit  = 5000; // 5 秒连击限时
@@ -278,7 +278,7 @@ public class StatusPanel extends JPanel {
         statusLabel.setBounds(x-200, y-10, size.width+150, size.height);
         timeLabel.setBounds(320,30, timeLabelSize.width, timeLabelSize.height);
         comboLabel.setBounds(800,6, comboSize.width, comboSize.height);
-        pairsLabel.setBounds(x-180,y+20,190,30);
+        pairsLabel.setBounds(x-170,y+35,190,30);
         this.add(statusLabel);
         this.add(timeLabel);
         this.add(comboLabel);
@@ -349,7 +349,7 @@ public class StatusPanel extends JPanel {
         repaint();
     }
 
-        //刷新显示
+    //刷新显示
     /*public void updateLabels() {
         timeLabel.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
         statusLabel.setText("Score: " + score);

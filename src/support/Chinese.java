@@ -71,6 +71,7 @@ public enum Chinese implements Language{
     public String pairs(int nowP,int totalP) {
         return "可消除："+Integer.toString(nowP)+"/"+Integer.toString(totalP);
     }
+    @Override public String exitConfirm() { return "未保存的进度将丢失，确定要退出吗？"; }
 
     @Override public String audioOnTooltip(){ return "播放音乐"; }
     @Override public String audioOffTooltip() { return "停止音乐"; }

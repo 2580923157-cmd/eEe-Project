@@ -70,6 +70,7 @@ public enum TraditionalChinese implements Language{
     public String pairs(int nowP,int totalP) {
         return "可消除："+Integer.toString(nowP)+"/"+Integer.toString(totalP);
     }
+    @Override public String exitConfirm() { return "未保存的進度將丟失，確定要退出嗎？"; }
 
     @Override public String audioOnTooltip(){ return "播放音樂"; }
     @Override public String audioOffTooltip() { return "停止音樂"; }

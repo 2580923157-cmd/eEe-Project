@@ -120,6 +120,7 @@ public enum English implements Language {
     public String pairs(int nowP,int totalP) {
         return "Pairs left: "+Integer.toString(nowP)+"/"+Integer.toString(totalP);
     }
+    @Override public String exitConfirm() { return "Unsaved progress will be lost. Exit anyway?"; }
 
     @Override public String audioOnTooltip(){ return "Play Music"; }
     @Override public String audioOffTooltip() { return "Stop Music"; }

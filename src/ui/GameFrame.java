@@ -72,6 +72,7 @@ public class GameFrame extends JFrame{
         controlPanel.setBoardPanel(boardPanel);
         //用来退回menu
         controlPanel.exitAction(() -> {
+
             dispose();                              // 关闭当前游戏窗口
             SwingUtilities.invokeLater(() -> {      // 返回主菜单
                 Menu menu=new Menu(user);  // 需要把当前用户传回菜单
@@ -245,6 +246,7 @@ public class GameFrame extends JFrame{
         }
         saveManager.save(user.getUserName(), exportGameState());
         JOptionPane.showMessageDialog(this, "存档成功！");
+        ControlPanel.nowSaved=true;
     }
     /**load game接口*/
     public void loadGame() {
@@ -291,6 +293,7 @@ public class GameFrame extends JFrame{
         StatusPanel.setGameTime(60);
         boardPanel.loadBoard(cellMap);                   // 加载地图
         StatusPanel.pairs=16;
+        StatusPanel.nowPairs=16;
         boardPanel.repaint();
     }
 
@@ -302,6 +305,7 @@ public class GameFrame extends JFrame{
         StatusPanel.setGameTime(300);
         boardPanel.loadBoard(cellMap);
         StatusPanel.pairs=50;
+        StatusPanel.nowPairs=50;
         boardPanel.repaint();
     }
 

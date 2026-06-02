@@ -43,6 +43,7 @@ public class ControlPanel extends JPanel {
         this.saveAction=action;
     }
 
+    public static boolean nowSaved=true;
     int offSetX;    //偏移
     int offSetY;
     int width;
@@ -358,12 +359,25 @@ public class ControlPanel extends JPanel {
         //pauseButton.setToolTipText("保存");
     }
     /**退出*/
-    private void onExitClick(ActionEvent e) {
+    private void onExitClick(ActionEvent e){
         AudioProcess.playClickSpecial();
-        if (exitAction!=null) {
+        if (!nowSaved){
+            Language l=LanguageProcess.getCurrentLanguage();
+            int choice=JOptionPane.showOptionDialog(this,
+                    l.exitConfirm(),      // “确定要退出吗？未保存的进度将丢失”
+                    l.WarningTitle(),                // “警告”
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE,
+                    null,
+                    new Object[]{l.yes(),l.no()},   // 自定义按钮文字
+                    l.no());
+            if(choice!=0) {   // 0 表示“是”，非0表示取消
+                return;
+            }
+        }
+        if(exitAction!=null){
             exitAction.run();
         }
-        //pauseButton.setToolTipText("退出");
     }
 
     /***/
