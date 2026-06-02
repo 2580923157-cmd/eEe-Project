@@ -19,9 +19,10 @@ public enum TraditionalChinese implements Language{
     @Override public String loginRegSuccessTitle(){ return "註冊"; }
     @Override public String loginGuestMsgTitle() { return "提示"; }
     @Override public String loginEmptyFields(){ return "用戶名和密碼不能爲空！"; }
+    @Override public String loginRegFailPass(){return "密碼不符合要求！\n（需至少6位且同時包含字母和數字）";}
     @Override public String loginSuccess(String user){ return "登錄成功！歡迎您， " + user; }
     @Override public String loginFail(){ return "用戶名或密碼錯誤！"; }
-    @Override public String loginCommaError(){ return "用戶名不能包含逗號！"; }
+    @Override public String loginCommaError(){ return "用戶名不能包含逗號！";}
     @Override public String loginRegSuccess(){ return "註冊成功！請登錄"; }
     @Override public String loginRegFail(){ return "用戶名已存在，請更換！"; }
     @Override public String loginGuestMsg(){ return "以遊客身份進入遊戲"; }
@@ -53,10 +54,11 @@ public enum TraditionalChinese implements Language{
         return "保存遊戲";
     }
     @Override public String gameTitle(){return "夏日大挑戰";}
-    @Override public String fail() {
+    @Override public String timeupFail() {
         return "時間用完了！遊戲結束。\n下一步操作是？";
     }
     @Override public String failTitle(){return "失敗";}
+    @Override public String deadFail(){return "當前棋盤無解，死局！\n建議重新開始或回退。";}
     @Override public String win() {
         return "🎉 恭喜通關！🎉\n下一步操作是？";
     }
@@ -65,13 +67,16 @@ public enum TraditionalChinese implements Language{
     @Override public String score(int sc){
         return "分數："+Integer.toString(sc);
     }
+    public String pairs(int nowP,int totalP) {
+        return "可消除："+Integer.toString(nowP)+"/"+Integer.toString(totalP);
+    }
 
     @Override public String audioOnTooltip(){ return "播放音樂"; }
     @Override public String audioOffTooltip() { return "停止音樂"; }
     @Override public String pauseTooltip(){ return "暫停"; }
     @Override public String continueTooltip() { return "繼續"; }
     @Override public String retryTooltip(){ return "重新開始"; }
-    @Override public String undoTooltip(){ return "回到上一步"; }
+    @Override public String undoTooltip(){ return "回退上一步"; }
     @Override public String saveTooltip(){ return "保存"; }
     @Override public String exitTooltip(){ return "退出"; }
 
@@ -84,4 +89,9 @@ public enum TraditionalChinese implements Language{
     @Override public String new_game(){return "開始新一關";};
     @Override public String end(){return "退出";};
     @Override public String start(){return "開始";}
+
+    @Override
+    public String cancel() {
+        return "取消";
+    }
 }

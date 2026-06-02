@@ -210,8 +210,7 @@ public class BoardPanel extends JPanel {
             }
         }
         saveHistory();
-
-
+        StatusPanel.updatePairsLabel(getRemainingPairsCount());
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -266,6 +265,7 @@ public class BoardPanel extends JPanel {
 
         // 撤销后重新判断胜负
         checkWin();
+        StatusPanel.updatePairsLabel(getRemainingPairsCount());
     }
     /**
      * 重开游戏
@@ -342,6 +342,7 @@ public class BoardPanel extends JPanel {
         historyStack.clear();
         saveHistory();      //重新入栈
         repaint();
+        StatusPanel.updatePairsLabel(getRemainingPairsCount());
     }
 
     public static void setOnWin(Runnable callback) {
@@ -434,6 +435,7 @@ public class BoardPanel extends JPanel {
                 animating = false;
                 repaint();
                 // 判断胜利
+                StatusPanel.updatePairsLabel(getRemainingPairsCount());
                 checkWin();
             });
             timer.setRepeats(false);
@@ -600,8 +602,8 @@ public class BoardPanel extends JPanel {
    //四局判断
    public void checkDeadlock() {
        int pairs = getRemainingPairsCount();
-       if (pairs == 0) {
-           AudioProcess.playWrong(); // 播放一个警告音效
+       if (pairs==0) {
+           AudioProcess.playFail(); // 播放一个警告音效
            JOptionPane.showMessageDialog(this, "当前棋盘已无解，陷入死局！建议重新开始或洗牌。");
        }
    }

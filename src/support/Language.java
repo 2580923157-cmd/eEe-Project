@@ -17,6 +17,7 @@ public interface Language {
     String loginRegSuccessTitle();
     String loginGuestMsgTitle();
     String loginEmptyFields();
+    String loginRegFailPass();
     String loginSuccess(String username);
     String loginFail();
     String loginCommaError();
@@ -49,12 +50,15 @@ public interface Language {
     //Main
     String gameTitle();
     String gameSave();
-    String fail();
+    String timeupFail();
+    String deadFail();
     String failTitle();
     String win();
     String winTitle();
     String ready();
     String score(int sc);
+    String pairs(int nowP,int totalP);
+
 
 
     String audioOnTooltip();
@@ -77,5 +81,6 @@ public interface Language {
     String new_game();
     String end();
     String start();
+    String cancel();
 
 }

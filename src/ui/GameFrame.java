@@ -88,7 +88,7 @@ public class GameFrame extends JFrame{
             //SystemSleepEvent();
             AudioProcess.playFail();
             int choice=JOptionPane.showOptionDialog(this,
-                    l.fail(),
+                    l.timeupFail(),
                     l.failTitle(),
                     JOptionPane.DEFAULT_OPTION,
                     JOptionPane.QUESTION_MESSAGE,
@@ -114,7 +114,7 @@ public class GameFrame extends JFrame{
                 menu.setVisible(true);
                 dispose();
             }
-            //JOptionPane.showMessageDialog(this, l.fail());
+            //JOptionPane.showMessageDialog(this, l.timeupFail());
             //controlPanel.resetToStart();  // 回到开始状态
             // 可扩展：直接返回菜单或重开
         });
@@ -290,6 +290,7 @@ public class GameFrame extends JFrame{
         diff=0;
         StatusPanel.setGameTime(60);
         boardPanel.loadBoard(cellMap);                   // 加载地图
+        StatusPanel.pairs=16;
         boardPanel.repaint();
     }
 
@@ -300,6 +301,7 @@ public class GameFrame extends JFrame{
         diff=1;
         StatusPanel.setGameTime(300);
         boardPanel.loadBoard(cellMap);
+        StatusPanel.pairs=50;
         boardPanel.repaint();
     }
 

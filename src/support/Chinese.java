@@ -19,6 +19,7 @@ public enum Chinese implements Language{
     @Override public String loginRegSuccessTitle(){ return "注册"; }
     @Override public String loginGuestMsgTitle() { return "提示"; }
     @Override public String loginEmptyFields(){ return "用户名和密码不能为空！"; }
+    @Override public String loginRegFailPass(){return "密码不符合要求！\n（需至少6位且同时包含字母和数字）";}
     @Override public String loginSuccess(String user){ return "登录成功！欢迎您， " + user; }
     @Override public String loginFail(){ return "用户名或密码错误！"; }
     @Override public String loginCommaError(){ return "用户名不能包含逗号！"; }
@@ -53,9 +54,10 @@ public enum Chinese implements Language{
         return "保存游戏";
     }
     @Override public String gameTitle(){return "夏日大挑战";}
-    @Override public String fail() {
+    @Override public String timeupFail() {
         return "时间用完了！游戏结束。\n下一步操作是？";
     }
+    @Override public String deadFail(){return "当前棋盘已无解，陷入死局！\n建议重新开始或撤销。";}
     @Override public String failTitle(){return "失败";}
     @Override public String win() {
         return "🎉 恭喜通关！🎉\n下一步操作是？";
@@ -64,6 +66,10 @@ public enum Chinese implements Language{
     @Override public String ready(){return "准备...";}
     @Override public String score(int sc){
         return "分数："+Integer.toString(sc);
+    }
+    @Override
+    public String pairs(int nowP,int totalP) {
+        return "可消除："+Integer.toString(nowP)+"/"+Integer.toString(totalP);
     }
 
     @Override public String audioOnTooltip(){ return "播放音乐"; }
@@ -84,4 +90,6 @@ public enum Chinese implements Language{
     @Override public String new_game(){return "开始新一关";};
     @Override public String end(){return "退出";};
     @Override public String start(){return "开始";}
+    @Override
+    public String cancel() {return "取消";    }
 }

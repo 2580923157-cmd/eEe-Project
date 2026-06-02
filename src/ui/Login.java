@@ -234,8 +234,7 @@ public class Login {
             // (?=.*\d)：必须包含至少一个数字
             // .{6,}：总长度至少为 6 位
             if (!password.matches("^(?=.*[A-Za-z])(?=.*\\d).{6,}$")) {
-                // 这里的提示文字如果你有国际化处理（Language Process），建议后续替换为 nowLang 里的对应方法
-                JOptionPane.showMessageDialog(loginBox, "密码不符合要求！（需至少6位且同时包含字母和数字）", nowLang.loginRegFailTitle()/*"注册失败"*/, JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(loginBox, nowLang.loginRegFailPass(), nowLang.loginRegFailTitle()/*"注册失败"*/, JOptionPane.WARNING_MESSAGE);
                 return;
             }
             boolean success = userService.register(username, password);

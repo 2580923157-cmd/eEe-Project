@@ -116,6 +116,7 @@ public class ControlPanel extends JPanel {
             saveButton.setVisible(true);
             newButton.setVisible(true);
             langButton.setVisible(true);
+            StatusPanel.pairsLabel.setVisible(true);
         });
 
         //设置按钮

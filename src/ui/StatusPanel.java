@@ -16,6 +16,7 @@ public class StatusPanel extends JPanel {
     private static int combo = 0;
     // 上一次消除的图案ID（用于判断是否相同）
     private static int lastEliminateIcon = -1;
+    public static int pairs=16;
 
     private static long lastEliminateTime = 0;   // 上一次消除时间（毫秒）
     private static final long comboTimeLimit  = 5000; // 5 秒连击限时
@@ -206,6 +207,8 @@ public class StatusPanel extends JPanel {
         timeLabel = new JLabel("00:00:00");
         comboLabel=new JLabel();
         comboLabel.setVisible(false);
+        pairsLabel=new JLabel();
+        pairsLabel.setVisible(false);
 
 
         comboIcon=ResourceProcess.loadImage("effects/combo.png");
@@ -259,21 +262,28 @@ public class StatusPanel extends JPanel {
         });*/
         //开始计时！
         //timer.start();
+
         statusLabel.setFont(new Font("微软雅黑", Font.PLAIN, 30));
         timeLabel.setFont(new Font("Arial", Font.BOLD, 50));
+        pairsLabel.setFont(new Font("微软雅黑", Font.PLAIN, 20));
+        pairsLabel.setForeground(Color.BLACK);
         Dimension size = statusLabel.getPreferredSize();
         Dimension timeLabelSize = timeLabel.getPreferredSize();
         Dimension comboSize=comboLabel.getPreferredSize();
+        //Dimension pairsSize=pairsLabel.getPreferredSize();
         int x = (width - size.width) / 4 ;
         int y = (height - size.height) / 3;
         int time_x = (width - timeLabelSize.width) * 2 / 3;
         int time_y = (height - timeLabelSize.height) * 2 /3;
-        statusLabel.setBounds(x-200, y, size.width+150, size.height);
+        statusLabel.setBounds(x-200, y-10, size.width+150, size.height);
         timeLabel.setBounds(320,30, timeLabelSize.width, timeLabelSize.height);
         comboLabel.setBounds(800,6, comboSize.width, comboSize.height);
+        pairsLabel.setBounds(x-180,y+20,190,30);
         this.add(statusLabel);
         this.add(timeLabel);
         this.add(comboLabel);
+        this.add(pairsLabel);
+
     }
     //启动计时器，外部调用用
     public static void startTimer() {
@@ -315,6 +325,11 @@ public class StatusPanel extends JPanel {
 
     public static void setOnTimeUp(Runnable callback) {
         onTimeUp = callback;
+    }
+    public static void updatePairsLabel(int remPairs) {
+        if (pairsLabel!=null) {
+            pairsLabel.setText(LanguageProcess.getCurrentLanguage().pairs(remPairs,pairs));
+        }
     }
     public static void setRemainingTime(int h, int m, int s) {
         stopTimer();

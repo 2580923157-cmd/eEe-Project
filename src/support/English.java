@@ -72,11 +72,12 @@ public enum English implements Language {
     @Override public String loginRegSuccessTitle(){ return "Register"; }
     @Override public String loginGuestMsgTitle() { return "Info"; }
     @Override public String loginEmptyFields()   { return "Username and password cannot be empty!"; }
-    @Override public String loginSuccess(String u){ return "Login succeessfully! Welcome to the Game, " + u; }
+    @Override public String loginSuccess(String u){ return "Login successfully! Welcome to the Game, " + u; }
     @Override public String loginFail(){ return "Wrong username or password!"; }
     @Override public String loginCommaError(){ return "Username cannot contain comma!"; }
     @Override public String loginRegSuccess(){ return "Registration successful! Please login."; }
     @Override public String loginRegFail(){ return "Username already exists, please change!"; }
+    @Override public String loginRegFailPass(){return "Not valid password!\n(Need at least 6 digits, including numbers and characters)";}
     @Override public String loginGuestMsg(){ return "Entered as guest."; }
 
     //menu
@@ -103,10 +104,11 @@ public enum English implements Language {
     //Main
     @Override public String gameSave()           { return "Save Game"; }
     @Override public String gameTitle(){return "Summer Challenge";}
-    @Override public String fail() {
+    @Override public String timeupFail() {
         return "Time's up! You lose.\nWhat's your next action?";
     }
     @Override public String failTitle(){return "Fail";}
+    @Override public String deadFail(){return "No pairs for elimination!\nPlease retry or undo";}
     @Override public String win() {
         return "🎉 You win!🎉\nWhat's your next action?";
     }
@@ -114,6 +116,9 @@ public enum English implements Language {
     @Override public String ready(){return "Ready...";}
     @Override public String score(int sc){
         return "Score: "+Integer.toString(sc);
+    }
+    public String pairs(int nowP,int totalP) {
+        return "Pairs left: "+Integer.toString(nowP)+"/"+Integer.toString(totalP);
     }
 
     @Override public String audioOnTooltip(){ return "Play Music"; }
@@ -134,4 +139,9 @@ public enum English implements Language {
     @Override public String new_game(){return "New game";};
     @Override public String end(){return "Exit";};
     @Override public String start(){return "START";}
+
+    @Override
+    public String cancel() {
+        return "cancel";
+    }
 }
