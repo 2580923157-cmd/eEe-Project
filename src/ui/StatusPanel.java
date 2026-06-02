@@ -9,6 +9,7 @@ import utils.ResourceProcess;
 public class StatusPanel extends JPanel {
     static JLabel statusLabel;
     static JLabel timeLabel;
+    static JLabel pairsLabel;
     static Timer timer;
     private static int score = 0;
 
@@ -333,7 +334,7 @@ public class StatusPanel extends JPanel {
         repaint();
     }
 
-    //刷新显示
+        //刷新显示
     /*public void updateLabels() {
         timeLabel.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
         statusLabel.setText("Score: " + score);
