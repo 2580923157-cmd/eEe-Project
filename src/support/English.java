@@ -116,12 +116,22 @@ public enum English implements Language {
         return "Score: "+Integer.toString(sc);
     }
 
+    @Override public String audioOnTooltip(){ return "Play Music"; }
+    @Override public String audioOffTooltip() { return "Stop Music"; }
+    @Override public String pauseTooltip(){ return "Pause"; }
+    @Override public String continueTooltip() { return "Continue"; }
+    @Override public String retryTooltip(){ return "Restart"; }
+    @Override public String undoTooltip(){ return "Undo"; }
+    @Override public String saveTooltip(){ return "Save"; }
+    @Override public String exitTooltip(){ return "Exit"; }
+
+
     @Override public String yes() { return "Yes"; }
     @Override public String no()  { return "No"; }
     @Override public String easy() { return "Easy"; }
     @Override public String hard() { return "Hard"; }
     @Override public String restart(){return "Retry";};
-    @Override public String new_game(){return "Start new game";};
+    @Override public String new_game(){return "New game";};
     @Override public String end(){return "Exit";};
     @Override public String start(){return "START";}
 }

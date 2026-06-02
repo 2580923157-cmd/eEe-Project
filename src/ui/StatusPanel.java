@@ -78,7 +78,7 @@ public class StatusPanel extends JPanel {
     public void resetScore() {
         setScore(0);
         breakCombo();  // 重置连击计数
-        statusLabel.setText("分数: 0");  // 或调用 setStatus("...")
+        statusLabel.setText(LanguageProcess.getCurrentLanguage().score(0));  // 或调用 setStatus("...")
     }
 
     // 静态刷新 显示分数、连消
@@ -208,7 +208,7 @@ public class StatusPanel extends JPanel {
 
 
         comboIcon=ResourceProcess.loadImage("effects/combo.png");
-        Image img=comboIcon.getScaledInstance(92,73,Image.SCALE_SMOOTH);
+        Image img=comboIcon.getScaledInstance(115,88,Image.SCALE_SMOOTH);
         comboLabel.setIcon(new ImageIcon(img));
         /*try {
             //ImageIcon icon = new ImageIcon("resource\\menus\\language.png");
@@ -237,6 +237,10 @@ public class StatusPanel extends JPanel {
                     onTimeUp.run();
                 }
             }
+            if(hours==0&&minutes==0&&seconds<=20){
+                //timeLabel.setFont(new Font("Arial", Font.BOLD, 50));
+                timeLabel.setForeground(Color.RED);
+            }
             updateTimer();
         });
         /*timer = new Timer(1000, e -> {
@@ -263,9 +267,9 @@ public class StatusPanel extends JPanel {
         int y = (height - size.height) / 3;
         int time_x = (width - timeLabelSize.width) * 2 / 3;
         int time_y = (height - timeLabelSize.height) * 2 /3;
-        statusLabel.setBounds(x-130, y, size.width+150, size.height);
-        timeLabel.setBounds(300,47, timeLabelSize.width, timeLabelSize.height);
-        comboLabel.setBounds(800,1, comboSize.width, comboSize.height);
+        statusLabel.setBounds(x-200, y, size.width+150, size.height);
+        timeLabel.setBounds(320,30, timeLabelSize.width, timeLabelSize.height);
+        comboLabel.setBounds(800,6, comboSize.width, comboSize.height);
         this.add(statusLabel);
         this.add(timeLabel);
         this.add(comboLabel);
@@ -287,6 +291,7 @@ public class StatusPanel extends JPanel {
     /** 重开的一部分：重置时间*/
     public static void resetTimer() {
         stopTimer();
+        timeLabel.setForeground(Color.BLACK);
         int totalTime=totalGameSeconds;
         hours=totalTime/3600;
         minutes=(totalTime%3600)/60;

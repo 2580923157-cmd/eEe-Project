@@ -104,7 +104,7 @@ public class ControlPanel extends JPanel {
             StatusPanel.startTimer();
             startButton.setVisible(false);
 
-            statusPanel.setStatus("Score: 0 ×0");
+            statusPanel.setStatus(LanguageProcess.getCurrentLanguage().score(0)+"×0");
             //welcomeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
             // 显示控制按钮
             //settingsButton.setVisible(true);
@@ -132,34 +132,34 @@ public class ControlPanel extends JPanel {
         this.add(settingsButton);*/
 
         //音频控制按钮
-        audioButton = createIconButton(audioOnIcon, "音频控制"); // 初始未播放
+        audioButton = createIconButton(audioOnIcon/*, "音频控制"*/); // 初始未播放
         audioButton.setBounds(leftX + iconSize + gap, bottomY, iconSize, iconSize);
         audioButton.addActionListener(this::onAudioClick);
         audioButton.setVisible(false);
         this.add(audioButton);
 
         //暂停按钮
-        pauseButton = createIconButton(pauseIcon, "暂停");
+        pauseButton = createIconButton(pauseIcon/*, "暂停"*/);
         pauseButton.setBounds(rightX-iconSize-gap, bottomY, iconSize, iconSize);
         pauseButton.addActionListener(this::onPauseClick);
         pauseButton.setVisible(false);
         this.add(pauseButton);
 
         //重开按钮
-        retryButton = createIconButton(retryIcon, "重新开始");
+        retryButton = createIconButton(retryIcon/*, "重新开始"*/);
         retryButton.setBounds(rightX-2*iconSize-2*gap, bottomY, iconSize, iconSize);
         retryButton.addActionListener(this::onRetryClick);
         retryButton.setVisible(false);
         this.add(retryButton);
         //撤销按钮
-        undoButton=createIconButton(undoIcon,"回到上一步");
+        undoButton=createIconButton(undoIcon/*,"回到上一步"*/);
         undoButton.setBounds(leftX+iconSize*2+2*gap,bottomY,iconSize,iconSize);
         undoButton.addActionListener(this::onUndoClick);
         undoButton.setVisible(false);
         this.add(undoButton);
 
         // 保存按钮（原设置按钮位置）
-        saveButton = createIconButton(saveIcon, "保存");
+        saveButton = createIconButton(saveIcon/*, "保存"*/);
         saveButton.setBounds(leftX, bottomY, iconSize, iconSize);
         saveButton.addActionListener(this::onSaveClick);
         saveButton.setVisible(false);
@@ -168,24 +168,26 @@ public class ControlPanel extends JPanel {
         // 退出按钮（最右边）
         //int exitX = width - iconSize - 20;               // 靠右
         //int pauseX = exitX - iconSize - gap;             // 暂停在左边
-        exitButton = createIconButton(exitIcon, "退出");
+        exitButton = createIconButton(exitIcon/*, "退出"*/);
         exitButton.setBounds(rightX-10, bottomY, iconSize, iconSize);
         exitButton.addActionListener(this::onExitClick);
         //exitButton.setVisible(false);
         this.add(exitButton);
 
-        langButton=createIconButton(langIcon,"切换语言");
+        langButton=createIconButton(langIcon/*,"切换语言"*/);
         langButton.setBounds(leftX+gap*3+iconSize*3,bottomY,iconSize,iconSize);
         langButton.addActionListener(this::onLangClick);
         langButton.setVisible(false);
         this.add(langButton);
 
-        newButton=createIconButton(newIcon,"开始新游戏");
+        newButton=createIconButton(newIcon/*,"开始新游戏"*/);
         newButton.setBounds(rightX-gap*3-iconSize*3,bottomY,iconSize,iconSize);
         newButton.addActionListener(this::onNewClick);
         newButton.setVisible(false);
         this.add(newButton);
+        refreshTooltips();
     }
+
     // 加载图标资源
     private void loadIcons() {
         final int iconSize=45;
@@ -206,9 +208,9 @@ public class ControlPanel extends JPanel {
     * 创建纯图标按钮，鼠标靠近时候会有一个边框，这里利用swing的border实现；累死我啦
      * 其中的tooltip是鼠标靠近时候显示的文字
     * */
-    private JButton createIconButton(ImageIcon icon,String tooltip) {
+    private JButton createIconButton(ImageIcon icon/*,String tooltip*/) {
         JButton btn = new JButton(icon);
-        btn.setToolTipText(tooltip);
+        //btn.setToolTipText(tooltip);
         btn.setBorderPainted(false);
         btn.setContentAreaFilled(false);
         btn.setFocusPainted(false);
@@ -263,12 +265,12 @@ public class ControlPanel extends JPanel {
         if (bgmPlaying) {
             AudioProcess.stopBgm();
             audioButton.setIcon(audioOffIcon);
-            audioButton.setToolTipText("播放音乐");
+            //audioButton.setToolTipText("播放音乐");
             bgmPlaying = false;
         } else {
             AudioProcess.playBgm();
             audioButton.setIcon(audioOnIcon);
-            audioButton.setToolTipText("停止音乐");
+            //audioButton.setToolTipText("停止音乐");
             bgmPlaying = true;
         }
 
@@ -280,13 +282,13 @@ public class ControlPanel extends JPanel {
         if (!isPaused) {
             statusPanel.stopTimer();
             pauseButton.setIcon(continueIcon);
-            pauseButton.setToolTipText("继续");
+            //pauseButton.setToolTipText("继续");
             isPaused = true;
 
         } else {
             statusPanel.startTimer();
             pauseButton.setIcon(pauseIcon);
-            pauseButton.setToolTipText("暂停");
+            //pauseButton.setToolTipText("暂停");
             isPaused = false;
             // 恢复游戏交互
         }
@@ -308,7 +310,7 @@ public class ControlPanel extends JPanel {
     }*/
     private void onRetryClick(ActionEvent re) {
         AudioProcess.playClick1();
-        pauseButton.setToolTipText("重新开始");
+        //pauseButton.setToolTipText("重新开始");
         if (boardPanel!=null) {
             boardPanel.resetGame();
         }
@@ -327,7 +329,7 @@ public class ControlPanel extends JPanel {
         pauseButton.setVisible(false);
         retryButton.setVisible(false);
         undoButton.setVisible(false);
-        exitButton.setVisible(false);
+        exitButton.setVisible(true);
         saveButton.setVisible(false);
         langButton.setVisible(false);
         newButton.setVisible(false);
@@ -335,7 +337,7 @@ public class ControlPanel extends JPanel {
         // 重置暂停状态
         isPaused = false;
         pauseButton.setIcon(pauseIcon);
-        pauseButton.setToolTipText("暂停");
+        //pauseButton.setToolTipText("暂停");
         //AudioProcess.playBgm();
     }
     /** 撤销 */
@@ -344,7 +346,7 @@ public class ControlPanel extends JPanel {
         if (boardPanel != null) {
             boardPanel.undoStep();
         }
-        pauseButton.setToolTipText("撤销");
+        //pauseButton.setToolTipText("撤销");
     }
     /**保存*/
     private void onSaveClick(ActionEvent save) {
@@ -352,7 +354,7 @@ public class ControlPanel extends JPanel {
         if (saveAction!=null) {
             saveAction.run();
         }
-        pauseButton.setToolTipText("保存");
+        //pauseButton.setToolTipText("保存");
     }
     /**退出*/
     private void onExitClick(ActionEvent e) {
@@ -360,13 +362,14 @@ public class ControlPanel extends JPanel {
         if (exitAction!=null) {
             exitAction.run();
         }
-        pauseButton.setToolTipText("退出");
+        //pauseButton.setToolTipText("退出");
     }
 
     /***/
     private void onLangClick(ActionEvent l){
         LanguageProcess.switchLanguage();
         AudioProcess.playClick1();
+        refreshTooltips();
     }
     /***/
     private void onNewClick(ActionEvent n){
@@ -380,7 +383,7 @@ public class ControlPanel extends JPanel {
             statusPanel.stopTimer();
             isPaused = true;
             pauseButton.setIcon(continueIcon);
-            pauseButton.setToolTipText("继续");
+            //pauseButton.setToolTipText("继续");
         }
     }
     /**即load之后的“强制”开始*/
@@ -395,7 +398,7 @@ public class ControlPanel extends JPanel {
         langButton.setVisible(true);
         newButton.setVisible(true);
     }
-    public void setTips() {
+    /*public void setTips() {
         startButton.setVisible(false);
         audioButton.setVisible(true);
         pauseButton.setVisible(true);
@@ -405,6 +408,18 @@ public class ControlPanel extends JPanel {
         exitButton.setVisible(true);
         langButton.setVisible(true);
         newButton.setVisible(true);
+    }*/
+    private void refreshTooltips() {
+        Language lang = LanguageProcess.getCurrentLanguage();
+        audioButton.setToolTipText(bgmPlaying?lang.audioOnTooltip():lang.audioOffTooltip());
+        pauseButton.setToolTipText(isPaused?lang.continueTooltip():lang.pauseTooltip());
+        retryButton.setToolTipText(lang.retryTooltip());
+        undoButton.setToolTipText(lang.undoTooltip());
+        saveButton.setToolTipText(lang.saveTooltip());
+        exitButton.setToolTipText(lang.exitTooltip());
+        langButton.setToolTipText(lang.getLanguageTooltip());
+        newButton.setToolTipText(lang.new_game());
+        //statusPanel.setStatus("");
     }
 
     public boolean isPaused() {

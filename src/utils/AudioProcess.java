@@ -10,7 +10,7 @@ import java.io.IOException;
 
 /**
  *音频处理类，负责背景音乐和音效的播放与停止。
- *音乐文件位于 resource/audio/ 目录下，格式定为 WAV！（ffmpeg来转格式）
+ *音乐文件位于audio/目录下，格式为 WAV（ffmpeg来转格式）
  *BGM循环，音效每次播放均创建新的 Clip
  */
 public class AudioProcess {

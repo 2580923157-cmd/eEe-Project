@@ -57,6 +57,16 @@ public interface Language {
     String score(int sc);
 
 
+    String audioOnTooltip();
+    String audioOffTooltip();
+    String pauseTooltip();
+    String continueTooltip();
+    String retryTooltip();
+    String undoTooltip();
+    String saveTooltip();
+    String exitTooltip();
+
+
     //General
     // 通用按钮文字
     String yes();  // 是 / Yes

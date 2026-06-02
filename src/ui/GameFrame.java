@@ -307,7 +307,7 @@ public class GameFrame extends JFrame{
         Cell[][] cellMap = convertToCellBoard(map);
         boardPanel.loadBoard(cellMap);
         statusPanel.resetScore();
-        statusPanel.setStatus("SCORE: 0 ×0");
+        statusPanel.setStatus(LanguageProcess.getCurrentLanguage().score(0));
         controlPanel.resetToStart();   // 显示 START 按钮，隐藏其他控制按钮
         // 计时器在 Start 按钮点击后启动，由 ControlPanel 控制
     }

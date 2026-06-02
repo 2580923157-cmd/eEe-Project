@@ -66,6 +66,16 @@ public enum Chinese implements Language{
         return "分数："+Integer.toString(sc);
     }
 
+    @Override public String audioOnTooltip(){ return "播放音乐"; }
+    @Override public String audioOffTooltip() { return "停止音乐"; }
+    @Override public String pauseTooltip(){ return "暂停"; }
+    @Override public String continueTooltip() { return "继续"; }
+    @Override public String retryTooltip(){ return "重新开始"; }
+    @Override public String undoTooltip(){ return "回到上一步"; }
+    @Override public String saveTooltip(){ return "保存"; }
+    @Override public String exitTooltip(){ return "退出"; }
+
+
     @Override public String yes() { return "是"; }
     @Override public String no()  { return "否"; }
     @Override public String easy() { return "简单"; }
