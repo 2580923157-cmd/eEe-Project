@@ -36,6 +36,7 @@ public class Menu extends JFrame {
     JButton continueButton=new JButton();
     JButton exitButton=new JButton();
     JButton languageButton=new JButton();
+    JButton helpButton = new JButton();
     boolean hasSave;
     public Menu(User user) {
         super("夏日大挑战 - 主菜单");
@@ -174,6 +175,7 @@ public class Menu extends JFrame {
                 }else{
                     gameFrame.startHardMode();
                 }
+                gameFrame.diff=diff;
                 dispose();
             }else{
                 int diff=JOptionPane.showOptionDialog(this,
@@ -187,7 +189,7 @@ public class Menu extends JFrame {
                 if (diff==JOptionPane.CLOSED_OPTION) {
                     return; // 用户关闭了对话框
                 }
-                GameFrame gameFrame=new GameFrame("夏日大挑战", 1000, 1000, user);
+                GameFrame gameFrame=new GameFrame(l.gameTitle(), 1000, 1000, user);
                 dispose();
                 if(diff==0){
                     gameFrame.startEasyMode();

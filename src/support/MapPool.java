@@ -1618,7 +1618,9 @@ public class MapPool {
                         return createDefaultMap();
                 Random rand=new Random(LocalTime.now().getSecond()+LocalTime.now().getMinute()+LocalTime.now().getHour());
                 int num = 1+rand.nextInt(easyCount);
+                System.out.println("map: easy_"+num);
                 return loadMap("maps/easy", "easy_map_", num);
+                //System.out.println();
         }
 
         /** 随机抽取一张困难地图 */
@@ -1627,6 +1629,7 @@ public class MapPool {
                         return createDefaultMap();
                 Random rand=new Random(LocalTime.now().getSecond()+LocalTime.now().getMinute()+LocalTime.now().getHour());
                 int num = 1+rand.nextInt(hardCount);
+                System.out.println("map: hard_"+num);
                 return loadMap("maps/hard", "hard_map_", num);
         }
 }
