@@ -150,6 +150,7 @@ public class BoardPanel extends JPanel {
         return null;
     }
 
+
     // 统一判定是否可以消除
     private boolean canEliminate(Position a, Position b) {
         Cell ca = gameBoard.getCell(a.getRow(), a.getCol());

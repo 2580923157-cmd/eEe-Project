@@ -1,8 +1,8 @@
 # Split-Maps.ps1
-$easyFile = "C:\Users\MDG\Desktop\maps\easy_all.txt"
-$hardFile = "C:\Users\MDG\Desktop\maps\hard_all.txt"
+$easyFile = "D:\mapFile\EASYMAP.txt"
+$hardFile = "D:\mapFile\HARDMAP.txt"
 
-$rootDir = "E:\eEe-Project\resource\maps"
+$rootDir = "D:\eEe-Project\resource\maps"
 $easyDir = Join-Path $rootDir "easy"
 $hardDir = Join-Path $rootDir "hard"
 

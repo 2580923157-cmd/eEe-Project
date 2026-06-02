@@ -85,7 +85,7 @@ public class SaveManager {
             boardLines.add(lines.get(i));
         }
 
-        //接下来计算棋盘的行列 该功能可能在棋盘大小随机生成的场景能用到
+        //接下来计算棋盘的行列
         int row = boardLines.size();
         int col = boardLines.get(0).split(" ").length;//save时cell用空格分隔
         Cell[][] board = new Cell[row][col];
